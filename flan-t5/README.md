@@ -172,21 +172,28 @@ Following are the results of our ablation studies:
 
 Since there are a total of 36 experiments, we choose a subset to demonstrate the effect of different hyperparameters. For your experiments, we would still recommend running the full search.
  
-|Epochs | Prefix Tokens | Prefix Projection | Dropout Rate | Accuracy |
-|:-----:|:-------------:|:-----------------:|:------------:|:--------:|
-|2      |50             |1                  |0.2           |
-|5      |10             |0                  |0.1           |
-|5      |50             |0                  |0.1           |
-|5      |100            |0                  |0.1           |
-|10     |10             |1                  |0.2           |
-|10     |50             |1                  |0.2           |
-|10     |100            |1                  |0.2           |
+|Epochs | Prefix Tokens | Prefix Projection | Accuracy |
+|:-----:|:-------------:|:-----------------::---------:|
+|2      |50             |1                  |10.85     |
+|5      |10             |0                  |59.73     |
+|5      |50             |0                  |63.39     |
+|5      |100            |0                  |66.50     |
+|10     |10             |1                  |7.08      |
+|10     |50             |1                  |10.44     |
+|10     |100            |1                  |15.11     |
+|10     |10             |0                  |68.98     |
+|10     |50             |0                  |70.85     |
+|10     |100            |0                  |72.23     |
+
+<u> Insight: </u>
+
+* From Table 4, it can be seen that, keeping everything else the same, disabling Prefix Projection helps achieve better performance. Higher Prefix Tokens and training for more epochs tends to lift model performance.
 
 
 <u> Table 5: Summarization & LoRA </u>
 
-|Epochs | Rank (R) | Dropout Rate | Accuracy |
-|:-----:|:--------:|:------------:|:--------:|
+|Epochs | Rank (R) | Dropout Rate | ROUGE-1 | ROUGE-2 | ROUGE-L |
+|:-----:|:--------:|:------------:|:-------:|:-------:|:-------:|
 |2      |2         |0.1           |
 |2      |2         |0.2           |
 |2      |4         |0.1           |
@@ -216,14 +223,17 @@ Since there are a total of 36 experiments, we choose a subset to demonstrate the
 
 <u> Table 6: Summarization & Prefix Tuning </u>
  
-|Epochs | Prefix Tokens | Prefix Projection | Dropout Rate | Accuracy |
-|:-----:|:-------------:|:-----------------:|:------------:|:--------:|
-|2      |50             |1                  |0.2           |
-|5      |10             |0                  |0.1           |
-|5      |50             |0                  |0.1           |
-|5      |100            |0                  |0.1           |
-|10     |10             |1                  |0.2           |
-|10     |50             |1                  |0.2           |
-|10     |100            |1                  |0.2           |
+|Epochs | Prefix Tokens | Prefix Projection | ROUGE-1 | ROUGE-2 | ROUGE-L |
+|:-----:|:-------------:|:-----------------:|:-------:|:-------:|:-------:|
+|2      |50             |1                  |48.83    |22.54    |39.32    |
+|5      |10             |0                  |47.99    |21.96    |38.68    |
+|5      |50             |0                  |47.86    |21.61    |38.40    |
+|5      |100            |0                  |48.33    |21.55    |38.73    |
+|10     |10             |1                  |49.25    |22.63    |39.73    |
+|10     |50             |1                  |47.81    |21.87    |38.70    |
+|10     |100            |1                  |47.18    |21.01    |38.19    |
+|10     |10             |0                  |48.01    |21.63    |38.44    |
+|10     |50             |0                  |47.85    |21.89    |38.33    |
+|10     |100            |0                  |48.14    |22.09    |39.08    |
 
 
