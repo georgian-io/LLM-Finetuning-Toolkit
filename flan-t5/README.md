@@ -136,6 +136,9 @@ Since we use PEFT methodolgies, LoRA and Prefix Tuning, we ablate over their set
 	* Prefix Tokens: [10, 50, 100]
 	* Prefix Projection: [0, 1]
 	
+
+### Classification Studies
+
 Following are the results of our ablation studies:
 
 <u> Table 3: Classification & LoRA </u>
@@ -193,6 +196,10 @@ Since there are a total of 36 experiments, we choose a subset to demonstrate the
 * From Table 4, it can be seen that, keeping everything else the same, disabling Prefix Projection helps achieve better performance. Higher Prefix Tokens and training for more epochs tends to lift model performance.
 * Across Tables 3 and 4, LoRA outperforms Prefix Tuning under several hyperparameter settings.
 
+
+### Summarization Studies:
+
+Following are the results of our experiments:
 
 <u> Table 5: Summarization & LoRA </u>
 
