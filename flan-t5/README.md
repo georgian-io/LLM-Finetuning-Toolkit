@@ -173,7 +173,7 @@ Following are the results of our ablation studies:
 Since there are a total of 36 experiments, we choose a subset to demonstrate the effect of different hyperparameters. For your experiments, we would still recommend running the full search.
  
 |Epochs | Prefix Tokens | Prefix Projection | Accuracy |
-|:-----:|:-------------:|:-----------------::---------:|
+|:-----:|:-------------:|:-----------------:|:--------:|
 |2      |50             |1                  |10.85     |
 |5      |10             |0                  |59.73     |
 |5      |50             |0                  |63.39     |
