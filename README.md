@@ -13,22 +13,22 @@ We, at Georgian, are moving fast to experiment with both open-source and closed-
 
 ## What's in it for you?
 
-For each of the above 4 pillars, we are sharing our codebase and insights to:
+For each of the above four pillars, we are sharing our codebase and insights to:
 - Assist you to leverage LLMs for your business needs and challenges
-- Decide which LLM best suites your needs from a performance and cost perspective
-- Boost reproducibility efforts that are becoming increasingly difficult with LLMs
+- Decide which LLM suits your needs from a performance and cost perspective
+- Boost reproducibility efforts which are becoming increasingly difficult with LLMs
 
 We are providing scripts that are ready-to-use for:
-- Finetuning LLMs on your proprietary dataset via PeFT methodologies such as LoRA and Prefix Tuning!
-- Performing hyperparameter optimization to get the maximum performance out of these models!
+- Finetuning LLMs on your proprietary dataset via PeFT methodologies such as LoRA and Prefix Tuning
+- Performing hyperparameter optimization to get the maximum performance out of these models
 
 ## What's the best way to use this repository?
 
-Go over to the LLM-specific directory that you are interested in, and go over the ```README.md```. We have elaborated everything you need to know about the LLM, followed by performance results on open-source datasets!
+Go over to the LLM-specific directory that you are interested in, and open the ```README.md```. We have included everything you need to know about the LLM, followed by performance results on open-source datasets!
 
 ## Roadmap
 
-We are trying our best to perform extensive experiments on all LLMs. To that end, this is a tentative roadmap of LLMs that we aim to cover in the future:
+Our plan is to perform these experiments on all the LLMs below. To that end, this is a tentative roadmap of the LLMs that we aim to cover:
 
 - [x] Flan-T5
 - [ ] Falcon (landing very soon!)
@@ -48,4 +48,4 @@ If you have any questions or issues, or would like to contribute to this reposit
 - Kyryl Truskovskyi ([Email](kyryl@georgian.io) | [LinkedIn](httpg/ca.linkedin.com/in/kyryl-truskovskyi-275b7967))
 - Maria Ponomarenko ([Email](mariia.ponomarenko@georgian.io) | [LinkedIn](httpg/ca.linkedin.com/in/maria-ponomarenko-71b465179))
 
-If you found this repository helpful, please leave a :star:. It helps ensure the AI research community can also benefit from & contribute to this repository!
+If you found this repository helpful, please leave a :star:. It helps others in the AI research community to find, benefit from & contribute to this repository!
