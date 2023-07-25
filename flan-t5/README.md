@@ -142,30 +142,30 @@ Following are the results of our ablation studies:
 
 |Epochs | Rank (R) | Dropout Rate | Accuracy |
 |:-----:|:--------:|:------------:|:--------:|
-|2      |2         |0.1           |
-|2      |2         |0.2           |
-|2      |4         |0.1           |
-|2      |4         |0.2           |
-|2      |8         |0.1           |
-|2      |8         |0.2           |
-|2      |16        |0.1           |
-|2      |16        |0.2           |
-|5      |2         |0.1           |
-|5      |2         |0.2           |
-|5      |4         |0.1           |
-|5      |4         |0.2           |
-|5      |8         |0.1           |
-|5      |8         |0.2           |
-|5      |16        |0.1           |
-|5      |16        |0.2           |
-|10     |2         |0.1           |
-|10     |2         |0.2           |
-|10     |4         |0.1           |
-|10     |4         |0.2           |
-|10     |8         |0.1           |
-|10     |8         |0.2           |
-|10     |16        |0.1           |
-|10     |16        |0.2           |
+|2      |2         |0.1           |65.72     |
+|2      |2         |0.2           |7.280     |
+|2      |4         |0.1           |74.93     |
+|2      |4         |0.2           |72.81     |
+|2      |8         |0.1           |74.54     |
+|2      |8         |0.2           |75.42     |
+|2      |16        |0.1           |76.25     |
+|2      |16        |0.2           |69.56     |
+|5      |2         |0.1           |69.51     |
+|5      |2         |0.2           |68.58     |
+|5      |4         |0.1           |72.80     |
+|5      |4         |0.2           |71.83     |
+|5      |8         |0.1           |73.17     |
+|5      |8         |0.2           |73.21     |
+|5      |16        |0.1           |73.54     |
+|5      |16        |0.2           |72.44     |
+|10     |2         |0.1           |61.80     |
+|10     |2         |0.2           |59.99     |
+|10     |4         |0.1           |65.90     |
+|10     |4         |0.2           |66.20     |
+|10     |8         |0.1           |69.65     |
+|10     |8         |0.2           |66.10     |
+|10     |16        |0.1           |68.81     |
+|10     |16        |0.2           |70.43     |
 
 
 <u> Table 4: Classification & Prefix Tuning </u>
@@ -185,9 +185,12 @@ Since there are a total of 36 experiments, we choose a subset to demonstrate the
 |10     |50             |0                  |70.85     |
 |10     |100            |0                  |72.23     |
 
-<u> Insight: </u>
+<u> Classification Insights: </u>
 
+* From Table 3, we can see that lower epochs i.e., 2 and 5, seem to achieve better performance. It is likely that training for 10 epochs is causing the model to overfit.
+* Furthermore, from Table 3, it can be noted that higher values of the Rank (R) tend to give better results.
 * From Table 4, it can be seen that, keeping everything else the same, disabling Prefix Projection helps achieve better performance. Higher Prefix Tokens and training for more epochs tends to lift model performance.
+* Across Tables 3 and 4, LoRA outperforms Prefix Tuning under several hyperparameter settings.
 
 
 <u> Table 5: Summarization & LoRA </u>
@@ -236,4 +239,4 @@ Since there are a total of 36 experiments, we choose a subset to demonstrate the
 |10     |50             |0                  |47.85    |21.89    |38.33    |
 |10     |100            |0                  |48.14    |22.09    |39.08    |
 
-
+<u> Summarization Insights: </u>
