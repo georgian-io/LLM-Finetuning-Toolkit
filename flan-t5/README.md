@@ -185,6 +185,7 @@ Since there are a total of 36 experiments, we choose a subset to demonstrate the
 |10     |50             |0                  |70.85     |
 |10     |100            |0                  |72.23     |
 
+
 <u> Classification Insights: </u>
 
 * From Table 3, we can see that lower epochs i.e., 2 and 5, seem to achieve better performance. It is likely that training for 10 epochs is causing the model to overfit.
