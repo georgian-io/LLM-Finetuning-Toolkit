@@ -15,12 +15,11 @@ from utils import clean_text
 # Metric
 metric = evaluate.load("rouge")
 
+
 def evaluate_peft_model(model, tokenizer, prompt, max_target_length=50):
     # generate summary
     input_ids = tokenizer(
-        "summarize: " + prompt,
-        return_tensors="pt",
-        truncation=True
+        "summarize: " + prompt, return_tensors="pt", truncation=True
     ).input_ids.cuda()
 
     with torch.inference_mode():
@@ -31,15 +30,13 @@ def evaluate_peft_model(model, tokenizer, prompt, max_target_length=50):
             max_new_tokens=max_target_length,
         )
         prediction = tokenizer.batch_decode(
-            outputs.detach().cpu().numpy(),
-            skip_special_tokens=True
+            outputs.detach().cpu().numpy(), skip_special_tokens=True
         )[0]
 
     return prediction
 
 
 def main(args):
-
     dataset_id = "samsum"
     dataset = load_dataset(dataset_id)
     test_dataset = dataset["test"]
@@ -49,23 +46,18 @@ def main(args):
 
     # load base LLM model and tokenizer
     model = AutoModelForSeq2SeqLM.from_pretrained(
-        config.base_model_name_or_path, 
+        config.base_model_name_or_path,
         # load_in_8bit=True,
     )
-    tokenizer = AutoTokenizer.from_pretrained(
-        config.base_model_name_or_path
-    )
+    tokenizer = AutoTokenizer.from_pretrained(config.base_model_name_or_path)
 
     # Load the Lora model
-    model = PeftModel.from_pretrained(
-        model,
-        peft_model_id
-    )
+    model = PeftModel.from_pretrained(model, peft_model_id)
     model.cuda()
     model.eval()
 
     print("Peft model loaded")
-    predictions, references = [] , []
+    predictions, references = [], []
     for sample in tqdm(test_dataset):
         prediction = evaluate_peft_model(model, tokenizer, sample["dialogue"])
         predictions.append(prediction)
@@ -74,9 +66,7 @@ def main(args):
 
     # compute metric
     rouge = metric.compute(
-        predictions=predictions,
-        references=references,
-        use_stemmer=True
+        predictions=predictions, references=references, use_stemmer=True
     )
 
     # print results
@@ -85,9 +75,7 @@ def main(args):
     print(f"rougeL: {rouge['rougeL']* 100:2f}%")
     print(f"rougeLsum: {rouge['rougeLsum']* 100:2f}%")
 
-    metrics = {
-        metric: round(rouge[metric] * 100, 2) for metric in rouge.keys()
-    }
+    metrics = {metric: round(rouge[metric] * 100, 2) for metric in rouge.keys()}
 
     metrics_dir = os.path.join(args.adapter_type, args.experiment, "metrics")
     if not os.path.exists(metrics_dir):
@@ -95,7 +83,6 @@ def main(args):
     with open(os.path.join(metrics_dir, "metric.pkl"), "wb") as handle:
         pickle.dump(metrics, handle)
     print(f"Inference over for {args.experiment}")
-
 
 
 if __name__ == "__main__":

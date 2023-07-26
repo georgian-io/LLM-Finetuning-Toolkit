@@ -15,9 +15,11 @@ from utils import clean_text
 def evaluate_peft_model(model, tokenizer, sample, max_target_length=20):
     # generate summary
     input_ids = tokenizer(
-        "Classify the following sentence into a category: " + sample.replace("\n", " ") + " The answer is: ",
+        "Classify the following sentence into a category: "
+        + sample.replace("\n", " ")
+        + " The answer is: ",
         return_tensors="pt",
-        truncation=True
+        truncation=True,
     ).input_ids.cuda()
 
     with torch.inference_mode():
@@ -29,49 +31,37 @@ def evaluate_peft_model(model, tokenizer, sample, max_target_length=20):
             temperature=1e-3,
         )
         prediction = tokenizer.batch_decode(
-            outputs.detach().cpu().numpy(),
-            skip_special_tokens=True
+            outputs.detach().cpu().numpy(), skip_special_tokens=True
         )[0]
 
     return prediction
+
 
 def main(args):
     # load test dataset from distk
     dataset_id = "rungalileo/20_Newsgroups_Fixed"
     # Load dataset from the hub
     dataset = load_dataset(dataset_id)
-    test_df = clean_text(
-        dataset["test"]["text"],
-        dataset["test"]["label"]
-    )
+    test_df = clean_text(dataset["test"]["text"], dataset["test"]["label"])
 
-    peft_model_id = os.path.join(
-        args.adapter_type,
-        args.experiment,
-        "assets"
-    )
+    peft_model_id = os.path.join(args.adapter_type, args.experiment, "assets")
 
     config = PeftConfig.from_pretrained(peft_model_id)
 
     # load base LLM model and tokenizer
     model = AutoModelForSeq2SeqLM.from_pretrained(
-        config.base_model_name_or_path, 
+        config.base_model_name_or_path,
         # load_in_8bit=True,
     )
-    tokenizer = AutoTokenizer.from_pretrained(
-        config.base_model_name_or_path
-    )
+    tokenizer = AutoTokenizer.from_pretrained(config.base_model_name_or_path)
 
     # Load the Lora model
-    model = PeftModel.from_pretrained(
-        model,
-        peft_model_id
-    )
+    model = PeftModel.from_pretrained(model, peft_model_id)
     model.cuda()
     model.eval()
 
     print("Peft model loaded")
-    predictions, references = [] , []
+    predictions, references = [], []
     for idx, row in tqdm(test_df.iterrows()):
         sample = row["text"]
         label = row["label"]
@@ -97,7 +87,9 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--adapter_type", default="experiments")
-    parser.add_argument("--experiment", default="lora_samples-10557_epochs-5_r-16_dropout-0.1")
+    parser.add_argument(
+        "--experiment", default="lora_samples-10557_epochs-5_r-16_dropout-0.1"
+    )
     args = parser.parse_args()
 
     main(args)
