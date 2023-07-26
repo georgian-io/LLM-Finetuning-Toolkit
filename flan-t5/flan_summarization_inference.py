@@ -73,17 +73,21 @@ def main(args):
         references.append(summary)
 
     # compute metric
-    rogue = metric.compute(
+    rouge = metric.compute(
         predictions=predictions,
         references=references,
         use_stemmer=True
     )
 
     # print results
-    print(f"Rogue1: {rogue['rouge1']* 100:2f}%")
-    print(f"rouge2: {rogue['rouge2']* 100:2f}%")
-    print(f"rougeL: {rogue['rougeL']* 100:2f}%")
-    print(f"rougeLsum: {rogue['rougeLsum']* 100:2f}%")
+    print(f"rouge1: {rouge['rouge1']* 100:2f}%")
+    print(f"rouge2: {rouge['rouge2']* 100:2f}%")
+    print(f"rougeL: {rouge['rougeL']* 100:2f}%")
+    print(f"rougeLsum: {rouge['rougeLsum']* 100:2f}%")
+
+    metrics = {
+        metric: round(rouge[metric] * 100, 2) for metric in rouge.keys()
+    }
 
     metrics_dir = os.path.join(args.adapter_type, args.experiment, "metrics")
     if not os.path.exists(metrics_dir):
