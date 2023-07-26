@@ -1,14 +1,16 @@
 # Contents:
 
-- [What is Flan-T5?](#what-is-flan-t5)
-- [Variations of Flan-T5 and Parameters](#variations-of-flan-t5-and-parameters)
-- [What does this folder contain?](#what-does-this-folder-contain)
-- [Evaluation Framework](#evaluation-framework) <img src="../images/glass-gif.gif" width="32" height="32"/> 
-	- Performance
-	- Time to Train
-	- Cost to Train
-	- Inference
-- [Ablation Studies](#ablation-studies)
+- [Contents:](#contents)
+	- [What is Flan-T5?](#what-is-flan-t5)
+	- [Variations of Flan-T5 and Parameters](#variations-of-flan-t5-and-parameters)
+	- [What does this folder contain?](#what-does-this-folder-contain)
+	- [Evaluation Framework](#evaluation-framework)
+		- [ Performance ](#-performance-)
+		- [  Time \& Cost to Train  ](#--time--cost-to-train--)
+		- [ Inference ](#-inference-)
+	- [Ablation Studies](#ablation-studies)
+		- [Classification Studies](#classification-studies)
+		- [Summarization Studies:](#summarization-studies)
 
 ## What is Flan-T5? 
 
@@ -119,7 +121,34 @@ Since we are performing PeFT, the number of trainable parameters in a Flan-T5-La
 
 ### <img src="../images/progress.gif" width="32" height="32"/> Inference <img src="../images/progress.gif" width="32" height="32"/>
 
+We use a basic setup with FastAPI server without any optimization under the hood. 
 
+All benchmarks were conducted on a g5.4xlarge AWS instance costing $1.624 (on-demand price as of June 2023). For stress-testing purposes, we used a load-testing tool called Vegeta and loaded the web servers with an increasing number of requests per second (RPS) until latency started to degrade significantly, or we started getting timeout errors. 
+
+For the summarization task we varied the RPS from 5 to 20, and examined the system's responsiveness across different load levels. We discovered that 90% of all requests had a response time equal to or less than 20.82 seconds (for 17 RPS). The plot also shows that as RPS increases, the 90th percentile latency rises gradually, signaling potential performance limitations. We found out that 20 requests per second is a critical threshold where the system fails.
+
+The Throughput value represents the average number of requests successfully completed per second during the load test. 
+
+<u> Table 3: Cost estimation of deploying Flan-T5-Large + LoRA for summarization task </u>
+
+|     Server   | Inference cost    | Requests per second (rps) | Throughput | Latency 90% |
+|:------------:|:-----------------:|:-------------------------:|:----------:|:-----------:|
+|	FastAPI    |$0.0001 / 1K tokens|			17 			   |	0.80	|	20.82 s.  | 
+
+<p></p>
+<img src="../deployment/fastapi/load_testing/plots/flan_summ.png" width="380" height="332"/>
+<p></p>
+We performed the same load testing experiments for the classification task. Here the maximum number of requests the system can cope with is much higher — 185 requests per second.
+<p></p>
+<u> Table 4: Cost estimation of deploying Flan-T5-Large + LoRA for classification task </u>
+<p></p>
+
+|     Server   | Inference cost     | Requests per second (rps) | Throughput | Latency 90% |
+|:------------:|:------------------:|:-------------------------:|:----------:|:-----------:|
+|	FastAPI    |$0.00001 / 1K tokens|			180 			|	5.84	 |	28.01 s.   | 
+
+<p></p>
+<img src="../deployment/fastapi/load_testing/plots/flan_class.png" width="380" height="332"/>
 
 ## Ablation Studies
 
