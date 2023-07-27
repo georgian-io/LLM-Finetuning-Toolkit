@@ -44,8 +44,8 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 
 If you have any questions or issues, or would like to contribute to this repository, please reach out to:
 
-- Rohit Saha ([Email](rohit@georgian.io) | [LinkedIn](httpg/www.linkedin.com/in/rohit-saha-ai/))
-- Kyryl Truskovskyi ([Email](kyryl@georgian.io) | [LinkedIn](httpg/ca.linkedin.com/in/kyryl-truskovskyi-275b7967))
-- Maria Ponomarenko ([Email](mariia.ponomarenko@georgian.io) | [LinkedIn](httpg/ca.linkedin.com/in/maria-ponomarenko-71b465179))
+- Rohit Saha ([Email](mailto:rohit@georgian.io) | [LinkedIn](https://www.linkedin.com/in/rohit-saha-ai/))
+- Kyryl Truskovskyi ([Email](mailto:kyryl@georgian.io) | [LinkedIn](https://www.linkedin.com/in/kyryl-truskovskyi-275b7967/))
+- Maria Ponomarenko ([Email](mailto:mariia.ponomarenko@georgian.io) | [LinkedIn](https://www.linkedin.com/in/maria-ponomarenko-71b465179/))
 
 If you found this repository helpful, please leave a :star:. It helps others in the AI research community to find, benefit from & contribute to this repository!
