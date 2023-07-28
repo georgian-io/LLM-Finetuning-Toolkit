@@ -1,6 +1,6 @@
 transformers==4.30.1
 datasets==2.12.0
-peft==0.4.0.dev0
+peft==0.4.0
 pandas==2.0.2
 numpy==1.24.3
 ipdb==0.13.13
@@ -11,8 +11,8 @@ wandb==0.15.4
 einops==0.6.1
 bitsandbytes==0.39.0
 nltk==3.8.1
-accelerate==0.21.0.dev0
-trl==0.4.5.dev0
+accelerate==0.21.0
+trl==0.4.7
 rouge-score==0.1.2
 absl-py==1.4.0
 py7zr==0.20.5
