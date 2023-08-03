@@ -16,3 +16,4 @@ trl==0.4.7
 rouge-score==0.1.2
 absl-py==1.4.0
 py7zr==0.20.5
+tiktoken==0.4.0
