@@ -56,7 +56,7 @@ In this section, we bring to you our insights after extensively experimenting wi
 * Inference Costs
 
 
-### <img src="../images/rocket.gif" width="32" height="32"/> Performance <img src="../images/rocket.gif" width="32" height="32"/>
+### <img src="../assets/rocket.gif" width="32" height="32"/> Performance <img src="../assets/rocket.gif" width="32" height="32"/>
 
 We evaluated Flan-T5-Large under the following conditions:
 
@@ -95,7 +95,7 @@ We evaluated Flan-T5-Large under the following conditions:
 
 We can see that Flan-T5-Large does a significantly better job when compared to Distilbert and Bert on a sample size as low as ~250! As we steadily increase the number of samples, Distilbert and Bert finally catch-up to Flan-T5-Large, making Flan-T5-Large a great candidate to consider in low-data situations. 
 
-### <img src="../images/time.gif" width="32" height="32"/> <img src="../images/money.gif" width="32" height="32"/> Time & Cost to Train <img src="../images/money.gif" width="32" height="32"/> <img src="../images/time.gif" width="32" height="32"/>
+### <img src="../assets/time.gif" width="32" height="32"/> <img src="../assets/money.gif" width="32" height="32"/> Time & Cost to Train <img src="../assets/money.gif" width="32" height="32"/> <img src="../assets/time.gif" width="32" height="32"/>
 
 Conditions:
 
@@ -119,7 +119,7 @@ Conditions:
 
 Since we are performing PeFT, the number of trainable parameters in a Flan-T5-Large is significantly lower. As a result, the model converges faster, leading to insignificant cost figures.
 
-### <img src="../images/progress.gif" width="32" height="32"/> Inference <img src="../images/progress.gif" width="32" height="32"/>
+### <img src="../assets/progress.gif" width="32" height="32"/> Inference <img src="../assets/progress.gif" width="32" height="32"/>
 
 We use a basic setup with FastAPI server without any optimization under the hood. 
 
