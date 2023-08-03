@@ -1,15 +1,15 @@
 # LLM Tuning Hub 
 
-<img src="images/repo-main.png" width="768" height="468"/>
+<img src="assets/repo-main.png" width="768" height="468"/>
 
 If the last 6 months of AI research felt like a decade to you, you are not alone! With a new Large Language Model (LLM) released every other week, it has been challenging for us to keep up with the current pace of innovation in AI. While there has been a flurry of blog posts, tweets and code snippets on social media showcasing the power of LLMs and how to set up chat applications using them, we have not seen efforts that stress-test them for real-life business use-cases.
 
 We, at Georgian, are moving fast to experiment with both open-source and closed-source LLMs. For a holistic evaluation, we will make use of the __Evaluation Framework__ that contains __4 pillars__:
 
-- <img src="images/rocket.gif" width="32" height="32"/> Performance <img src="images/rocket.gif" width="32" height="32"/>
-- <img src="images/time.gif" width="32" height="32"/> Time to Train <img src="images/time.gif" width="32" height="32"/>
-- <img src="images/money.gif" width="32" height="32"/> Cost to Train <img src="images/money.gif" width="32" height="32"/>
-- <img src="images/progress.gif" width="32" height="32"/> Inferencing <img src="images/progress.gif" width="32" height="32"/>
+- <img src="assets/rocket.gif" width="32" height="32"/> Performance <img src="assets/rocket.gif" width="32" height="32"/>
+- <img src="assets/time.gif" width="32" height="32"/> Time to Train <img src="assets/time.gif" width="32" height="32"/>
+- <img src="assets/money.gif" width="32" height="32"/> Cost to Train <img src="assets/money.gif" width="32" height="32"/>
+- <img src="assets/progress.gif" width="32" height="32"/> Inferencing <img src="assets/progress.gif" width="32" height="32"/>
 
 ## What's in it for you?
 
