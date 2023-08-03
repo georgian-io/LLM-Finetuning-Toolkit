@@ -1,16 +1,16 @@
 # Contents:
 
-- [Contents:](#contents)
-	- [What is Flan-T5?](#what-is-flan-t5)
-	- [Variations of Flan-T5 and Parameters](#variations-of-flan-t5-and-parameters)
-	- [What does this folder contain?](#what-does-this-folder-contain)
-	- [Evaluation Framework](#evaluation-framework)
-		- [ Performance ](#-performance-)
-		- [  Time \& Cost to Train  ](#--time--cost-to-train--)
-		- [ Inference ](#-inference-)
-	- [Ablation Studies](#ablation-studies)
-		- [Classification Studies](#classification-studies)
-		- [Summarization Studies:](#summarization-studies)
+
+- [What is Flan-T5?](#what-is-flan-t5)
+- [Variations of Flan-T5 and Parameters](#variations-of-flan-t5-and-parameters)
+- [What does this folder contain?](#what-does-this-folder-contain)
+- [Evaluation Framework](#evaluation-framework)
+	- [ Performance ](#-performance-)
+	- [  Time \& Cost to Train  ](#--time--cost-to-train--)
+	- [ Inference ](#-inference-)
+- [Ablation Studies](#ablation-studies)
+	- [Classification Studies](#classification-studies)
+	- [Summarization Studies:](#summarization-studies)
 
 ## What is Flan-T5? 
 
