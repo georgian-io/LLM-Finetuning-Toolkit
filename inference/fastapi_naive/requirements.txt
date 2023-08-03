@@ -5,5 +5,5 @@ bitsandbytes==0.39.0
 uvicorn==0.22.0
 fastapi==0.100.0
 huggingface-hub==0.16.4
-transformers==4.27.2
+transformers==4.30.0
 pydantic_settings==2.0.2
