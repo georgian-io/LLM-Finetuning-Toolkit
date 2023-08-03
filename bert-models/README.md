@@ -16,4 +16,4 @@ Simply do ```python train.py --model bert-base-uncased``` or ```python train.py 
 
 Happy finetuning BERT! 
 
-<img src="../images/bert.gif" width="128" height="128"/>
+<img src="../assets/bert.gif" width="128" height="128"/>
