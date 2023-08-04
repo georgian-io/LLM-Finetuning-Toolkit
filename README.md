@@ -2,9 +2,9 @@
 
 <img src="assets/repo-main.png" width="768" height="468"/>
 
-If the last 6 months of AI research felt like a decade to you, you are not alone! With a new Large Language Model (LLM) released every other week, it has been challenging for us to keep up with the current pace of innovation in AI. While there has been a flurry of blog posts, tweets and code snippets on social media showcasing the power of LLMs and how to set up chat applications using them, we have not seen efforts that stress-test them for real-life business use-cases.
+If the last 6 months of AI research felt like a decade to you, you are not alone! With a new Large Language Model (LLM) released every other week, it has been challenging to keep up with the current pace of innovation in AI. While there has been a flurry of blog posts, tweets and code snippets on social media showcasing the power of LLMs and how to set up chat applications using them, we have not seen efforts that stress-test them for real-life business use-cases.
 
-We, at Georgian, are moving fast to experiment with both open-source and closed-source LLMs. For a holistic evaluation, we will make use of the __Evaluation Framework__ that contains __4 pillars__:
+We, at Georgian, are experimenting with both open-source and closed-source LLMs. For a holistic evaluation, we will make use of the __Evaluation Framework__ that contains __4 pillars__:
 
 - <img src="assets/rocket.gif" width="32" height="32"/> Performance <img src="assets/rocket.gif" width="32" height="32"/>
 - <img src="assets/time.gif" width="32" height="32"/> Time to Train <img src="assets/time.gif" width="32" height="32"/>
@@ -24,7 +24,7 @@ We are providing scripts that are ready-to-use for:
 
 ## What's the best way to use this repository?
 
-Go over to the LLM-specific directory that you are interested in, and open the ```README.md```. We have included everything you need to know about the LLM, followed by performance results on open-source datasets!
+Go over to the LLM-specific directory that you are interested in, and open the ```README.md```. We have included details about the LLM, followed by performance results on open-source datasets!
 
 ## Roadmap
 
@@ -48,4 +48,3 @@ If you have any questions or issues, or would like to contribute to this reposit
 - Kyryl Truskovskyi ([Email](mailto:kyryl@georgian.io) | [LinkedIn](https://www.linkedin.com/in/kyryl-truskovskyi-275b7967/))
 - Maria Ponomarenko ([Email](mailto:mariia.ponomarenko@georgian.io) | [LinkedIn](https://www.linkedin.com/in/maria-ponomarenko-71b465179/))
 
-If you found this repository helpful, please leave a :star:. It helps others in the AI research community to find, benefit from & contribute to this repository!
