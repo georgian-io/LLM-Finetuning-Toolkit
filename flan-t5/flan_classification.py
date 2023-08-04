@@ -94,7 +94,7 @@ def main(args):
             num_virtual_tokens=args.prefix_tokens,
             prefix_projection=True if args.prefix_projection else False,
         )
-        results_dir = f"experiments/{args.peft_method}_samples-{n_samples}_epochs-{args.epochs}_prefixTokens-{args.prefix_tokens}_useProjection-{args.prefix_projection}"
+        results_dir = f"experiments/classification_{args.peft_method}_samples-{n_samples}_epochs-{args.epochs}_prefixTokens-{args.prefix_tokens}_useProjection-{args.prefix_projection}"
 
     model = AutoModelForSeq2SeqLM.from_pretrained(model_name_or_path)
     model = get_peft_model(model, peft_config)

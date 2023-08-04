@@ -21,7 +21,7 @@ from peft import (
     PrefixTuningConfig,
 )
 
-from utils import samsum_data
+from utils import get_samsum_data
 
 
 def main(args):
@@ -72,7 +72,7 @@ def main(args):
             lora_dropout=args.dropout,
             target_modules=["q", "v"],
         )
-        results_dir = f"experiments/{args.peft_method}_epochs-{args.epochs}_r-{args.lora_r}_dropout-{args.dropout}"
+        results_dir = f"experiments/summarization_{args.peft_method}_epochs-{args.epochs}_r-{args.lora_r}_dropout-{args.dropout}"
 
     elif args.peft_method == "prefix":
         peft_config = PrefixTuningConfig(
@@ -81,7 +81,7 @@ def main(args):
             num_virtual_tokens=args.prefix_tokens,
             prefix_projection=True if args.prefix_projection else False,
         )
-        results_dir = f"experiments/{args.peft_method}_epochs-{args.epochs}_prefixTokens-{args.prefix_tokens}_useProjection-{args.prefix_projection}"
+        results_dir = f"experiments/summarization_{args.peft_method}_epochs-{args.epochs}_prefixTokens-{args.prefix_tokens}_useProjection-{args.prefix_projection}"
 
     model = AutoModelForSeq2SeqLM.from_pretrained(model_name_or_path)
     model = get_peft_model(model, peft_config)
