@@ -160,13 +160,13 @@ For the summarization task we varied the RPS from 5 to 30, and examined the syst
 The Throughput value was reported as 1.5. This value represents the average number of requests successfully completed per second during the load test. 
 
 <p></p>
-<img src="../inference/load_testing/vegeta/fast_api/plots/flan_summ.png" width="380" height="332"/>
+<img src="../inference/load_testing/vegeta/fastapi/plots/flan_summ.png" width="380" height="332"/>
 <p></p>
 
 We performed the same load testing experiments for the classification task. Here the maximum number of requests the system can cope with is much higher — 180 requests per second.
 
 <p></p>
-<img src="../inference/load_testing/vegeta/fast_api/plots/flan_class.png" width="380" height="332"/>
+<img src="../inference/load_testing/vegeta/fastapi/plots/flan_class.png" width="380" height="332"/>
 
 #### HuggingFace Text Generation Inference ####
 
