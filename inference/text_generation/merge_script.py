@@ -3,7 +3,7 @@ import torch
 import pickle
 import evaluate
 import numpy as np
-import os
+from pathlib import Path
 
 from peft import PeftModel, PeftConfig
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, PushToHubCallback
@@ -14,10 +14,10 @@ from sklearn.metrics import accuracy_score, f1_score
 
 def main(args):
 
-    peft_model_id = os.path.join(args.adapter_type, args.experiment, "assets")
-    merged_model_id = os.path.join(args.adapter_type, args.experiment, "assets_merged")
+    peft_model_id = Path(args.adapter_type, args.experiment, "assets")
+    merged_model_id = Path(args.adapter_type, args.experiment, "assets_merged")
 
-    config = PeftConfig.from_pretrained(peft_model_id)
+    config = PeftConfig.from_pretrained(str(peft_model_id))
     
     model = AutoModelForSeq2SeqLM.from_pretrained(
         config.base_model_name_or_path, 
@@ -27,12 +27,12 @@ def main(args):
     )
     model = PeftModel.from_pretrained(
         model,
-        peft_model_id
+        str(peft_model_id)
     )
     
     model = model.merge_and_unload()
-    model.save_pretrained(merged_model_id, push_to_hub=True, repo_id=args.repo_id)
-    tokenizer.save_pretrained(merged_model_id, push_to_hub=True, repo_id=args.repo_id)
+    model.save_pretrained(str(merged_model_id), push_to_hub=True, repo_id=args.repo_id)
+    tokenizer.save_pretrained(str(merged_model_id), push_to_hub=True, repo_id=args.repo_id)
 
 
 if __name__ == "__main__":
