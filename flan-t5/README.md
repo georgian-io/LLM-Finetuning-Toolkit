@@ -199,93 +199,118 @@ Since we use PEFT methodolgies, LoRA and Prefix Tuning, we ablate over their set
 	* Prefix Tokens: [10, 50, 100]
 	* Prefix Projection: [0, 1]
 	
+### Classification Studies
+
 Following are the results of our ablation studies:
 
 <u> Table 3: Classification & LoRA </u>
 
 |Epochs | Rank (R) | Dropout Rate | Accuracy |
 |:-----:|:--------:|:------------:|:--------:|
-|2      |2         |0.1           |
-|2      |2         |0.2           |
-|2      |4         |0.1           |
-|2      |4         |0.2           |
-|2      |8         |0.1           |
-|2      |8         |0.2           |
-|2      |16        |0.1           |
-|2      |16        |0.2           |
-|5      |2         |0.1           |
-|5      |2         |0.2           |
-|5      |4         |0.1           |
-|5      |4         |0.2           |
-|5      |8         |0.1           |
-|5      |8         |0.2           |
-|5      |16        |0.1           |
-|5      |16        |0.2           |
-|10     |2         |0.1           |
-|10     |2         |0.2           |
-|10     |4         |0.1           |
-|10     |4         |0.2           |
-|10     |8         |0.1           |
-|10     |8         |0.2           |
-|10     |16        |0.1           |
-|10     |16        |0.2           |
+|2      |2         |0.1           |65.72     |
+|2      |2         |0.2           |7.280     |
+|2      |4         |0.1           |74.93     |
+|2      |4         |0.2           |72.81     |
+|2      |8         |0.1           |74.54     |
+|2      |8         |0.2           |75.42     |
+|2      |16        |0.1           |76.25     |
+|2      |16        |0.2           |69.56     |
+|5      |2         |0.1           |69.51     |
+|5      |2         |0.2           |68.58     |
+|5      |4         |0.1           |72.80     |
+|5      |4         |0.2           |71.83     |
+|5      |8         |0.1           |73.17     |
+|5      |8         |0.2           |73.21     |
+|5      |16        |0.1           |73.54     |
+|5      |16        |0.2           |72.44     |
+|10     |2         |0.1           |61.80     |
+|10     |2         |0.2           |59.99     |
+|10     |4         |0.1           |65.90     |
+|10     |4         |0.2           |66.20     |
+|10     |8         |0.1           |69.65     |
+|10     |8         |0.2           |66.10     |
+|10     |16        |0.1           |68.81     |
+|10     |16        |0.2           |70.43     |
 
 
 <u> Table 4: Classification & Prefix Tuning </u>
 
 Since there are a total of 36 experiments, we choose a subset to demonstrate the effect of different hyperparameters. For your experiments, we would still recommend running the full search.
  
-|Epochs | Prefix Tokens | Prefix Projection | Dropout Rate | Accuracy |
-|:-----:|:-------------:|:-----------------:|:------------:|:--------:|
-|2      |50             |1                  |0.2           |
-|5      |10             |0                  |0.1           |
-|5      |50             |0                  |0.1           |
-|5      |100            |0                  |0.1           |
-|10     |10             |1                  |0.2           |
-|10     |50             |1                  |0.2           |
-|10     |100            |1                  |0.2           |
+|Epochs | Prefix Tokens | Prefix Projection | Accuracy |
+|:-----:|:-------------:|:-----------------:|:--------:|
+|2      |50             |1                  |10.85     |
+|5      |10             |0                  |59.73     |
+|5      |50             |0                  |63.39     |
+|5      |100            |0                  |66.50     |
+|10     |10             |1                  |7.08      |
+|10     |50             |1                  |10.44     |
+|10     |100            |1                  |15.11     |
+|10     |10             |0                  |68.98     |
+|10     |50             |0                  |70.85     |
+|10     |100            |0                  |72.23     |
 
+
+<u> Classification Insights: </u>
+
+* From Table 3, we can see that lower epochs i.e., 2 and 5, seem to achieve better performance. It is likely that training for 10 epochs is causing the model to overfit.
+* Furthermore, from Table 3, it can be noted that higher values of the Rank (R) tend to give better results.
+* From Table 4, it can be seen that, keeping everything else the same, disabling Prefix Projection helps achieve better performance. Higher Prefix Tokens and training for more epochs tends to lift model performance.
+* Across Tables 3 and 4, LoRA outperforms Prefix Tuning under several hyperparameter settings.
+
+
+### Summarization Studies:
+
+Following are the results of our experiments:
 
 <u> Table 5: Summarization & LoRA </u>
 
-|Epochs | Rank (R) | Dropout Rate | Accuracy |
-|:-----:|:--------:|:------------:|:--------:|
-|2      |2         |0.1           |
-|2      |2         |0.2           |
-|2      |4         |0.1           |
-|2      |4         |0.2           |
-|2      |8         |0.1           |
-|2      |8         |0.2           |
-|2      |16        |0.1           |
-|2      |16        |0.2           |
-|5      |2         |0.1           |
-|5      |2         |0.2           |
-|5      |4         |0.1           |
-|5      |4         |0.2           |
-|5      |8         |0.1           |
-|5      |8         |0.2           |
-|5      |16        |0.1           |
-|5      |16        |0.2           |
-|10     |2         |0.1           |
-|10     |2         |0.2           |
-|10     |4         |0.1           |
-|10     |4         |0.2           |
-|10     |8         |0.1           |
-|10     |8         |0.2           |
-|10     |16        |0.1           |
-|10     |16        |0.2           |
+|Epochs | Rank (R) | Dropout Rate | ROUGE-1 | ROUGE-2 | ROUGE-L |
+|:-----:|:--------:|:------------:|:-------:|:-------:|:-------:|
+|2      |2         |0.1           |48.30    |22.28    |38.91    |
+|2      |2         |0.2           |47.99    |22.31    |38.78    |
+|2      |4         |0.1           |47.67    |21.51    |38.50    |
+|2      |4         |0.2           |48.40    |22.17    |39.03    |
+|2      |8         |0.1           |47.46    |21.30    |38.12    |
+|2      |8         |0.2           |48.08    |21.69    |38.65    |
+|2      |16        |0.1           |48.82    |23.08    |39.59    |
+|2      |16        |0.2           |48.35    |22.46    |38.93    |
+|5      |2         |0.1           |48.41    |22.13    |38.83    |
+|5      |2         |0.2           |48.53    |22.03    |39.09    |
+|5      |4         |0.1           |48.36    |22.23    |38.87    |
+|5      |4         |0.2           |48.91    |22.48    |39.16    |
+|5      |8         |0.1           |48.97    |23.54    |39.80    |
+|5      |8         |0.2           |48.95    |22.97    |39.42    |
+|5      |16        |0.1           |48.74    |22.56    |39.61    |
+|5      |16        |0.2           |49.36    |23.39    |40.22    |
+|10     |2         |0.1           |48.91    |22.87    |39.53    |
+|10     |2         |0.2           |48.34    |22.25    |38.99    |
+|10     |4         |0.1           |48.20    |22.13    |38.84    |
+|10     |4         |0.2           |48.62    |22.51    |39.16    |
+|10     |8         |0.1           |49.59    |23.67    |40.29    |
+|10     |8         |0.2           |49.47    |23.55    |40.42    |
+|10     |16        |0.1           |49.11    |23.26    |39.85    |
+|10     |16        |0.2           |48.71    |22.54    |39.52    |
 
 
 
 <u> Table 6: Summarization & Prefix Tuning </u>
  
-|Epochs | Prefix Tokens | Prefix Projection | Dropout Rate | Accuracy |
-|:-----:|:-------------:|:-----------------:|:------------:|:--------:|
-|2      |50             |1                  |0.2           |
-|5      |10             |0                  |0.1           |
-|5      |50             |0                  |0.1           |
-|5      |100            |0                  |0.1           |
-|10     |10             |1                  |0.2           |
-|10     |50             |1                  |0.2           |
-|10     |100            |1                  |0.2           |
+|Epochs | Prefix Tokens | Prefix Projection | ROUGE-1 | ROUGE-2 | ROUGE-L |
+|:-----:|:-------------:|:-----------------:|:-------:|:-------:|:-------:|
+|2      |50             |1                  |48.83    |22.54    |39.32    |
+|5      |10             |0                  |47.99    |21.96    |38.68    |
+|5      |50             |0                  |47.86    |21.61    |38.40    |
+|5      |100            |0                  |48.33    |21.55    |38.73    |
+|10     |10             |1                  |49.25    |22.63    |39.73    |
+|10     |50             |1                  |47.81    |21.87    |38.70    |
+|10     |100            |1                  |47.18    |21.01    |38.19    |
+|10     |10             |0                  |48.01    |21.63    |38.44    |
+|10     |50             |0                  |47.85    |21.89    |38.33    |
+|10     |100            |0                  |48.14    |22.09    |39.08    |
 
+
+<u> Summarization Insights: </u>
+
+* Based on Table 5 and Table 6, we do not find any one method to outperform the other when considering ROUGE-1.
+* When considering ROUGE-2, LoRA experiments achieve higher scores when compared with Prefix Tuning experiments.
