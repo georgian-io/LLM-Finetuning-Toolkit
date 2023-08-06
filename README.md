@@ -31,8 +31,8 @@ Go over to the LLM-specific directory that you are interested in, and open the `
 Our plan is to perform these experiments on all the LLMs below. To that end, this is a tentative roadmap of the LLMs that we aim to cover:
 
 - [x] Flan-T5
-- [ ] Falcon (landing very soon!)
-- [ ] RedPajama
+- [x] Falcon 
+- [ ] RedPajama (ingredients are being prepped!)
 - [ ] Llama-2
 - [ ] OpenLlama
 - [ ] SalesForce XGen
