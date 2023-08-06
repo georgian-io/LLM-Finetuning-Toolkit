@@ -4,6 +4,7 @@ import os
 import numpy as np
 import pandas as pd
 import pickle
+import datasets
 from datasets import Dataset, load_dataset
 
 from peft import LoraConfig

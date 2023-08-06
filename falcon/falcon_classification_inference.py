@@ -53,6 +53,7 @@ def main(args):
     tokenizer = AutoTokenizer.from_pretrained(config.base_model_name_or_path)
     tokenizer.pad_token = tokenizer.eos_token
 
+    ctr = 0
     results = []
     instructions, labels = test_dataset["instructions"], test_dataset["labels"]
 
@@ -74,7 +75,8 @@ def main(args):
             )[0]
             result = result[len(instruct) :]
             results.append(result)
-            print(f"Instruction:{instruct}")
+            ctr += 1
+            print(f"Example {ctr} / {len(instructions)}:")
             print(f"Label:{label}")
             print(f"Generated:{result}")
             print("----------------------------------------")
@@ -88,7 +90,11 @@ def main(args):
     }
     print(metrics)
 
-    with open(os.path.join(peft_model_id, "metrics.pkl"), "wb") as handle:
+    save_dir = os.path.join(f"experiments/{args.experiment}", "metrics")
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+
+    with open(os.path.join(save_dir, "metrics.pkl"), "wb") as handle:
         pickle.dump(metrics, handle)
 
     print(f"Completed experiment {peft_model_id}")
