@@ -87,7 +87,7 @@ def main(args):
     )
     model.config.use_cache = False
 
-    results_dir = f"experiments/{args.epochs}-{args.lora_r}-{args.dropout}"
+    results_dir = f"experiments/summarization_epochs-{args.epochs}_rank-{args.lora_r}_dropout-{args.dropout}"
 
     # Define training args
     training_args = TrainingArguments(
