@@ -75,7 +75,7 @@ We evaluated Falcon-7B under the following conditions:
 	* Epochs: 5
 	* Falcon-7B:
 		* PeFT technique: QLoRA
-		* Learning rate: 1e-3
+		* Learning rate: 2e-4
 	* Flan-T5 Large:
 		* PeFT technique: LoRA
 		* Learning rate: 1e-3
