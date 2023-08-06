@@ -75,6 +75,7 @@ def main(args):
     tokenizer = AutoTokenizer.from_pretrained(config.base_model_name_or_path)
     tokenizer.pad_token = tokenizer.eos_token
 
+    ctr = 0
     results = []
     for instruct, summary in zip(val_instructions, summaries):
         input_ids = tokenizer(
@@ -93,7 +94,8 @@ def main(args):
             )[0]
             result = result[len(instruct) :]
             results.append(result)
-            print(f"Instruction:{instruct}")
+            ctr += 1
+            print(f"Example {ctr} / {len(val_instructions)}:")
             print(f"Summary:{summary}")
             print(f"Generated:{result}")
             print("----------------------------------------")
@@ -102,6 +104,7 @@ def main(args):
     rouge = metric.compute(predictions=results, references=summaries, use_stemmer=True)
 
     metrics = {metric: round(rouge[metric] * 100, 2) for metric in rouge.keys()}
+    print(metrics)
 
     save_dir = os.path.join(f"experiments/{args.experiment}", "metrics")
     if not os.path.exists(save_dir):
