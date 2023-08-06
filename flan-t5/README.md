@@ -65,7 +65,7 @@ We evaluated Flan-T5-Large under the following conditions:
 	* Summarization: Samsum dataset. 
 * Competing Models:
 	* BERT-Base (110M parameters)
-	* Distilbert (66 parameters)
+	* Distilbert (66M parameters)
 * Experiments:
 	* Sample Efficiency vs Accuracy
 * Training config:
