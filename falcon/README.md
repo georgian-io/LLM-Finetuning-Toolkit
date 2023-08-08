@@ -21,10 +21,10 @@ Falcon models come in two sizes, and can be leveraged depending on the task at h
 
 | Falcon variation | Parameters  |
 |:----------------:|:-----------:|
-|Base-3B            |3B          |
-|Instruct-3B        |3B          |           
-|Base-7B            |7B          |
-|Instruct-7B        |7B          |
+|Base-7B           |7B           |
+|Instruct-7B       |7B           |           
+|Base-40B          |40B          |
+|Instruct-40B      |40B          |
 
 In this repository, we have used Falcon-7B for our experiments.
 
@@ -157,6 +157,8 @@ Conditions:
 
 
 ### <img src="../assets/progress.gif" width="32" height="32"/> Inference <img src="../assets/progress.gif" width="32" height="32"/>
+
+__Note__: This section is still work in progress so feel free to skip this part for now.
 
 We use a basic setup with FastAPI server without any optimization under the hood. 
 
