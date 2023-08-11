@@ -6,10 +6,10 @@
 	- [What does this folder contain?](#what-does-this-folder-contain)
 	- [Evaluation Framework](#evaluation-framework)
 		- [ Performance ](#-performance-)
+			- [Classification](#classification)
+			- [Summarization](#summarization)
 		- [  Time \& Cost to Train  ](#--time--cost-to-train--)
 		- [ Inference ](#-inference-)
-			- [FastApi](#fastapi)
-			- [HuggingFace Text Generation Inference](#huggingface-text-generation-inference)
 
 ## What is Falcon? 
 
@@ -158,28 +158,25 @@ Conditions:
 
 ### <img src="../assets/progress.gif" width="32" height="32"/> Inference <img src="../assets/progress.gif" width="32" height="32"/>
 
-__Note__: This section is still work in progress so feel free to skip this part for now.
+With inference, we used the same approach for deployment and cost estimation for the Flan model. 
 
-We use a basic setup with FastAPI server without any optimization under the hood. 
+Following the same process we used to test Flan-T5-Large, we are using the load testing tool, Vegeta, on Falcon. We created a script that sent varying numbers of requests (ranging from 5 to 185) in three sets, with a three-second interval to give the server time to recover. Afterward, we examined the results, excluding instances where a "too many requests" error occurred. We calculated the average throughput and latency (90%) for the maximum possible requests per second (RPS) and used this data to calculate the cost. Again, following the same process we used to test Flan-T5-Large,  all of the load testing experiments have been executed on a g5.4xlarge instance.
 
-All benchmarks were conducted on a g5.4xlarge AWS instance costing $1.624 (on-demand price as of June 2023). For stress-testing purposes, we used a load-testing tool called Vegeta and loaded the web servers with an increasing number of requests per second (RPS) until latency started to degrade significantly, or we started getting timeout errors. We conducted experiments for each RPS value multiple times (3-6 times) and calculated the average latency and throughput.
+For the summarization task, we varied the RPS from five to 180. 90% of all requests had a response time equal to or less than 1.82 seconds for 145 RPS (which is the maximum number of requests the server was able to handle). 
 
-It is worth mentioning that when we perform a load test with a tool like Vegeta and set the request rate to n requests per second, it means that the tool attempts to simulate an average of n requests per second over the duration of the test. It doesn't guarantee that exactly n requests will be served and completed within each second.
-
-Inference costs are derived from:
-- Total tokens server can process in 1 hour = (rps * average number of tokens (input + output) * 60 seconds * 60 minutes)
-- Price per hour = from AWS 
-- Inference cost = Price per hour / (Total tokens in 1 hour / 1000)
-
-This is a specific calculation, but using it makes it easy to compare other LLMs, including closed LLM APIs (such as GPT-4 and Writer Parmila). 
-
+As for the cost, taking into account that the throughput value was reported as 53.8, to get this number of responses in one second (or to get 145 responses in ~1.82 seconds) will cost you $0.0008.
 
 <u> Table 3: Cost estimation of deploying Falcon-7B + LoRA for summarization task </u>
 
 |     Server   | Inference cost     | Requests per second (rps) | Throughput | Latency 90% |
 |:------------:|:------------------:|:-------------------------:|:----------:|:-----------:|
-|	FastAPI    |$0.00007 / 1K tokens|			30 			    |	1.5		 |	18.27 s.   | 
-|text-generation| $0.00001 /1K tokens|			120				|	45.5	 |	2.03 s.    |
+|text-generation| $0.00004 / 1K tokens|			145				|	53.8	 |	1.82 s.    |
+
+<img src="../inference/load_testing/vegeta/text_gen/plots/falcon/falcon_summ_exp1.png" width="430" height="332"/>
+
+The performance of the classification model during inference is quite similar to the summarization. The maximum RPS that TGI was able to handle equals to 125. 
+
+Taking into account the latency value, it will cost $0.001 to get responses for 125 requests in 2.7s. 
 
 <p></p>
 <u> Table 4: Cost estimation of deploying Falcon-7B + LoRA for classification task </u>
@@ -187,22 +184,9 @@ This is a specific calculation, but using it makes it easy to compare other LLMs
 
 |     Server   | Inference cost        | Requests per second (rps)  | Throughput | Latency 90% |
 |:------------:|:---------------------:|:--------------------------:|:----------:|:-----------:|
-|	FastAPI    |$0.00001 / 1K tokens|			180 			|	5.84	 |	28.01 s.   | 
-|text-generation|$0.00001 /1K tokens   |        145				|   78.5 	 |  1.5 s.     |
+|text-generation|$0.00005 / 1K tokens   |        125				|   30.3 	 |  2.7 s.     |
+<p></p>
+<img src="../inference/load_testing/vegeta/text_gen/plots/falcon/falcon_class_exp1.png" width="430" height="332"/>
 
 
-
-#### FastApi ####
-
-For the summarization task we varied the RPS from 5 to 30, and examined the system's responsiveness across different load levels. We discovered that 90% of all requests had a response time equal to or less than 18.27 seconds (for 30 RPS). The plot also shows that as RPS increases, the 90th percentile latency rises gradually, signaling potential performance limitations. We found out that 35 requests per second is a critical threshold where the system fails.
-
-
-
-#### HuggingFace Text Generation Inference ####
-
-Text Generation Inference server developed by HuggingFace allows faster text generation by using advanced techniques like Tensor Parallelism and dynamic batching with popular open-source Language Model Libraries (LLMs) such as StarCoder, BLOOM, GPT-NeoX, Llama, and T5.
-
-This time for the summarization task we varied the RPS value from 5 to 120. 90% of all requests had a response time equal to or less than 2.03 seconds (for 120 RPS). 
-
-The Throughput value was reported as 45.5, which is much greater than the value we were able to get using FastApi. 
 
