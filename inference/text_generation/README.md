@@ -9,9 +9,11 @@ In order to use HuggingFace Text Generation Inference, we need to merge trained 
    huggingface-cli login
    ```
 2. Run the merge script.
+   
    ```
-   python3 merge_script.py --repo_id your_model_repository
+   python3 merge_script_{llm_name}.py --repo_id your_model_repository
    ```
+
 3. Define next variables in the CLI.
    ```
    model=your_model_repository
@@ -29,6 +31,6 @@ In order to use HuggingFace Text Generation Inference, we need to merge trained 
    ```
    curl 127.0.0.1:8080/generate \
     -X POST \
-    -d '{"inputs":"summarize: Hannah: Hey, do you have Betty's number?\nAmanda: Lemme check\nHannah: <file_gif>\nAmanda: Sorry, can't find it.\nAmanda: Ask Larry\nAmanda: He called her last time we were at the park together\nHannah: I don't know him well\nHannah: <file_gif>\nAmanda: Don't be shy, he's very nice\nHannah: If you say so..\nHannah: I'd rather you texted him\nAmanda: Just text him 🙂\nHannah: Urgh.. Alright\nHannah: Bye\nAmanda: Bye bye","parameters":{"max_new_tokens":50}}' \
+    -d '{"inputs": Example prompt,"parameters":{"max_new_tokens":50}}' \
     -H 'Content-Type: application/json'
    ```
