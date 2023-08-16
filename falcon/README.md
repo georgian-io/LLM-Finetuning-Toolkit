@@ -44,7 +44,7 @@ This folder contains ready-to-use scripts, using which you can do the following:
 	* ```falcon_baseline_inference.py```: Infer in zero-shot and few-shot settings using Falcon-7B Instruct version
 	* ```falcon_classification_inference.py```: Infer on News Group classification dataset
 	* ```falcon_summarization_inference.py```: Infer on Samsum summarization dataset
-* Infer across a bunch of checkpoints:
+* Infer across a different settings:
 	* ```baseline_inference.sh```: Loop over all settings to perform zero-shot and few-shot prompting across classification and summarization tasks
 
 ## Evaluation Framework
@@ -113,7 +113,7 @@ NOTE:
 
 <u> Insight: </u>
 
-We can see that Falcon-7B does a significantly better job when compared to other models on a sample size as low as ~250! At roughly 50% of training samples, Distilbert and Bert finally catch-up to Falcon-7B, making Falcon-7B a great candidate to consider in low-data situations. 
+We can see that Falcon-7B does a better job when compared to other models on a sample size as low as ~250! At roughly 50% of training samples, Distilbert and Bert finally catch-up to Falcon-7B, making Falcon-7B a great candidate to consider in low-data situations. 
 
 #### Summarization ####
 
@@ -166,7 +166,7 @@ For the summarization task, we varied the RPS from five to 180. 90% of all reque
 
 As for the cost, taking into account that the throughput value was reported as 53.8, to get this number of responses in one second (or to get 145 responses in ~1.82 seconds) will cost you $0.0008.
 
-<u> Table 3: Cost estimation of deploying Falcon-7B + LoRA for summarization task </u>
+<u> Table 6: Cost estimation of deploying Falcon-7B + LoRA for summarization task </u>
 
 |     Server   | Inference cost     | Requests per second (rps) | Throughput | Latency 90% |
 |:------------:|:------------------:|:-------------------------:|:----------:|:-----------:|
@@ -179,7 +179,7 @@ The performance of the classification model during inference is quite similar to
 Taking into account the latency value, it will cost $0.001 to get responses for 125 requests in 2.7s. 
 
 <p></p>
-<u> Table 4: Cost estimation of deploying Falcon-7B + LoRA for classification task </u>
+<u> Table 7: Cost estimation of deploying Falcon-7B + LoRA for classification task </u>
 <p></p>
 
 |     Server   | Inference cost        | Requests per second (rps)  | Throughput | Latency 90% |

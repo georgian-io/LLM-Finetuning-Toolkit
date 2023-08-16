@@ -24,6 +24,7 @@ from prompts import INFERENCE_SUMMARIZATION_PROMPT_v2
 metric = evaluate.load("rouge")
 warnings.filterwarnings("ignore")
 
+
 def prepare_instructions(dialogues, summaries):
     instructions = []
 
@@ -47,7 +48,6 @@ def prepare_samsum_data():
     val_instructions = prepare_instructions(dialogues, summaries)
 
     return val_instructions, summaries
-
 
 
 def main(args):
