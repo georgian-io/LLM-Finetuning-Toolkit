@@ -44,7 +44,7 @@ This folder contains ready-to-use scripts, using which you can do the following:
 	* ```falcon_baseline_inference.py```: Infer in zero-shot and few-shot settings using Falcon-7B Instruct version
 	* ```falcon_classification_inference.py```: Infer on News Group classification dataset
 	* ```falcon_summarization_inference.py```: Infer on Samsum summarization dataset
-* Infer across a bunch of checkpoints:
+* Infer across a different settings:
 	* ```baseline_inference.sh```: Loop over all settings to perform zero-shot and few-shot prompting across classification and summarization tasks
 
 ## Evaluation Framework
