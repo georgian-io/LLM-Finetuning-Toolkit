@@ -61,7 +61,6 @@ def main(args):
         report_to="none",
         per_device_train_batch_size=1,
         gradient_accumulation_steps=4,
-        
         output_dir=results_dir,
         learning_rate=2e-4,
         num_train_epochs=args.epochs,
@@ -80,7 +79,6 @@ def main(args):
         peft_config=peft_config,
         tokenizer=tokenizer,
         train_dataset=train_dataset,
-        
         max_seq_length=512,
         dataset_text_field="instructions",
         packing=True,
