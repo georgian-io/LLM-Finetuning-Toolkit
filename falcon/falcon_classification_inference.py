@@ -28,6 +28,7 @@ from prompts import get_newsgroup_data_for_ft
 metric = evaluate.load("rouge")
 warnings.filterwarnings("ignore")
 
+
 def main(args):
     _, test_dataset = get_newsgroup_data_for_ft(mode="inference")
 
