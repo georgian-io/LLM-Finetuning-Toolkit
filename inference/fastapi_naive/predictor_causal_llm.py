@@ -1,23 +1,17 @@
 from peft import PeftModel, PeftConfig
-from transformers import AutoModelForSeq2SeqLM, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoPeftModelForCausalLM, AutoTokenizer
 import torch
 
 class Predictor:
     def __init__(self, model_load_path: str, task: str = "summarization", load_in_8bit: bool = False):
-        config = PeftConfig.from_pretrained(model_load_path)
-        bnb_config = BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_compute_dtype=torch.float16,
-        )
-        self.model = AutoModelForCausalLM.from_pretrained(config.base_model_name_or_path, 
-                                                          load_in_8bit=load_in_8bit,
-                                                          quantization_config=bnb_config)
-        self.tokenizer = AutoTokenizer.from_pretrained(config.base_model_name_or_path)
-        self.tokenizer.pad_token = self.tokenizer.eos_token
+
+        self.model = AutoPeftModelForCausalLM.from_pretrained(model_load_path,
+                                            low_cpu_mem_usage=True,
+                                            torch_dtype=torch.float16,
+                                            load_in_4bit=True,)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_load_path)
         
         self.task = task
-        self.model = PeftModel.from_pretrained(self.model, model_load_path)
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(device)
