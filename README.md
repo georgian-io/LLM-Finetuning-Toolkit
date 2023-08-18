@@ -32,8 +32,8 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 
 - [x] Flan-T5
 - [x] Falcon 
-- [ ] RedPajama (ingredients are being prepped!)
-- [ ] Llama-2
+- [x] RedPajama
+- [ ] Llama-2 (ingredients are being prepped!)
 - [ ] OpenLlama
 - [ ] SalesForce XGen
 - [ ] OpenAI GPT-4
