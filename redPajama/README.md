@@ -1,8 +1,8 @@
 # Contents:
 
 - [Contents:](#contents)
-	- [What is RedPajama?](#what-is-falcon)
-	- [Variations of RedPajama and Parameters](#variations-of-falcon-and-parameters)
+	- [What is RedPajama?](#what-is-redpajama)
+	- [Variations of RedPajama and Parameters](#variations-of-redpajama-and-parameters)
 	- [What does this folder contain?](#what-does-this-folder-contain)
 	- [Evaluation Framework](#evaluation-framework)
 		- [ Performance ](#-performance-)
@@ -13,26 +13,26 @@
 
 ## What is RedPajama? 
 
-RedPajama is a causal decoder-only model, i.e, given a sequence of words, it can predict the most-likely next word. RedPajama comes in two sizes – 7 billion and 40 billion parameters. Furthermore, each of the two sizes has two versions: (i) base, which has been pre-trained on large corpuses of text and can be fine-tuned on downstream tasks, and (ii) instruct, which has already been fine-tuned on instructions, making it favorable for out-of-the-box chatbot and Q&A applications!
+RedPajama-INCITE (RP) combines Together.ai’s RedPajama dataset and EleutherAI’s Pythia model architecture to form a fully open source LLM. One interesting aspect is that there is a 3B parameter size model, which is unusual in our experience. They reason that this will allow for wider adoption due to smaller hardware requirements and easier experimentation. 
 
 ## Variations of RedPajama and Parameters
 
 RedPajama models come in two sizes, and can be leveraged depending on the task at hand.
 
 | RedPajama variation | Parameters  |
-|:----------------:|:-----------:|
-|Base-7B           |7B           |
-|Instruct-7B       |7B           |           
-|Base-40B          |40B          |
-|Instruct-40B      |40B          |
+|:-------------------:|:-----------:|
+|Base-3B              |3B           |
+|Instruct-3B          |3B           |           
+|Base-7B              |7B           |
+|Instruct-7B          |7B           |
 
-In this repository, we have used RedPajama-7B for our experiments.
+In this repository, we have experimented with all of the above variations. 
 
 ## What does this folder contain? 
 
 This folder contains ready-to-use scripts, using which you can do the following:
 	
-* Finetuning RedPajama-7B using PeFT methodology QLoRA:
+* Finetuning RedPajama using PeFT methodology QLoRA:
 	* ```redpajama_classification.py```: Finetune on News Group classification dataset
 	* ```redpajama_summarization.py```: Finetune on Samsum summarization dataset
 * Prompts used:
@@ -40,8 +40,8 @@ This folder contains ready-to-use scripts, using which you can do the following:
 * Perform hyperparameter optimization over a well-constrained search space:
 	* ```run_lora.sh```: Ablation study on LoRA's parameters 
 	* ```sample_ablate.sh```: Ablation study over sample complexities
-* Infer RedPajama-7B using trained checkpoints:
-	* ```redpajama_baseline_inference.py```: Infer in zero-shot and few-shot settings using RedPajama-7B Instruct version
+* Infer RedPajama using trained checkpoints:
+	* ```redpajama_baseline_inference.py```: Infer in zero-shot and few-shot settings using RedPajama-3B or 7B Instruct versions
 	* ```redpajama_classification_inference.py```: Infer on News Group classification dataset
 	* ```redpajama_summarization_inference.py```: Infer on Samsum summarization dataset
 * Infer across a different settings:
@@ -49,7 +49,7 @@ This folder contains ready-to-use scripts, using which you can do the following:
 
 ## Evaluation Framework
 
-In this section, we bring to you our insights after extensively experimenting with RedPajama-7B across different tasks. For a thorough evaluation, we need to evaluate the __four pillars__:
+In this section, we bring to you our insights after extensively experimenting with RedPajama-3B and 7B across different tasks. For a thorough evaluation, we need to evaluate the __four pillars__:
 
 * Performance
 * Cost to Train
@@ -59,7 +59,7 @@ In this section, we bring to you our insights after extensively experimenting wi
 
 ### <img src="../assets/rocket.gif" width="32" height="32"/> Performance <img src="../assets/rocket.gif" width="32" height="32"/>
 
-We evaluated RedPajama-7B under the following conditions:
+We evaluated RedPajama (RP) under the following conditions:
 
 * Tasks & Datasets:
 	* Classification: News Group dataset, which is a 20-way classification task.
@@ -68,12 +68,16 @@ We evaluated RedPajama-7B under the following conditions:
 	* BERT-Base (110M parameters)
 	* Distilbert (66M parameters)
 	* Flan-T5 Large (780M parameters)
+	* Falcon-7B (7B parameters)
 * Experiments:
 	* Zero-Shot prompting vs Few-Shot prompting vs PeFT QLoRA
 	* Sample Efficiency vs Accuracy
 * Training config:
 	* Epochs: 5
-	* RedPajama-7B:
+	* RedPajama-3B/7B:
+		* PeFT technique: QLoRA
+		* Learning rate: 2e-4
+	* Falcon-7B:
 		* PeFT technique: QLoRA
 		* Learning rate: 2e-4
 	* Flan-T5 Large:
@@ -89,51 +93,64 @@ We evaluated RedPajama-7B under the following conditions:
 
 <u> Table 1: Zero-Shot prompting vs Few-Shot prompting vs Fine-Tuning QLoRA </u>
 
-|Method          | Zero-Shot  | Few-Shot | Fine-Tuning + QLoRA |
-|:--------------:|:----------:|:--------:|:-------------------:|
-|Accuracy (in %) |1.08        |:x:       |76.37                |
+|Method          | RP-3B Zero-Shot  | RP-3B Few-Shot | Fine-Tuning + QLoRA |
+|:--------------:|:----------------:|:--------------:|:-------------------:|
+|Accuracy (in %) |0.0               |:x:             |72.34                |
+
+
+|Method          | RP-7B Zero-Shot  | RP-7B Few-Shot | Fine-Tuning + QLoRA |
+|:--------------:|:----------------:|:--------------:|:-------------------:|
+|Accuracy (in %) |0.0               |:x:             |75.52                |
+
 
 
 NOTE: 
 
 * ```prompts.py``` contains the prompts used for zero-shot prompting, few-shot prompting and instruction tuning.
-* For zero-shot and few-shot experiments, we used RedPajama-7B-Instruct version. For instruction tuning, we used Faclon-7B-Base as per recommendations.
+* For zero-shot and few-shot experiments, we used the Instruct versions. For instruction tuning, we used the Base versions as per recommendations.
 
 
 <u> Table 2: Sample Efficiency vs Accuracy </u>
 
-|Training samples (fraction) | Distilbert | Bert | Flan-T5 Large + LoRA | RedPajama-7B + QLoRA |
-|:--------------------------:|:----------:|:----:|:--------------------:|:-----------------:|
-|266   (2.5%)                |36.24       |16.91 |59.86                 |61.85              |
-|533   (5%)                  |46.65       |30.75 |68.84                 |64.02              |
-|1066  (10%)                 |54.15       |53.73 |73.38                 |67.52              |
-|2666  (25%)                 |67.07       |68.41 |75.45                 |70.32              |
-|5332  (50%)                 |72.00       |72.46 |75.43                 |72.42              |
-|10664 (100%)                |71.91       |74.15 |72.31                 |76.37              |
+|Training samples (fraction) | Distilbert | Bert | Flan-T5 Large + LoRA | Falcon-7B + QLoRA | RP-3B + QLoRA | RP-7B + QLoRA |
+|:--------------------------:|:----------:|:----:|:--------------------:|:-----------------:|:-------------:|:-------------:|
+|266   (2.5%)                |36.24       |16.91 |59.86                 |61.85              |55.32          |58.17          |
+|533   (5%)                  |46.65       |30.75 |68.84                 |64.02              |57.49          |60.31          |
+|1066  (10%)                 |54.15       |53.73 |73.38                 |67.52              |65.45          |67.22          |
+|2666  (25%)                 |67.07       |68.41 |75.45                 |70.32              |67.18          |69.53          |
+|5332  (50%)                 |72.00       |72.46 |75.43                 |72.42              |70.58          |70.96          |
+|10664 (100%)                |71.91       |74.15 |72.31                 |76.37              |72.34          |75.52          |
 
 <u> Insight: </u>
 
-We can see that RedPajama-7B does a better job when compared to other models on a sample size as low as ~250! At roughly 50% of training samples, Distilbert and Bert finally catch-up to RedPajama-7B, making RedPajama-7B a great candidate to consider in low-data situations. 
+We can see that RedPajama-7B does a better job when compared to RedPajam-3B across all sample sizes! 
 
 #### Summarization ####
 
 <u> Table 3: Zero-Shot prompting vs Few-Shot prompting vs Fine-Tuning QLoRA </u>
 
-|Method         | Zero-Shot  | Few-Shot  | Fine-Tuning + QLoRA |
-|:-------------:|:----------:|:---------:|:-------------------:|
-|ROUGE-1 (in %) |32.21       |34.12      |52.18                |
-|ROUGE-2 (in %) |10.08       |11.9       |27.84                |
+|Method         | RP-3B Zero-Shot  | RP-3B Few-Shot  | Fine-Tuning + QLoRA |
+|:-------------:|:----------------:|:---------------:|:-------------------:|
+|ROUGE-1 (in %) |30.09             |29.16            |47.75                |
+|ROUGE-2 (in %) |10.48             |10.05            |23.53                |
+
+
+|Method         | RP-7B Zero-Shot  | RP-7B Few-Shot  | Fine-Tuning + QLoRA |
+|:-------------:|:----------------:|:---------------:|:-------------------:|
+|ROUGE-1 (in %) |30.85             |23.22            |49.96                |
+|ROUGE-2 (in %) |11.30             |8.24             |25.94                |
+
 
 <u> Insight: </u>
 
-RedPajama-7B does a much better job at summarizing dialogues than classifying news documents in zero-shot and few-shot settings. But Fine-Tuning is still most effective as it helps RedPajama-7B learn the summarization style specific to the dataset as opposed to creating a generic summary. It is, however, surprising that Few-Shot prompting yields lower ROUGE scores than zero-shot prompting.
+RedPajama does a much better job at summarizing dialogues than classifying news documents in zero-shot and few-shot settings. But Fine-Tuning is still most effective as it helps RedPajama learn the summarization style specific to the dataset as opposed to creating a generic summary. It is, however, surprising that Few-Shot prompting yields lower ROUGE scores than zero-shot prompting.
 
-<u> Table 4: RedPajama-7B vs Other LLMs </u>
+<u> Table 4: RedPajama vs Other LLMs </u>
 
-|Model          | Flan-T5-Base Full Fine-Tune | Flan-T5-Large + LoRA | RedPajama-7B + QLoRA |
-|:-------------:|:---------------------------:|:--------------------:|:-----------------:|
-|ROUGE-1 (in %) |47.23                        |49.21                 |52.18              |
-|ROUGE-2 (in %) |21.01                        |23.39                 |27.84              |
+|Model          | Flan-T5-Base Full Fine-Tune | Flan-T5-Large + LoRA | Falcon-7B + QLoRA | RP-3B + QLoRA | RP-7B + QLoRA |
+|:-------------:|:---------------------------:|:--------------------:|:-----------------:|:-------------:|:-------------:|
+|ROUGE-1 (in %) |47.23                        |49.21                 |52.18              |47.75          |49.96          |
+|ROUGE-2 (in %) |21.01                        |23.39                 |27.84              |23.53          |25.94          |
 
 <u> Insight: </u>
 
@@ -158,7 +175,7 @@ Conditions:
 
 ### <img src="../assets/progress.gif" width="32" height="32"/> Inference <img src="../assets/progress.gif" width="32" height="32"/>
 
-With inference, we used the same approach for deployment and cost estimation for the Flan model. 
+(WIP) With inference, we used the same approach for deployment and cost estimation for the Flan model. 
 
 Following the same process we used to test Flan-T5-Large, we are using the load testing tool, Vegeta, on RedPajama. We created a script that sent varying numbers of requests (ranging from 5 to 185) in three sets, with a three-second interval to give the server time to recover. Afterward, we examined the results, excluding instances where a "too many requests" error occurred. We calculated the average throughput and latency (90%) for the maximum possible requests per second (RPS) and used this data to calculate the cost. Again, following the same process we used to test Flan-T5-Large,  all of the load testing experiments have been executed on a g5.4xlarge instance.
 
