@@ -32,7 +32,7 @@ In this repository, we have experimented with all of the above variations.
 
 This folder contains ready-to-use scripts, using which you can do the following:
 	
-* Finetuning RedPajama-7B using PeFT methodology QLoRA:
+* Finetuning RedPajama using PeFT methodology QLoRA:
 	* ```redpajama_classification.py```: Finetune on News Group classification dataset
 	* ```redpajama_summarization.py```: Finetune on Samsum summarization dataset
 * Prompts used:
@@ -40,7 +40,7 @@ This folder contains ready-to-use scripts, using which you can do the following:
 * Perform hyperparameter optimization over a well-constrained search space:
 	* ```run_lora.sh```: Ablation study on LoRA's parameters 
 	* ```sample_ablate.sh```: Ablation study over sample complexities
-* Infer RedPajama-7B using trained checkpoints:
+* Infer RedPajama using trained checkpoints:
 	* ```redpajama_baseline_inference.py```: Infer in zero-shot and few-shot settings using RedPajama-3B or 7B Instruct versions
 	* ```redpajama_classification_inference.py```: Infer on News Group classification dataset
 	* ```redpajama_summarization_inference.py```: Infer on Samsum summarization dataset
