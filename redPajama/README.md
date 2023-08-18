@@ -175,7 +175,7 @@ Conditions:
 
 ### <img src="../assets/progress.gif" width="32" height="32"/> Inference <img src="../assets/progress.gif" width="32" height="32"/>
 
-With inference, we used the same approach for deployment and cost estimation for the Flan model. 
+(WIP) With inference, we used the same approach for deployment and cost estimation for the Flan model. 
 
 Following the same process we used to test Flan-T5-Large, we are using the load testing tool, Vegeta, on RedPajama. We created a script that sent varying numbers of requests (ranging from 5 to 185) in three sets, with a three-second interval to give the server time to recover. Afterward, we examined the results, excluding instances where a "too many requests" error occurred. We calculated the average throughput and latency (90%) for the maximum possible requests per second (RPS) and used this data to calculate the cost. Again, following the same process we used to test Flan-T5-Large,  all of the load testing experiments have been executed on a g5.4xlarge instance.
 
