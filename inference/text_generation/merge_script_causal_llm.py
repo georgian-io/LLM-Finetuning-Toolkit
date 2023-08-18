@@ -42,7 +42,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--adapter_type", default="experiments")
-    parser.add_argument("--experiment", default="1-8-0.1")
+    parser.add_argument("--experiment", default="class_redp_7b")
     parser.add_argument("--repo_id")
     args = parser.parse_args()
 
