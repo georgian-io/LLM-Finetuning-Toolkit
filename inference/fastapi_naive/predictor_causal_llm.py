@@ -1,5 +1,5 @@
-from peft import PeftModel, PeftConfig
-from transformers import AutoPeftModelForCausalLM, AutoTokenizer
+from peft import AutoPeftModelForCausalLM
+from transformers import AutoTokenizer
 import torch
 
 class Predictor:
