@@ -5,10 +5,7 @@ import os
 import pandas as pd
 import pickle
 import warnings
-warnings.filterwarnings("ignore")
 
-
-# from falcon_seq2seq import get_data, preprocess_function
 from prompts import (
     ZERO_SHOT_CLASSIFIER_PROMPT,
     FEW_SHOT_CLASSIFIER_PROMPT,
@@ -26,41 +23,34 @@ from transformers import (
 
 from datasets import load_dataset
 
-from sklearn.metrics import (
-    accuracy_score, f1_score, precision_score, recall_score
-)
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 metric = evaluate.load("rouge")
+warnings.filterwarnings("ignore")
+
 
 def compute_metrics_decoded(decoded_labs, decoded_preds, args):
-
     if args.task_type == "summarization":
         rouge = metric.compute(
-            predictions=decoded_preds,
-            references=decoded_labs,
-            use_stemmer=True
+            predictions=decoded_preds, references=decoded_labs, use_stemmer=True
         )
-        metrics = {
-            metric: round(rouge[metric] * 100., 3) for metric in rouge.keys()
-        }
+        metrics = {metric: round(rouge[metric] * 100.0, 3) for metric in rouge.keys()}
 
     elif args.task_type == "classification":
         metrics = {
-            "micro_f1": f1_score(decoded_labs, decoded_preds, average='micro'),
-            "macro_f1": f1_score(decoded_labs, decoded_preds, average='macro'),
-            "precision": precision_score(decoded_labs, decoded_preds, average='micro'),
-            "recall": recall_score(decoded_labs, decoded_preds, average='micro'),
-            "accuracy": accuracy_score(decoded_labs, decoded_preds)
+            "micro_f1": f1_score(decoded_labs, decoded_preds, average="micro"),
+            "macro_f1": f1_score(decoded_labs, decoded_preds, average="macro"),
+            "precision": precision_score(decoded_labs, decoded_preds, average="micro"),
+            "recall": recall_score(decoded_labs, decoded_preds, average="micro"),
+            "accuracy": accuracy_score(decoded_labs, decoded_preds),
         }
 
     return metrics
 
 
 def main(args):
-
     save_dir = os.path.join(
-        "baseline_results", args.pretrained_ckpt,
-        args.task_type, args.prompt_type
+        "baseline_results", args.pretrained_ckpt, args.task_type, args.prompt_type
     )
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
@@ -71,7 +61,7 @@ def main(args):
         test_data, test_labels = test_dataset["text"], test_dataset["label"]
 
         newsgroup_classes, few_shot_samples, _ = get_newsgroup_data()
-    
+
     elif args.task_type == "summarization":
         dataset = load_dataset("samsum")
         test_dataset = dataset["test"]
@@ -98,9 +88,7 @@ def main(args):
     )
 
     model = AutoModelForCausalLM.from_pretrained(
-        args.pretrained_ckpt, 
-        quantization_config=bnb_config, 
-        trust_remote_code=True
+        args.pretrained_ckpt, quantization_config=bnb_config, trust_remote_code=True
     )
     model.eval()
 
@@ -145,7 +133,7 @@ def main(args):
         input_ids = tokenizer(
             example, return_tensors="pt", truncation=True
         ).input_ids.cuda()
-        
+
         # Token length >= 2048 cannot be handled by RedPajama
         if input_ids.shape[-1] >= 2048:
             continue
@@ -160,15 +148,14 @@ def main(args):
                     temperature=1e-3,
                 )
                 result = tokenizer.batch_decode(
-                    outputs.detach().cpu().numpy(),
-                    skip_special_tokens=True
+                    outputs.detach().cpu().numpy(), skip_special_tokens=True
                 )[0]
             except:
                 print("Dtype error raised")
                 continue
 
             # Extract the generated text, and do basic processing
-            result = result[len(example):].replace("\n", "").lstrip().rstrip()
+            result = result[len(example) :].replace("\n", "").lstrip().rstrip()
             results.append(result)
             good_labels.append(label)
             good_data.append(data)
@@ -176,7 +163,7 @@ def main(args):
         print(f"Example {ctr}/{len(test_data)} | GT: {label} | Pred: {result}")
         ctr += 1
 
-    metrics = compute_metrics_decoded(good_labels, results, args) 
+    metrics = compute_metrics_decoded(good_labels, results, args)
     print(metrics)
     metrics["predictions"] = results
     metrics["labels"] = good_labels
@@ -191,7 +178,9 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--pretrained_ckpt", default="togethercomputer/RedPajama-INCITE-7B-Instruct")
+    parser.add_argument(
+        "--pretrained_ckpt", default="togethercomputer/RedPajama-INCITE-7B-Instruct"
+    )
     parser.add_argument("--prompt_type", default="zero-shot")
     parser.add_argument("--task_type", default="classification")
     args = parser.parse_args()
