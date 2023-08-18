@@ -1,40 +1,38 @@
 import argparse
-from tqdm import tqdm
-import torch
 import os
 import pandas as pd
 import evaluate
-import datasets
-from datasets import load_dataset
 import pickle
+import torch
 import warnings
-warnings.filterwarnings("ignore")
-
-from transformers import (
-    AutoModelForCausalLM,
-    BitsAndBytesConfig,
-    AutoTokenizer,
-)
+from tqdm import tqdm
 
 from peft import (
     PeftConfig,
     PeftModel,
 )
-
-from sklearn.metrics import (
-    accuracy_score, f1_score, precision_score, recall_score
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    BitsAndBytesConfig,
 )
-from prompts import get_newsgroup_data_for_ft 
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    precision_score,
+    recall_score,
+)
+
+from prompts import get_newsgroup_data_for_ft
 
 metric = evaluate.load("rouge")
+warnings.filterwarnings("ignore")
 
 
 def main(args):
-
     _, test_dataset = get_newsgroup_data_for_ft(mode="inference")
 
-    experiment = args.experiment 
-    peft_model_id = f"experiments/{experiment}/assets"
+    peft_model_id = f"{args.experiment_dir}/assets"
 
     config = PeftConfig.from_pretrained(peft_model_id)
 
@@ -45,9 +43,9 @@ def main(args):
     )
 
     model = AutoModelForCausalLM.from_pretrained(
-        config.base_model_name_or_path, 
-        quantization_config=bnb_config, 
-        trust_remote_code=True
+        config.base_model_name_or_path,
+        quantization_config=bnb_config,
+        trust_remote_code=True,
     )
     model = PeftModel.from_pretrained(model, peft_model_id)
     model.eval()
@@ -73,18 +71,20 @@ def main(args):
         with torch.inference_mode():
             try:
                 outputs = model.generate(
-                    input_ids=input_ids, max_new_tokens=20,
-                    do_sample=True, top_p=0.95, temperature=1e-3,
+                    input_ids=input_ids,
+                    max_new_tokens=20,
+                    do_sample=True,
+                    top_p=0.95,
+                    temperature=1e-3,
                 )
                 result = tokenizer.batch_decode(
-                    outputs.detach().cpu().numpy(),
-                    skip_special_tokens=True
+                    outputs.detach().cpu().numpy(), skip_special_tokens=True
                 )[0]
 
             except:
                 print("Scalar type Half but found Float")
 
-            result = result[len(instruct):]
+            result = result[len(instruct) :]
             results.append(result)
             good_labels.append(label)
             print(f"Instruction:{instruct}")
@@ -92,16 +92,15 @@ def main(args):
             print(f"Generated:{result}")
             print("----------------------------------------")
 
-
     metrics = {
-        "micro_f1": f1_score(good_labels, results, average='micro'),
-        "macro_f1": f1_score(good_labels, results, average='macro'),
-        "precision": precision_score(good_labels, results, average='micro'),
-        "recall": recall_score(good_labels, results, average='micro'),
-        "accuracy": accuracy_score(good_labels, results)
+        "micro_f1": f1_score(good_labels, results, average="micro"),
+        "macro_f1": f1_score(good_labels, results, average="macro"),
+        "precision": precision_score(good_labels, results, average="micro"),
+        "recall": recall_score(good_labels, results, average="micro"),
+        "accuracy": accuracy_score(good_labels, results),
     }
     print(metrics)
-    save_dir = os.path.join(f"experiments/{experiment}", "metrics")
+    save_dir = os.path.join(f"{args.experiment_dir}", "metrics")
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
@@ -114,7 +113,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--experiment", default="1-8-0.1")
+    parser.add_argument("--experiment_dir", default="experiments/classification_sampleFraction-0.01_epochs-1_rank-8_dropout-0.1")
     args = parser.parse_args()
 
     main(args)
