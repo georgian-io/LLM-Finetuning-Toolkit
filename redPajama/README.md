@@ -10,6 +10,8 @@
 			- [Summarization](#summarization)
 		- [  Time \& Cost to Train  ](#--time--cost-to-train--)
 		- [ Inference ](#-inference-)
+			- [Classification](#classification-1)
+			- [Summarization](#summarization-1)
 
 ## What is RedPajama? 
 
@@ -175,35 +177,66 @@ Conditions:
 
 ### <img src="../assets/progress.gif" width="32" height="32"/> Inference <img src="../assets/progress.gif" width="32" height="32"/>
 
-(WIP) With inference, we used the same approach for deployment and cost estimation for the Flan model. 
+As with previous assessments in this series, we used a load testing tool called Vegeta to test how effectively the system handles a large number of requests. We selected the HuggingFace Text Generation Inference Server and FastAPI as our deployment options. We aimed to determine the maximum RPS each model can handle, as well as the throughput, latency and cost per 1,000 tokens. We built a collection of example sentences each consisting of ~100 tokens in order to produce the requests. Then we randomly selected one of these sentences for each request during the load testing experiment. This approach helped us to ensure that our testing results are consistent. Through experimentation we determined the typical ranges of RPS that each model and service could handle for each task.  
 
-Following the same process we used to test Flan-T5-Large, we are using the load testing tool, Vegeta, on RedPajama. We created a script that sent varying numbers of requests (ranging from 5 to 185) in three sets, with a three-second interval to give the server time to recover. Afterward, we examined the results, excluding instances where a "too many requests" error occurred. We calculated the average throughput and latency (90%) for the maximum possible requests per second (RPS) and used this data to calculate the cost. Again, following the same process we used to test Flan-T5-Large,  all of the load testing experiments have been executed on a g5.4xlarge instance.
+To effectively evaluate RedPajama models through FastAPI, we decided to run the service with a single worker. This way GPU memory could be allocated for just one model instance at any given time. By doing so, we successfully averted the occurrence of "Out of Memory" errors, as the memory demands of RedPajama models surpassed the available GPU memory when multiple instances were executed concurrently. Since the TGI requires a standalone model, we have to merge the base model with the LoRA layers.
 
-For the summarization task, we varied the RPS from five to 180. 90% of all requests had a response time equal to or less than 1.82 seconds for 145 RPS (which is the maximum number of requests the server was able to handle). 
+All load testing experiments have been performed on an AWS g5.4xlarge instance that costs US$1.624 per hour.  
 
-As for the cost, taking into account that the throughput value was reported as 53.8, to get this number of responses in one second (or to get 145 responses in ~1.82 seconds) will cost you $0.0008.
+#### Classification
 
-<u> Table 6: Cost estimation of deploying RedPajama-7B + LoRA for summarization task </u>
+For the classification task we tested the FastAPI service for RPS ranging from 1 to 4 with a step size of 1. Then, we evaluated Text Generation Inference (TGI) for RPS ranging from 10 to 150, using a step size of 15. We then calculated the average throughput and latency for the maximum possible RPS. The tables and plots demonstrate significant differences in the response speed and load capacity when deploying the RedPajama model through FastAPI versus TGI.
+
+<u> Table 6: RedPajama-3B + LoRA </u>
 
 |     Server   | Inference cost     | Requests per second (rps) | Throughput | Latency 90% |
 |:------------:|:------------------:|:-------------------------:|:----------:|:-----------:|
-|text-generation| $0.00004 / 1K tokens|			145				|	53.8	 |	1.82 s.    |
+|FastAPI (no optimization)| US$0,001 / 1K tokens |			4				|	0.15	 |	26.4 s.    |
+|text-generation| US$0,00003 / 1K tokens|			135				|	57.3	 |	1.44 s.    |
 
-<img src="../inference/load_testing/vegeta/text_gen/plots/falcon/redpajama_summ_exp1.png" width="430" height="332"/>
+The inference cost for FastAPI (US$0,001 / 1K tokens) is much higher than for Text Generation Inference (US$0,00003 / 1K tokens). Moreover, looking at the latency value we can say that it would cost US$0.0006 to get responses on 135 requests in 1.44 seconds using TGI, which is not possible to achieve with FastAPI. 
 
-The performance of the classification model during inference is quite similar to the summarization. The maximum RPS that TGI was able to handle equals to 125. 
-
-Taking into account the latency value, it will cost $0.001 to get responses for 125 requests in 2.7s. 
+<img src="../assets/readme_images/redpajama_results/RedPajama-3B%20Classification.png" width="830" height="332"/>
 
 <p></p>
-<u> Table 7: Cost estimation of deploying RedPajama-7B + LoRA for classification task </u>
+<u> Table 7: RedPajama-3B + LoRA </u>
+
+|     Server   | Inference cost     | Requests per second (rps) | Throughput | Latency 90% |
+|:------------:|:------------------:|:-------------------------:|:----------:|:-----------:|
+|FastAPI (no optimization)| US$0,001 / 1K tokens |			4				|	0.14	 |	28.1 s.    |
+|text-generation| US$0,00003 / 1K tokens|			125				|	26.13	 |	3.98 s.    |
 <p></p>
+RedPajama-7B performs similarly to RedPajama-3B, but with a slightly lower RPS for text-generation. This is expected due to the larger model size.
 
-|     Server   | Inference cost        | Requests per second (rps)  | Throughput | Latency 90% |
-|:------------:|:---------------------:|:--------------------------:|:----------:|:-----------:|
-|text-generation|$0.00005 / 1K tokens   |        125				|   30.3 	 |  2.7 s.     |
-<p></p>
-<img src="../inference/load_testing/vegeta/text_gen/plots/falcon/redpajama_class_exp1.png" width="430" height="332"/>
+Taking into account the latency value, it will cost US$0.001 to get responses on 125 requests with the RedPajama-7B model deployed on Text Generation Inference. 
 
+<img src="../assets/readme_images/redpajama_results/RedPajama-7B%20Classification.png" width="830" height="332"/>
 
+#### Summarization
 
+For the summarization task we were testing the models for the RPS in range from 10 to 200 with a step equal to 15. You can see our results in the tables below. 
+
+<u> Table 8: RedPajama-3B + LoRA </u>
+
+|     Server   | Inference cost     | Requests per second (rps) | Throughput | Latency 90% |
+|:------------:|:------------------:|:-------------------------:|:----------:|:-----------:|
+|FastAPI (no optimization)| US$0.00002 / 1K tokens  |			160				|	5.46	 |	28.4     |
+|text-generation| US$0.00001 / 1K tokens|			195				|	96.06	 |	0.7139    |
+
+Even though the maximum RPS is quite similar for FastAPI and Text Generation using RedPajama-3B, the throughput and latency differ a lot which influences price per number of responses. According to our results, it will cost US$0.0003 to get responses for 195 requests using TGI and US$0.01 for 160 requests using FastAPI. 
+
+<img src="../assets/readme_images/redpajama_results/RedPajama-3B%20Summarization.png" width="830" height="332"/>
+
+<u> Table 9: RedPajama-7B + LoRA </u>
+
+|     Server   | Inference cost     | Requests per second (rps) | Throughput | Latency 90% |
+|:------------:|:------------------:|:-------------------------:|:----------:|:-----------:|
+|FastAPI (no optimization)| US$0.00002 / 1K tokens   |			160				|	5.27	 |	29.527     |
+|text-generation| US$0.00002 / 1K tokens|			145				|	41.5	 |	2.5    |
+
+As we saw with the classification task, the load testing performance for summarization of  RedPajama-7B is similar to RedPajama-3B. The maximum RPS for FastAPI stays the same and for TGI it is a bit lower. 
+
+<img src="../assets/readme_images/redpajama_results/RedPajama-7B%20Summarization.png" width="830" height="332"/>
+<p> </p>
+
+Our load testing experiments highlight a key finding: the difference in model size does not have a big impact on inference. Instead, the factor influencing performance is the choice of deployment platform. In our opinion, when dealing with LLMs, it's better never to use FastAPI as a deployment solution, and instead opt to much more effective options like Text Generation Inference.  
