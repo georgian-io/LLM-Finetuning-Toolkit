@@ -10,8 +10,15 @@ In order to use HuggingFace Text Generation Inference, we need to merge trained 
    ```
 2. Run the merge script.
    
+   Choose appropriate merge script:
+
+   For Flan:
    ```
-   python3 merge_script_{llm_name}.py --repo_id your_model_repository
+   python3 merge_script_seq_to_seq.py --repo_id your_model_repository
+   ```
+   For Falcon and RedPajama:
+   ```
+   python3 merge_script_causal_llm.py --repo_id your_model_repository
    ```
 
 3. Define next variables in the CLI.
