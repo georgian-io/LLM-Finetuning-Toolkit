@@ -11,6 +11,8 @@
 			- [FastApi](#fastapi)
 			- [HuggingFace Text Generation Inference](#huggingface-text-generation-inference)
 	- [Ablation Studies](#ablation-studies)
+		- [Classification Studies](#classification-studies)
+		- [Summarization Studies:](#summarization-studies)
 
 ## What is Flan-T5? 
 
@@ -160,13 +162,13 @@ For the summarization task we varied the RPS from 5 to 30, and examined the syst
 The Throughput value was reported as 1.5. This value represents the average number of requests successfully completed per second during the load test. 
 
 <p></p>
-<img src="../inference/load_testing/vegeta/fastapi/plots/flan_summ.png" width="380" height="332"/>
+<img src="../inference/load_testing/vegeta/fastapi/plots/flan/flan_summ.png" width="380" height="332"/>
 <p></p>
 
 We performed the same load testing experiments for the classification task. Here the maximum number of requests the system can cope with is much higher — 180 requests per second.
 
 <p></p>
-<img src="../inference/load_testing/vegeta/fastapi/plots/flan_class.png" width="380" height="332"/>
+<img src="../inference/load_testing/vegeta/fastapi/plots/flan/flan_class.png" width="380" height="332"/>
 
 #### HuggingFace Text Generation Inference ####
 
@@ -177,12 +179,12 @@ This time for the summarization task we varied the RPS value from 5 to 120. 90% 
 The Throughput value was reported as 45.5, which is much greater than the value we were able to get using FastApi. 
 
 <p></p>
-<img src="../inference/load_testing/vegeta/text_gen/plots/flan_summ_exp3.png" width="400" height="332"/>
+<img src="../inference/load_testing/vegeta/text_gen/plots/flan/flan_summ_exp3.png" width="400" height="332"/>
 
 As for the classification task, the maximum RPS that the server was able to handle equals to 145. The Throughput value is 78.5 which is much higher than the value we got during load testing of FastApi. Moreover the Latency (90%) is also lower and equals to 1.5 s per request. 
 
 <p></p>
-<img src="../inference/load_testing/vegeta/text_gen/plots/flan_class_exp2.png" width="400" height="332"/>
+<img src="../inference/load_testing/vegeta/text_gen/plots/flan/flan_class_exp2.png" width="400" height="332"/>
 
 ## Ablation Studies
 
