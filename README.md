@@ -109,7 +109,7 @@ NOTE: All of our experiments were conducted on the AWS EC2 instance: g5.2xlarge.
 
 Our plan is to perform these experiments on all the LLMs below. To that end, this is a tentative roadmap of the LLMs that we aim to cover, and their corresponding codebase and README links:
 
-| LLM        | Benchmarked?        |  Open-Source?     | Model README | Codebase |
+| LLM        | Benchmarked?        |  Open-Source?     | README | Codebase |
 |:----------:|:-------------------:|:-----------------:|:------------:|:------------:|
 |Flan-T5     |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/readme/update/flan-t5/README.md) | [Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/readme/update/flan-t5) |
 |Falcon      |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/falcon/README.md) | [Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/readme/update/falcon) |
