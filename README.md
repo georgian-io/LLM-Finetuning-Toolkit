@@ -107,7 +107,13 @@ You can start fine-tuning your choice of LLM in 4 easy steps:
 
 ## Roadmap
 
-Our plan is to perform these experiments on all the LLMs below. To that end, this is a tentative roadmap of the LLMs that we aim to cover:
+Our plan is to perform these experiments on all the LLMs below. To that end, this is a tentative roadmap of the LLMs that we aim to cover, and their corresponding READMEs:
+
+| LLM        | Benchmarked?        |  Open-Source?     | Model README |
+|:----------:|:-------------------:|:-----------------:|:------------:|
+|Flan-T5     |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/flan-t5)           |
+|Falcon      |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/falcon/README.md)  |
+
 
 - [x] Flan-T5
 - [x] Falcon 
