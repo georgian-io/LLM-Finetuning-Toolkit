@@ -138,7 +138,7 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Correspondence
 
-If you have any questions or issues, or would like to contribute to this repository, please reach out to:
+If you have any questions, please reach out to:
 
 - Rohit Saha ([Email](mailto:rohit@georgian.io) | [LinkedIn](https://www.linkedin.com/in/rohit-saha-ai/))
 - Kyryl Truskovskyi ([Email](mailto:kyryl@georgian.io) | [LinkedIn](https://www.linkedin.com/in/kyryl-truskovskyi-275b7967/))
