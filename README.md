@@ -11,7 +11,7 @@
 
 # LLM Finetuning Hub 
 
-<img src="assets/repo-main.png" width="512" height="212"/>
+<img src="assets/repo-main.png" width="512" height="252"/>
 
 LLM Finetuning Hub contains code and insights to finetune various large language models for your use-case.
 
