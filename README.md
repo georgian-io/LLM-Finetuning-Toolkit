@@ -49,12 +49,12 @@ You can start fine-tuning your choice of LLM in 4 easy steps:
 
 1. **Setup conda environment**
 
-   ```wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.11.0-Linux-x86_64.sh
-      bash Miniconda3-py38_4.11.0-Linux-x86_64.sh
-      source ~/.bashrc
-      conda create --name llm_finetuning python=3.9
-      conda activate llm_finetuning
-   ```
+```wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.11.0-Linux-x86_64.sh
+bash Miniconda3-py38_4.11.0-Linux-x86_64.sh
+source ~/.bashrc
+conda create --name llm_finetuning python=3.9
+conda activate llm_finetuning
+```
 
 All of our experiments were conducted on the AWS EC2 instance: g5.2xlarge. It has one 24GB Nvidia GPU, and is sufficient to run all of our codebase.
 
