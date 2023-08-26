@@ -18,8 +18,8 @@ LLM Finetuning Hub contains code and insights to finetune various large language
 We stress-test both open-source and close-source LLMs through our Evaluation Framework to check their applicability for real-life business use-cases. Finetuning LLMs has never been easier.
 
 [Evaluation Framework](#evaluation-framework) •
-[Getting started](#getting-started) •
-[LLM roadmap](#llm-roadmap) •
+[Getting Started](#getting-started) •
+[LLM Roadmap](#llm-roadmap) •
 [Contributing](#contributing)
 
 </div>
@@ -43,7 +43,7 @@ We are providing scripts that are ready-to-use for:
 - Finetuning LLMs on your proprietary dataset via PeFT methodologies such as LoRA and Prefix Tuning
 - Performing hyperparameter optimization to get the maximum performance out of these models
 
-## Getting started 
+## Getting Started 
 
 You can start fine-tuning your choice of LLM in 4 easy steps:
 
@@ -103,11 +103,11 @@ You can start fine-tuning your choice of LLM in 4 easy steps:
 	python falcon_baseline_inference.py --task_type summarization --prompt_type few-shot
 	```
 
-<u> Note </u>: All of our experiments were conducted on the AWS EC2 instance: g5.2xlarge. It has one 24GB Nvidia GPU, and is sufficient to finetune the LLMs in this repository.
+NOTE: All of our experiments were conducted on the AWS EC2 instance: g5.2xlarge. It has one 24GB Nvidia GPU, and is sufficient to finetune the LLMs in this repository.
 
-## Roadmap
+## LLM Roadmap
 
-Our plan is to perform these experiments on all the LLMs below. To that end, this is a tentative roadmap of the LLMs that we aim to cover, and their corresponding READMEs:
+Our plan is to perform these experiments on all the LLMs below. To that end, this is a tentative roadmap of the LLMs that we aim to cover, and their corresponding folder and README links:
 
 | LLM        | Benchmarked?        |  Open-Source?     | Model README | Model folder |
 |:----------:|:-------------------:|:-----------------:|:------------:|:------------:|
@@ -123,6 +123,18 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 |OpenAI GPT-3.5 | |:x: | | |
 |Google PaLM | |:x: | | |
 |Inflection Pi | |:x: | | |
+
+## Contributing
+
+If you would like to contribute to this project, we recommend following the "fork-and-pull" Git workflow.
+
+ 1. **Fork** the repo on GitHub
+ 2. **Clone** the project to your own machine
+ 3. **Commit** changes to your own branch
+ 4. **Push** your work back up to your fork
+ 5. Submit a **Pull request** so that we can review your changes
+
+NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ## Correspondence
 
