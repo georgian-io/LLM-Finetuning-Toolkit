@@ -49,7 +49,8 @@ You can start fine-tuning your choice of LLM in 4 easy steps:
 
 1. **Setup conda environment**
 
-```wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.11.0-Linux-x86_64.sh
+```shell
+wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.11.0-Linux-x86_64.sh
 bash Miniconda3-py38_4.11.0-Linux-x86_64.sh
 source ~/.bashrc
 conda create --name llm_finetuning python=3.9
@@ -58,13 +59,16 @@ conda activate llm_finetuning
 
 2. **Install relevant packages**
 
-```pip install -r requirements.txt```
+```shell
+pip install -r requirements.txt
+```
 
 3. **Finetune your LLM of choice**
 
 For instance, to finetune Falcon-7B, do the following:
 
-```cd falcon/ # navigate to Falcon folder
+```shell
+cd falcon/ # navigate to Falcon folder
 python falcon_classification.py --lora_r 8 --epochs 5 --dropout 0.1 # finetune Falcon-7B on newsgroup classification dataset
 python falcon_classification_inference.py --experiment <experiment folder> # evaluate finetuned Falcon
 python falcon_summarization.py --lora_r 8 --epochs 1 --dropout 0.1 # finetune Falcon-7B on samsum chat dataset
@@ -73,7 +77,8 @@ python falcon_summarization_inference.py --experiment <experiment folder> # eval
 
 For instance, to finetune Flan-T5-Large, do the following:
 
-```cd flan-t5/ # navigate to Flan-T5 folder
+```shell
+cd flan-t5/ # navigate to Flan-T5 folder
 python flan_classification.py --peft_method prefix --prefix_tokens 20 --epochs 5 # finetune Flan-T5 on newsgroup dataset
 python flan_classification_inference.py --experiment <experiment folder> # evaluate finetuned Flan-T5
 python flan_summarization.py --peft_method lora --lora_r 8 --epochs 1 # finetune Flan-T5 on samsum chat dataset
@@ -84,13 +89,15 @@ python flan_summarization_inference.py --experiment <experiment folder> # evalut
 
 For instance, to use Falcon-7B on newsgroup classification task, do the following:
 
-```python falcon_baseline_inference.py --task_type classification --prompt_type zero-shot
+```shell
+python falcon_baseline_inference.py --task_type classification --prompt_type zero-shot
 python falcon_baseline_inference.py --task_type classification --prompt_type few-shot
 ```
 
 To use Falcon-7B on samsum summarization task, do the following:
 
-```python falcon_baseline_inference.py --task_type summarization --prompt_type zero-shot
+```shell
+python falcon_baseline_inference.py --task_type summarization --prompt_type zero-shot
 python falcon_baseline_inference.py --task_type summarization --prompt_type few-shot
 ```
 
