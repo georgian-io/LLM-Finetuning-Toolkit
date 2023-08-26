@@ -87,7 +87,7 @@ You can start fine-tuning your choice of LLM in 4 easy steps:
 	python flan_summarization_inference.py --experiment <experiment folder> # evalute finetuned Flan-T5
 	```
 
-4. **Zero-shot and Few-shot LLM of choice**
+4. **Zero-shot and Few-shot your LLM of choice**
 
 	For instance, to use Falcon-7B on newsgroup classification task, do the following:
 
