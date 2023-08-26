@@ -58,8 +58,7 @@ conda activate llm_finetuning
 
 2. **Install relevant packages**
 
-```pip install -r requirements.txt
-```
+```pip install -r requirements.txt```
 
 3. **Finetune your LLM of choice**
 
