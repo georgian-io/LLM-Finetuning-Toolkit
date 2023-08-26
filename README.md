@@ -1,6 +1,17 @@
-# LLM Tuning Hub 
+<!-- markdownlint-configure-file {
+  "MD013": {
+    "code_blocks": false,
+    "tables": false
+  },
+  "MD033": false,
+  "MD041": false
+} -->
 
-<img src="assets/repo-main.png" width="768" height="468"/>
+<div align="center">
+
+# LLM Finetuning Hub 
+
+<img src="assets/repo-main.png" width="512" height="212"/>
 
 If the last 6 months of AI research felt like a decade to you, you are not alone! With a new Large Language Model (LLM) released every other week, it has been challenging to keep up with the current pace of innovation in AI. While there has been a flurry of blog posts, tweets and code snippets on social media showcasing the power of LLMs and how to set up chat applications using them, we have not seen efforts that stress-test them for real-life business use-cases.
 
