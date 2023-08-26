@@ -56,9 +56,46 @@ conda create --name llm_finetuning python=3.9
 conda activate llm_finetuning
 ```
 
-All of our experiments were conducted on the AWS EC2 instance: g5.2xlarge. It has one 24GB Nvidia GPU, and is sufficient to run all of our codebase.
+2. **Install relevant packages**
 
-Go over to the LLM-specific directory that you are interested in, and open the ```README.md```. We have included details about the LLM, followed by performance results on open-source datasets!
+```pip install -r requirements.txt
+```
+
+3. **Finetune your LLM of choice**
+
+For instance, to finetune Falcon-7B, do the following:
+
+```cd falcon/ # navigate to Falcon folder
+python falcon_classification.py --lora_r 8 --epochs 5 --dropout 0.1 # finetune Falcon-7B on newsgroup classification dataset
+python falcon_classification_inference.py --experiment <experiment folder> # evaluate finetuned Falcon
+python falcon_summarization.py --lora_r 8 --epochs 1 --dropout 0.1 # finetune Falcon-7B on samsum chat dataset
+python falcon_summarization_inference.py --experiment <experiment folder> # evaluate finetuned Falcon
+```
+
+For instance, to finetune Flan-T5-Large, do the following:
+
+```cd flan-t5/ # navigate to Flan-T5 folder
+python flan_classification.py --peft_method prefix --prefix_tokens 20 --epochs 5 # finetune Flan-T5 on newsgroup dataset
+python flan_classification_inference.py --experiment <experiment folder> # evaluate finetuned Flan-T5
+python flan_summarization.py --peft_method lora --lora_r 8 --epochs 1 # finetune Flan-T5 on samsum chat dataset
+python flan_summarization_inference.py --experiment <experiment folder> # evalute finetuned Flan-T5
+```
+
+4. **Zero-shot and Few-shot LLM of choice**
+
+For instance, to use Falcon-7B on newsgroup classification task, do the following:
+
+```python falcon_baseline_inference.py --task_type classification --prompt_type zero-shot
+python falcon_baseline_inference.py --task_type classification --prompt_type few-shot
+```
+
+To use Falcon-7B on samsum summarization task, do the following:
+
+```python falcon_baseline_inference.py --task_type summarization --prompt_type zero-shot
+python falcon_baseline_inference.py --task_type summarization --prompt_type few-shot
+```
+
+All of our experiments were conducted on the AWS EC2 instance: g5.2xlarge. It has one 24GB Nvidia GPU, and is sufficient to finetune the LLMs in this repository.
 
 ## Roadmap
 
