@@ -13,16 +13,26 @@
 
 <img src="assets/repo-main.png" width="512" height="212"/>
 
-If the last 6 months of AI research felt like a decade to you, you are not alone! With a new Large Language Model (LLM) released every other week, it has been challenging to keep up with the current pace of innovation in AI. While there has been a flurry of blog posts, tweets and code snippets on social media showcasing the power of LLMs and how to set up chat applications using them, we have not seen efforts that stress-test them for real-life business use-cases.
+LLM Finetuning Hub contains code and insights to finetune various large language models for your use-case.
 
-We, at Georgian, are experimenting with both open-source and closed-source LLMs. For a holistic evaluation, we will make use of the __Evaluation Framework__ that contains __4 pillars__:
+We stress-test both open-source and close-source LLMs through our Evaluation Framework to check their applicability for real-life business use-cases. Finetuning LLMs has never been easier.
+
+[Evaluation Framework](#evaluation-framework) •
+[Getting started](#getting-started) •
+[LLM roadmap](#llm-roadmap) •
+[Contributing](#contributing)
+
+</div>
+
+## Evaluation Framework
+
+For a holistic evaluation, we will make use of the __Evaluation Framework__ that contains __4 pillars__:
 
 - <img src="assets/rocket.gif" width="32" height="32"/> Performance <img src="assets/rocket.gif" width="32" height="32"/>
 - <img src="assets/time.gif" width="32" height="32"/> Time to Train <img src="assets/time.gif" width="32" height="32"/>
 - <img src="assets/money.gif" width="32" height="32"/> Cost to Train <img src="assets/money.gif" width="32" height="32"/>
 - <img src="assets/progress.gif" width="32" height="32"/> Inferencing <img src="assets/progress.gif" width="32" height="32"/>
 
-## What's in it for you?
 
 For each of the above four pillars, we are sharing our codebase and insights to:
 - Assist you to leverage LLMs for your business needs and challenges
@@ -33,7 +43,20 @@ We are providing scripts that are ready-to-use for:
 - Finetuning LLMs on your proprietary dataset via PeFT methodologies such as LoRA and Prefix Tuning
 - Performing hyperparameter optimization to get the maximum performance out of these models
 
-## What's the best way to use this repository?
+## Getting started 
+
+You can start fine-tuning your choice of LLM in 4 easy steps:
+
+1. **Setup conda environment**
+
+   ```wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.11.0-Linux-x86_64.sh
+      bash Miniconda3-py38_4.11.0-Linux-x86_64.sh
+      source ~/.bashrc
+      conda create --name llm_finetuning python=3.9
+      conda activate llm_finetuning
+   ```
+
+All of our experiments were conducted on the AWS EC2 instance: g5.2xlarge. It has one 24GB Nvidia GPU, and is sufficient to run all of our codebase.
 
 Go over to the LLM-specific directory that you are interested in, and open the ```README.md```. We have included details about the LLM, followed by performance results on open-source datasets!
 
