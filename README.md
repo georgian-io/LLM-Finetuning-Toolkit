@@ -60,6 +60,8 @@ conda activate llm_finetuning
 2. **Install relevant packages**
 
 ```shell
+git clone https://github.com/georgian-io/LLM-Finetuning-Hub.git
+cd LLM-Finetuning-Hub/
 pip install -r requirements.txt
 ```
 
