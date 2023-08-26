@@ -109,21 +109,20 @@ You can start fine-tuning your choice of LLM in 4 easy steps:
 
 Our plan is to perform these experiments on all the LLMs below. To that end, this is a tentative roadmap of the LLMs that we aim to cover, and their corresponding READMEs:
 
-| LLM        | Benchmarked?        |  Open-Source?     | Model README |
-|:----------:|:-------------------:|:-----------------:|:------------:|
-|Flan-T5     |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/flan-t5)           |
-|Falcon      |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/falcon/README.md)  |
-
-
-- [x] Flan-T5
-- [x] Falcon 
-- [x] RedPajama
-- [ ] Llama-2 (ingredients are being prepped!)
-- [ ] OpenLlama
-- [ ] SalesForce XGen
-- [ ] OpenAI GPT-4
-- [ ] Google PaLM
-- [ ] Inflection Pi
+| LLM        | Benchmarked?        |  Open-Source?     | Model README | Model folder |
+|:----------:|:-------------------:|:-----------------:|:------------:|:------------:|
+|Flan-T5     |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/readme/update/flan-t5/README.md) | [Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/readme/update/flan-t5) |
+|Falcon      |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/falcon/README.md) | [Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/readme/update/falcon) |
+|RedPajama   |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/readme/update/redPajama/README.md) | [Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/readme/update/redPajama) |
+|Llama-2     |WIP |:white_check_mark: | | |
+|OpenLlama   | |:white_check_mark: | | |
+|SalesForce XGen | |:white_check_mark: | | |
+|Mosaic MPT | |:white_check_mark: | | | 
+|Cerebras | |:white_check_mark: | | |
+|Writer Palmyra | |:x: | | |
+|OpenAI GPT-3.5 | |:x: | | |
+|Google PaLM | |:x: | | |
+|Inflection Pi | |:x: | | |
 
 ## Correspondence
 
