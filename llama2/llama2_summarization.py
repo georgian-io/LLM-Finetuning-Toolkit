@@ -54,7 +54,6 @@ def prepare_samsum_data():
 
 
 def main(args):
-
     train_dataset = prepare_samsum_data()
 
     # BitsAndBytesConfig int-4 config
