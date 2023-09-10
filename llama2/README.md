@@ -1,3 +1,9 @@
+Important: Llama2 has the option of using flash attention to speed up inference. In order to use flash attention, please do:
+
+```shell
+MAX_JOBS=4 pip install flash-attn --no-build-isolation
+```
+
 # Contents:
 
 - [Contents:](#contents)
