@@ -11,6 +11,11 @@
 
 # LLM Finetuning Hub 
 
+[![Contributors][contributors-shield]][contributors-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Apache 2.0 License][license-shield]][license-url]
+[![Last Commit][last_commit-shield]][last_commit-url]
+
 <img src="assets/repo-main.png" width="512" height="296"/>
 
 LLM Finetuning Hub contains code and insights to finetune various large language models for your use-case.
