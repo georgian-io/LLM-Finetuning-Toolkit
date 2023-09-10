@@ -17,3 +17,7 @@ rouge-score==0.1.2
 absl-py==1.4.0
 py7zr==0.20.5
 tiktoken==0.4.0
+ninja==1.11.1
+packaging==23.1
+sentencepiece==0.1.99
+protobuf==3.20.*
