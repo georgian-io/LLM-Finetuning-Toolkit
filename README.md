@@ -68,6 +68,16 @@ You can start fine-tuning your choice of LLM in 4 easy steps:
 
 3. **Finetune your LLM of choice**
 
+	For instance, to finetune Llama2-7B or Llama2-13B, do the following:
+
+	```shell
+	cd llama2/ # navigate to Llama2 folder
+	python llama2_classification.py --lora_r 8 --epochs 5 --dropout 0.1 --pretrained_ckpt NousResearch/Llama-2-7b-hf # finetune Llama2-7B on newsgroup classification dataset
+	python llama2_classification_inference.py --experiment <experiment folder> # evaluate finetuned Llama2 7B version
+	python llama2_summarization.py --lora_r 8 --epochs 1 --dropout 0.1 --pretrained_ckpt NousResearch/Llama-2-13b-hf # finetune Llama2-13B on samsum chat dataset
+	python llama2_summarization_inference.py --experiment <experiment folder> # evaluate finetuned Llama2 13B version
+	```
+
 	For instance, to finetune Falcon-7B, do the following:
 
 	```shell
@@ -131,6 +141,10 @@ We benchmark LLMs across the tasks of classification and summarization. More pre
 
 1. Classification: Sample efficiency VS Accuracy
 2. Summarization: Fine-tuning
+
+Note:
+
+* RP refers to RedPajama.
 
 ### Classification: Sample efficiency VS Accuracy
 
