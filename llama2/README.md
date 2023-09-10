@@ -70,6 +70,7 @@ We evaluated Llama2 under the following conditions:
 	* Distilbert (66M parameters)
 	* Flan-T5 Large (780M parameters)
 	* Falcon-7B (7B parameters)
+	* RedPajama (3B / 7B parameters)
 * Experiments:
 	* Sample Efficiency vs Accuracy
 	* Zero-Shot prompting vs Few-Shot prompting vs PeFT QLoRA
