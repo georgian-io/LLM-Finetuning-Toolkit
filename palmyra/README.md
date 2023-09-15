@@ -107,4 +107,9 @@ Palmyra was trained on a private dataset from Writer. Thus we do not have inform
 
 In terms of costs, Palmyra has two different [plans](https://writer.com/plans/). The first is for small teams and costs USD 18/user/month. The second is the enterprise plan which can be negotiated with their sales team. For the purposes of these experiments, we utilized the free trial available on the website. Thus there is no cost per-API call but rather a single monthly rate. 
 
-In terms of time, both classification scenarios took approximately 1 second per API call while both the summarization scenarios took approximately 2 seconds per API call. This came out to about 2.5 hours each for the classification experiments and a little less than an hour for each summarization experiment.
+| Task           	| Time/Call 	| Total Time 	|
+|----------------	|-----------	|------------	|
+| Classification 	| ~1s       	| ~2.5 hours 	|
+| Summarization  	| ~2s       	| ~1 hour    	|
+
+Note: We observed no significant difference in the time taken for zero-shot vs few-shot for summarization. For classification, few-shot experiments were faster since they failed due to hitting the maximum token length. We ignore this speed up due to the failure to generate a response.
