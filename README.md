@@ -130,7 +130,7 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 |SalesForce XGen | |:white_check_mark: | | |
 |Mosaic MPT | |:white_check_mark: | | | 
 |Cerebras | |:white_check_mark: | | |
-|Writer Palmyra |:white_check_mark: |:x: |https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/palmyra/README.md |https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/palmyra |
+|Writer Palmyra |:white_check_mark: |:x: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/palmyra/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/palmyra) |
 |OpenAI GPT-3.5 | |:x: | | |
 |Google PaLM | |:x: | | |
 |Inflection Pi | |:x: | | |
