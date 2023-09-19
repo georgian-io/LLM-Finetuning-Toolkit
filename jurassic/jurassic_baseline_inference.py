@@ -37,33 +37,33 @@ def jurassic_api_call(
     prompt: str, model, custom_model, max_new_tokens: int, top_p: float=0.95, temperature: float=1e-3
 ):
     
-    try:
-        if custom_model == "":
-            response = ai21.Completion.execute(
-                model=model,
-                prompt=prompt,
-                numResults=1,
-                maxTokens=max_new_tokens,
-                temperature=temperature,
-                topKReturn=0,
-                topP=top_p,
-                stopSequences=["##"]
-            )
-        else:
-            response = ai21.Completion.execute(
-                model=model,
-                custom_model=custom_model,
-                prompt=prompt,
-                numResults=1,
-                epoch=1,
-                maxTokens=max_new_tokens,
-                temperature=temperature,
-                topKReturn=0,
-            )
+    # try:
+    if custom_model == "":
+        response = ai21.Completion.execute(
+            model=model,
+            prompt=prompt,
+            numResults=1,
+            maxTokens=max_new_tokens,
+            temperature=temperature,
+            topKReturn=0,
+            topP=top_p,
+            stopSequences=["##"]
+        )
+    else:
+        response = ai21.Completion.execute(
+            model=model,
+            custom_model=custom_model,
+            prompt=prompt,
+            numResults=1,
+            epoch=1,
+            maxTokens=max_new_tokens,
+            temperature=temperature,
+            topKReturn=0,
+        )
 
-        generation = response["completions"][0]["data"]["text"]
-    except:
-        generation = ""
+    generation = response["completions"][0]["data"]["text"]
+    #except:
+    #    generation = ""
 
     return generation
 
@@ -178,8 +178,8 @@ def main(args):
                 )
 
         elif args.prompt_type == "fine-tuned":
-            example = data
-
+            example = data + "\n"
+        
         start = time.time()
         result = jurassic_api_call(
             example, 
