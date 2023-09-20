@@ -172,23 +172,33 @@ We use the samsum dataset which contains chat conversations and their summarized
 
 ## Cost estimation and load testing
 
+We deployed the models mentioned above on two servers: FastApi and the HuggingFace Text Generation Inference server. The goal was to compare the cost and latency between our custom server, developed using FastApi, and the inference server (TGI), which comes with many built-in optimizations.
+
+All servers were run and received inference requests on an AWS g5.4xlarge instance with Nvidia GPU A10. For load testing, we utilized Vegeta to see how the system copes with a high volume of requests. Our objective was to identify the maximum RPS each model could manage, along with throughput, latency, and cost per 1,000 tokens. We created a set of sample sentences, each about ~100 tokens long, to generate the requests. During the load testing, a random sentence was chosen for each request, ensuring consistent testing results. This method allowed us to identify the typical RPS range each model and service could handle for various tasks.
+
+Below, two tables summarize our observations for all the models, tasks, and deployment options explored in this repository (we also tried LLama on Nvidia A100 using the Ray server; more details can be found [here](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/llama2/README.md)). Generally, the TGI server is more cost-effective than the custom server and simpler to set up. It provided better RPS, throughput, and had less latency. Another observation was that models designed for classification are slower than those for summarization. Aslo, the model's size (number of training parameters) doesn't significantly impact its performance.
+
+### Text Generation Inference
+
 |                          | Classification |         |         |		  |             | 		 |Summarization|        |        |		  |         |		|
 |--------------------------|----------------|---------|---------|---------|-------------|----------|-------------|--------|--------|--------|---------|--------|
-| Model                    | Flan           | Falcon  | RP 3B   | RP 7B   |  LLama-2 7B |LLama-2 13B |  Flan       | Falcon |RP 3B   |RP 7B   |LLama-2 7B | LLama-2 13B| 
+| Model                    | Flan-T5 Large          | Falcon-7B  | RP-3B   | RP-7B   |  LLama2-7B |LLama2-13B |  Flan-T5 Large       | Falcon-7B |RP-3B   |RP-7B   |LLama2-7B | LLama-2-13B| 
 | Inference cost (per 1K tokens)          | $0.00001   		| $0.00005 | $0.00003 | $0.00003 |    $0.00003      |$0.00003			 | $0.00001    | $0.00004|$0.00001|$0.00002|	$0.00002	    |	$0.00002	  |
 | RPS                      | 145        	| 125     | 135     |    125  |     125     |125			 | 120         | 145    | 195    |145     |	135 	    |	125	|
 | Throughput               | 78.5       	| 30.3    | 57.3    | 26.13   |      19.81    |	9.60		 | 45.5        | 53.8   | 96.06  |41.5	  |	36.10	    |	22.16		|
 | Latency 90% (seconds)    | 1.5       		| 2.7     | 1.44    |   3.98  |      4.8    |	12.04		 | 2.03        | 1.82   | 0.7139 |2.5	  |	2.6	   |	5.15		|
 
-FAST API
+### FastApi
+
 |                          | Classification |         |         |		  |           | 		 |Summarization|        |        |		  |         |		    |
 |--------------------------|----------------|---------|---------|---------|-----------|----------|-------------|--------|--------|--------|---------|-----------|
-| Model                    | Flan           | Falcon  | RP 3B   |   RP 7B |  LLama-2 7B |LLama-2 13B |  Flan       | Falcon |RP 3B   |RP 7B   |LLama-2 7B | LLama-2 13B  | 
+| Model                    | Flan-T5 Large          | Falcon-7B  | RP-3B   |   RP-7B |  LLama2-7B |LLama2-13B |  Flan-T5 Large       | Falcon-7B |RP-3B   |RP-7B   |LLama2-7B | LLama2-13B  | 
 | Inference cost (per 1K tokens)           | $0.00001   		| -		  | $0.001   |  $0.001 |    $0.001      |	$0.001		 | $0.00007    | -		|$0.00002|$0.00002|	$0.00003	    |	$0.0003	    |
 | RPS                      | 180        	| -    	  | 4       |    4    |     4     |		4	 | 30          | -    	| 160    |160     |	100	    |	10	    |
 | Throughput               | 5.84       	| -   	  | 0.15    |   0.14  |      0.11    |	0.14		 | 1.5         | - 		| 5.46   |5.27	  |	3.43	    |	1.73		|
 | Latency 90% (seconds)    | 28.01       	| -    	  | 26.4    |   28.1  |      27.3    |	27.9		 | 18.27       | -   	| 28.4   |29.527  |	28.1	    |	5.1		|
 
+In conclusion, the TGI server offers a more cost-efficient and streamlined approach compared to custom servers, delivering superior performance metrics. While classification models tend to be slower, the size of the model, in terms of training parameters, doesn't notably affect its efficiency. Choosing the right server and model type is crucial for optimizing cost and latency.
 
 ## Contributing
 
