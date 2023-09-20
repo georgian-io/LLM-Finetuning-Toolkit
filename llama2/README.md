@@ -230,15 +230,6 @@ The results for LLama-13B for classification task show the same tendency as for 
 | Throughput               | 3.43       | 36.10   | 4.04    | 4.97        | 119.13 | 15.08  |
 | Latency 90% (seconds)    | 28.1       | 2.6     | 28.5    | 29.2        | 0.75   | 11.4   |
 
-
-|                   | Classification |         |         |		  |           | 		 |Summarization|        |        |		  |        |		|
-|--------------------------|----------------|---------|---------|---------|-----------|----------|-------------|--------|--------|--------|--------|--------|
-| Model                   		| Flan           | Falcon  | RP 3B   |   RP 7B |  LLama 7B |llama 13B |  Flan       | Falcon |RP 3B    |RP 7B  |LLama 7B | LLama 7B| 
-| Inference cost           | $0.00003   	| $0.00002| $0.00002|   4     |    5      |			 | $0.00005    | $0.00004|$0.00004|$0.00004|	7	|	7	  |
-| RPS                      | 100        	| 135     | 125     |    4    |     5     |			 | 150         | 205    | 185    |4        |	7	|	7	|
-| Throughput               | 3.43       	| 36.10   | 4.04    |     4   |      5    |			 | 4.97        | 119.13 | 15.08  |4			|	7	|	7		|
-| Latency 90% (seconds)    | 28.1       	| 2.6     | 28.5    |      4  |      5    |			 | 29.2        | 0.75   | 11.4   |4			|	7	|	7		|
-
 <img src="../assets/llama_images/llama-7b-summ.png" width="830" height="332"/>
 
 For the summarization task the difference in RPS doesn’t differ that much across all deployment options. However TGI showed amazing results when running on a GCP machine with A100 GPU that resulted in a quite big number of possible requests (205) and very small latency (0.75 seconds). 

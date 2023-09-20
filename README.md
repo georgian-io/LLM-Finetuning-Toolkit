@@ -21,6 +21,7 @@ We stress-test both open-source and close-source LLMs through our Evaluation Fra
 [Getting Started](#getting-started) •
 [LLM Roadmap](#llm-roadmap) •
 [Benchmarks](#benchmarks) •
+[Cost estimation and load testing](#cost-estimation-and-load-testing) •
 [Contributing](#contributing)
 
 </div>
@@ -169,6 +170,24 @@ We use the samsum dataset which contains chat conversations and their summarized
 |ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       | 
 |ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |
 
+## Cost estimation and load testing
+
+|                          | Classification |         |         |		  |             | 		 |Summarization|        |        |		  |         |		|
+|--------------------------|----------------|---------|---------|---------|-------------|----------|-------------|--------|--------|--------|---------|--------|
+| Model                    | Flan           | Falcon  | RP 3B   | RP 7B   |  LLama-2 7B |LLama-2 13B |  Flan       | Falcon |RP 3B   |RP 7B   |LLama-2 7B | LLama-2 13B| 
+| Inference cost (per 1K tokens)          | $0.00001   		| $0.00005 | $0.00003 | $0.00003 |    $0.00003      |$0.00003			 | $0.00001    | $0.00004|$0.00001|$0.00002|	$0.00002	    |	$0.00002	  |
+| RPS                      | 145        	| 125     | 135     |    125  |     125     |125			 | 120         | 145    | 195    |145     |	135 	    |	125	|
+| Throughput               | 78.5       	| 30.3    | 57.3    | 26.13   |      19.81    |	9.60		 | 45.5        | 53.8   | 96.06  |41.5	  |	36.10	    |	22.16		|
+| Latency 90% (seconds)    | 1.5       		| 2.7     | 1.44    |   3.98  |      4.8    |	12.04		 | 2.03        | 1.82   | 0.7139 |2.5	  |	2.6	   |	5.15		|
+
+FAST API
+|                          | Classification |         |         |		  |           | 		 |Summarization|        |        |		  |         |		    |
+|--------------------------|----------------|---------|---------|---------|-----------|----------|-------------|--------|--------|--------|---------|-----------|
+| Model                    | Flan           | Falcon  | RP 3B   |   RP 7B |  LLama-2 7B |LLama-2 13B |  Flan       | Falcon |RP 3B   |RP 7B   |LLama-2 7B | LLama-2 13B  | 
+| Inference cost (per 1K tokens)           | $0.00001   		| -		  | $0.001   |  $0.001 |    $0.001      |	$0.001		 | $0.00007    | -		|$0.00002|$0.00002|	$0.00003	    |	$0.0003	    |
+| RPS                      | 180        	| -    	  | 4       |    4    |     4     |		4	 | 30          | -    	| 160    |160     |	100	    |	10	    |
+| Throughput               | 5.84       	| -   	  | 0.15    |   0.14  |      0.11    |	0.14		 | 1.5         | - 		| 5.46   |5.27	  |	3.43	    |	1.73		|
+| Latency 90% (seconds)    | 28.01       	| -    	  | 26.4    |   28.1  |      27.3    |	27.9		 | 18.27       | -   	| 28.4   |29.527  |	28.1	    |	5.1		|
 
 
 ## Contributing
