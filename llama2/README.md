@@ -153,6 +153,8 @@ The Llama2-7B version performs significantly better than Llama2-13B in a zero-sh
 
 <u> Insight: </u>
 
+Both versions of Llama2 achieve competitive results, with Llama2-13B taking the lead once again. In our opinion, Llama2 and Falcon are good candidates to consider for summarization tasks. The 7B versions of both Llama2 and Falcon can deliver good performance at potentially lower latencies.
+
 ### <img src="../assets/time.gif" width="32" height="32"/> <img src="../assets/money.gif" width="32" height="32"/> Time & Cost to Train <img src="../assets/money.gif" width="32" height="32"/> <img src="../assets/time.gif" width="32" height="32"/>
 
 Conditions:
