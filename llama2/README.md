@@ -192,13 +192,13 @@ In terms of instances, we used a GCP compute engine with an Nvidia A100 40GB GPU
 As it was mentioned earlier, we did experiments with a new framework called Ray. It provides a scalable model serving library for building online inference APIs called Ray Serve. Even though we used it without any optimizations like dynamic batching or multi-node/multi-GPU serving, it showed good performance compared to HuggingFace Text Generation Inference (TGI) for certain tasks like summarization. For FastApi, we used 2 workers to serve the model. This is the optimal number for LLama models to prevent "Out of Memory" errors and introduce parallelism to the request handling process. Talking about TGI we traditionally merged base LLama models with Lora layers in order to complete the requirement for serving. 
 
 #### Llama-7B Classification
-| Metric                   | Nvidia A10 |         |         | Nvidia A100 |        |        |
-|--------------------------|------------|---------|---------|-------------|--------|--------|
-|                          | FastApi    | TGI     | Ray     | FastApi     | TGI    | Ray    |
-| Inference cost (per 1K tokens) | $0.001  | $0.00003| $0.0001 | $0.001     | $0.00007 | $0.0003|
-| RPS                      | 4          | 125     | 30      | 9           | 145    | 30     |
-| Throughput               | 0.11       | 19.81   | 2.20    | 0.45        | 54.41  | 3.71   |
-| Latency 90% (seconds)    | 27.3       | 4.8     | 13.03   | 19.4        | 1.74   | 7.6    |
+| Metric                   | Nvidia A10 |         |         |         | Nvidia A100 |        |        ||
+|--------------------------|------------|---------|---------|---------|-------------|--------|--------|---|
+|                          | FastApi    | TGI     | Ray     |vLLm| FastApi     | TGI    | Ray    | vLLm |
+| Inference cost (per 1K tokens) | $0.001  | $0.00003| $0.0001| < $0.00002| $0.001     | $0.00007 | $0.0003|< $0.00001|
+| RPS                      | 4          | 125     | 30      | > 185| 9           | 145    | 30     |> 280|
+| Throughput               | 0.11       | 19.81   | 2.20    |21.03| 0.45        | 54.41  | 3.71   |87.96|
+| Latency 90% (seconds)    | 27.3       | 4.8     | 13.03   |8.15| 19.4        | 1.74   | 7.6    |2.9|
 
 For classification task, Text Generation Inference outperformed all other deployment methods. However Ray can handle much more requests then FastApi and costs also 10x less. 
 
@@ -210,13 +210,13 @@ We took TGI results in order to show the difference in performance when working 
 
 #### Llama-13B Classification
 
-| Metric                   | Nvidia A10 |         |         | Nvidia A100 |        |        |
-|--------------------------|------------|---------|---------|-------------|--------|--------|
-|                          | FastApi    | TGI     | Ray     | FastApi     | TGI    | Ray    |
-| Inference cost           | $0.001     | $0.00003| $0.0001 | $0.001      | $0.00008| $0.0001|
-| RPS                      | 4          | 125     | 25      | 10          | 135    | 40     |
-| Throughput               | 0.14       | 9.60    | 1.44    | 2.86        | 64.60  | 2.21   |
-| Latency 90% (seconds)    | 27.9       | 12.04   | 12.5    | 3.02        | 1.185  | 17.5   |
+| Metric                   | Nvidia A10 |         |         | Nvidia A100 |        |        ||
+|--------------------------|------------|---------|---------|-------------|--------|--------|-|
+|                          | FastApi    | TGI     | Ray     | FastApi     | TGI    | Ray    |vLLm|
+| Inference cost           | $0.001     | $0.00003| $0.0001 | $0.001      | $0.00008| $0.0001| < $0.00003|
+| RPS                      | 4          | 125     | 25      | 10          | 135    | 40     | > 280|
+| Throughput               | 0.14       | 9.60    | 1.44    | 2.86        | 64.60  | 2.21   |51.46|
+| Latency 90% (seconds)    | 27.9       | 12.04   | 12.5    | 3.02        | 1.185  | 17.5   |4.4|
 
 <img src="../assets/llama_images/llama-13b-class.png" width="830" height="332"/>
 
@@ -224,13 +224,13 @@ The results for LLama-13B for classification task show the same tendency as for 
 
 #### Llama-7B Summarization
 
-| Metric                   | Nvidia A10 |         |         | Nvidia A100 |        |        |
-|--------------------------|------------|---------|---------|-------------|--------|--------|
-|                          | FastApi    | TGI     | Ray     | FastApi     | TGI    | Ray    |
-| Inference cost           | $0.00003   | $0.00002| $0.00002| $0.00005    | $0.00004| $0.00004|
-| RPS                      | 100        | 135     | 125     | 150         | 205    | 185    |
-| Throughput               | 3.43       | 36.10   | 4.04    | 4.97        | 119.13 | 15.08  |
-| Latency 90% (seconds)    | 28.1       | 2.6     | 28.5    | 29.2        | 0.75   | 11.4   |
+| Metric                   | Nvidia A10 |         |         || Nvidia A100 |        |        ||
+|--------------------------|------------|---------|---------|---------|-------------|--------|--------|--|
+|                          | FastApi    | TGI     | Ray     |vLLm| FastApi     | TGI    | Ray    |vLLm|
+| Inference cost           | $0.00003   | $0.00002| $0.00002| < $0.00001| $0.00005    | $0.00004| $0.00004| < $0.00002|
+| RPS                      | 100        | 135     | 125     |290| 150         | 205    | 185    |290|
+| Throughput               | 3.43       | 36.10   | 4.04    |31.62| 4.97        | 119.13 | 15.08  |99.39|
+| Latency 90% (seconds)    | 28.1       | 2.6     | 28.5    |8.2| 29.2        | 0.75   | 11.4   |2.01|
 
 <img src="../assets/llama_images/llama-7b-summ.png" width="830" height="332"/>
 
@@ -238,13 +238,13 @@ For the summarization task the difference in RPS doesn’t differ that much acro
 
 #### Llama-13B Summarization
 
-| Metric                   | Nvidia A10  |         |         | Nvidia A100 |         |         |
-|--------------------------|-------------|---------|---------|-------------|---------|---------|
-|                          | FastApi     | TGI     | Ray     | FastApi     | TGI     | Ray     |
-| Inference cost           | $0.0003     | $0.00002| $0.00006| $0.0001     | $0.00005| $0.00006|
-| RPS                      | 10          | 125     | 55      | 85          | 165     | 135     |
-| Throughput               | 1.73        | 22.16   | 2.18    | 2.83        | 64.01   | 11.98   |
-| Latency 90% (seconds)    | 5.1         | 5.15    | 24.6    | 27.8        | 1.6     | 10.3    |
+| Metric                   | Nvidia A10  |         |         | Nvidia A100 |         |         ||
+|--------------------------|-------------|---------|---------|-------------|---------|---------|---------|
+|                          | FastApi     | TGI     | Ray     | FastApi     | TGI     | Ray     |vLLm|
+| Inference cost           | $0.0003     | $0.00002| $0.00006| $0.0001     | $0.00005| $0.00006|$0.00002|
+| RPS                      | 10          | 125     | 55      | 85          | 165     | 135     |290|
+| Throughput               | 1.73        | 22.16   | 2.18    | 2.83        | 64.01   | 11.98   |55.92|
+| Latency 90% (seconds)    | 5.1         | 5.15    | 24.6    | 27.8        | 1.6     | 10.3    |4.24|
 
 Looking at the benchmarking results for Ray for the summarization task we can also say that it greatly outperforms FastApi (55 RPS compared to FastApi 10 RPS on Nvidia A10) which results in much lower cost ($0.00006 on both instances). 
 
