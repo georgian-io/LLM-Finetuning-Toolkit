@@ -53,7 +53,7 @@ For building FastApi application, do the following:
    python client.py --url http://localhost:8080/predict --prompt "Your custom prompt here"
    ```
 
-## Text Generation Inference
+## [Text Generation Inference](https://github.com/huggingface/text-generation-inference)
 
 1. Install HuggingFace library:
 
@@ -87,3 +87,29 @@ For building FastApi application, do the following:
    docker run --gpus all --shm-size 1g -e HUGGING_FACE_HUB_TOKEN=$token -p 8080:80 -v $volume:/data ghcr.io/huggingface/text-generation-inference:1.0.3 --model-id $model
    ```
    
+## [vLLm](https://vllm.readthedocs.io/en/latest/getting_started/quickstart.html)
+
+1. Install the package:
+   
+   ```
+   pip install vllm
+   ```
+2. Start the server:
+   
+   Use the model name from HuggingFace repository for ```--model``` argument
+
+   ```
+   python -m vllm.entrypoints.openai.api_server --model username/model
+   ```
+3. Make request:
+
+   ```
+   curl http://localhost:8000/v1/completions \
+      -H "Content-Type: application/json" \
+      -d '{
+      "model": "facebook/opt-125m",
+      "prompt": "San Francisco is a",
+      "max_tokens": 7,
+      "temperature": 0
+      }'
+   ```
