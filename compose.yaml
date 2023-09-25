@@ -1,7 +1,7 @@
 services:
   mlflow:
     container_name: georgian
-    image: georgian-finetune:latest
+    image: anthonyprinaldi/georgian-finetune:latest
     command:
       - ${MODEL}
       - ${TASK}
