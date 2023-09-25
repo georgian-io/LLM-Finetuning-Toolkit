@@ -111,6 +111,19 @@ You can start fine-tuning your choice of LLM in 4 easy steps:
 		--peft_method prefix --prefix_tokens 20 --epochs 5
 	```
 
+	### Docker Finetuning
+	The docker image can be found at `anthonyprinaldi/georgian-finetune:latest` or can be built from scratch using `docker build -t <IMAGE_NAME> .`. The docker compose file looks at `anthonyprinaldi/georgian-finetune:latest` by default. To run a docker container for finetuning, run the following command:
+
+	```shell
+	MODEL=<MODEL_NAME> TASK=<TASK_NAME> PYTHON_ARGS=<PYTHON_ARGS> docker-compose up
+	```
+
+	For instance, to finetune Flan-T5, do the following:
+
+	```shell
+	MODEL="flan-t5" TASK="classification" PYTHON_ARGS="--peft_method prefix --prefix_tokens 20 --epochs 5" docker compose up
+	```
+
 4. **Zero-shot and Few-shot your LLM of choice**
 
 	For instance, to use Falcon-7B on newsgroup classification task, do the following:
