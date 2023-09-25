@@ -3,11 +3,8 @@ services:
     container_name: georgian
     image: georgian-finetune:latest
     command:
-      - llama2
-      - classification
-      - --lora_r 8
-      - --epochs 5
-      - --dropout 0.1
-      - --pretrained_ckpt NousResearch/Llama-2-7b-hf
+      - ${MODEL}
+      - ${TASK}
+      - ${PYTHON_ARGS}
     volumes:
       - .:/code
