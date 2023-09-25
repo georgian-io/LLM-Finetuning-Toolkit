@@ -98,6 +98,19 @@ You can start fine-tuning your choice of LLM in 4 easy steps:
 	python flan_summarization_inference.py --experiment <experiment folder> # evalute finetuned Flan-T5
 	```
 
+	### Finetuning Script
+
+	For ease of use there is an additional [`finetune.sh`](./finetune.sh) that can be used to finetune any of the LLMs in this repository. The script expects the first argument to be the LLM name (e.g., `falcon`, `flan-t5`, etc.). The second argiment is the finetuning task (i.e., `classification` or `summarization`). The remaining arguments are any of those expected by the underlying python finetuning script (e.g., `--lora_r 8`).
+
+	For instance, to finetune Flan-T5, do the following:
+
+	```shell
+	./finetune.sh \
+		flan-t5 \
+		classification \
+		--peft_method prefix --prefix_tokens 20 --epochs 5
+	```
+
 4. **Zero-shot and Few-shot your LLM of choice**
 
 	For instance, to use Falcon-7B on newsgroup classification task, do the following:
