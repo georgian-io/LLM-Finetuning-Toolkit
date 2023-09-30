@@ -3,20 +3,17 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 
-from fastapi_naive.predictor import Predictor
+from predictor import Predictor
 
-# Settings for summarization
 class Settings(BaseSettings):
-    model_path: str = "weights/checkpoints-for-summarization/assets"
+    model_path: str = "weights/checkpoints/assets"
+    model_type: str= "causal"
     task: str = "summarization"
     max_target_length: int = 50
-
-
-# Settings for classification
-# class Settings(BaseSettings):
-#     model_path: str = 'weights/checkpoints-for-classification/assets'
-#     task: str = 'classification'
-#     max_target_length: int = 20
+    temperature: float = 0.01
+    
+    class Config:
+        env_prefix = 'APP_'
 
 
 class Payload(BaseModel):
@@ -29,12 +26,14 @@ class Prediction(BaseModel):
 
 app = FastAPI()
 settings = Settings()
-predictor = Predictor(model_load_path=settings.model_path, task=settings.task)
+predictor = Predictor(model_load_path=settings.model_path, model_type=settings.model_type,
+                      task=settings.task)
 
 
 @app.post("/predict", response_model=Prediction)
 def predict(paylod: Payload) -> Prediction:
-    prediction = predictor.predict(prompt=paylod.prompt, max_target_length=settings.max_target_length)
+    prediction = predictor.predict(prompt=paylod.prompt, max_target_length=settings.max_target_length,
+                                   temperature=settings.temperature)
     return Prediction(prediction=prediction)
 
 
