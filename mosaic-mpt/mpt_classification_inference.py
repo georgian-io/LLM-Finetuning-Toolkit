@@ -34,7 +34,6 @@ def main(args):
         low_cpu_mem_usage=True,
         torch_dtype=torch.float16,
         load_in_4bit=True,
-        use_flash_attention_2=args.use_flash_attention,
     )
     model.eval()
 
@@ -95,7 +94,6 @@ if __name__ == "__main__":
         "--experiment_dir",
         default="experiments/classification-sampleFraction-0.1_epochs-5_rank-8_dropout-0.1",
     )
-    parser.add_argument('--use_flash_attention', action=argparse.BooleanOptionalAction)
 
     args = parser.parse_args()
     main(args)
