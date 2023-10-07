@@ -96,7 +96,7 @@ def main(args):
         output_dir=results_dir,
         logging_dir=f"{results_dir}/logs",
         num_train_epochs=args.epochs,
-        per_device_train_batch_size=6 if use_flash_attention else 4,
+        per_device_train_batch_size=4,
         gradient_accumulation_steps=2,
         gradient_checkpointing=True,
         optim="paged_adamw_32bit",
