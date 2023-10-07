@@ -1,8 +1,8 @@
 # Contents:
 
 - [Contents:](#contents)
-	- [What is Jurassic?](#what-is-jurassic)
-	- [Variations of Jurassic and Parameters](#variations-of-jurassic-and-parameters)
+	- [What is Jurassic-2?](#what-is-jurassic-2)
+	- [Variations of Jurassic-2 and Parameters](#variations-of-jurassic-2-and-parameters)
 	- [What does this folder contain?](#what-does-this-folder-contain)
 	- [Evaluation Framework](#evaluation-framework)
 		- [ Performance ](#-performance-)
@@ -11,13 +11,13 @@
 		- [  Time \& Cost to Train  ](#--time--cost-to-train--)
 		- [ Inference ](#-inference-)
 
-## What is Jurassic? 
+## What is Jurassic-2? 
 
-Jurassic-2, created by [AI21 Labs](https://www.ai21.com/), are large language models that give maximum flexibility to provide AI-first reading and writing experiences. Jurassic line of models are available to developers via the [AI21 Studio](https://www.ai21.com/studio).
+Jurassic-2, created by [AI21 Labs](https://www.ai21.com/), are large language models that give maximum flexibility to provide AI-first reading and writing experiences. Jurassic-2 line of models are available to developers via the [AI21 Studio](https://www.ai21.com/studio).
 
-## Variations of Jurassic and Parameters
+## Variations of Jurassic-2 and Parameters
 
-Jurassic models, for API use, come in a variety of sizes, and can be leveraged depending on the task at hand.
+Jurassic-2 models, for API use, come in a variety of sizes, and can be leveraged depending on the task at hand.
 
 * Jurassic-2 Ultra: Unmatched quality
 * Jurassic-2 Mid: Optimal balance of quality, speed, and cost
