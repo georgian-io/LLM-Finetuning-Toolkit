@@ -22,3 +22,4 @@ packaging==23.1
 sentencepiece==0.1.99
 protobuf==3.20.*
 ai21==1.2.7
+openai==0.28.1
