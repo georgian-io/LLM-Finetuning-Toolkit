@@ -55,7 +55,7 @@ def jurassic_api_call(
             custom_model=custom_model,
             prompt=prompt,
             numResults=1,
-            epoch=1,
+            epoch=10,
             maxTokens=max_new_tokens,
             temperature=temperature,
             topKReturn=0,
