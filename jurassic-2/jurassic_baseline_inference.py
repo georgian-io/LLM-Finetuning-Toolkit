@@ -30,7 +30,7 @@ metric = evaluate.load("rouge")
 warnings.filterwarnings("ignore")
 
 # Obtain from ai21: https://www.ai21.com/studio
-API_KEY = "lqiq4pDywE1D9ErhE6NutXrHFWiRnZ4z"
+API_KEY = "" # enter your API key here
 ai21.api_key = API_KEY
 
 def jurassic_api_call(
