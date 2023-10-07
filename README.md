@@ -21,7 +21,6 @@ We stress-test both open-source and close-source LLMs through our Evaluation Fra
 [Getting Started](#getting-started) •
 [LLM Roadmap](#llm-roadmap) •
 [Benchmarks](#benchmarks) •
-[Cost estimation and load testing](#cost-estimation-and-load-testing) •
 [Contributing](#contributing)
 
 </div>
@@ -127,21 +126,24 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 |Falcon      |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/falcon/README.md) | [Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/falcon) |
 |RedPajama   |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/redPajama/README.md) | [Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/redPajama) |
 |Llama-2     |:white_check_mark: |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/llama2/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/llama2) |
+|Mistral     | |:white_check_mark: | | |
 |OpenLlama   | |:white_check_mark: | | |
 |SalesForce XGen | |:white_check_mark: | | |
 |Mosaic MPT | |:white_check_mark: | | | 
 |Cerebras | |:white_check_mark: | | |
 |Writer Palmyra |:white_check_mark: |:x: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/palmyra/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/palmyra) |
+|AI21 Jurassic-2 |:white_check_mark: |:x: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/jurassic/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/jurassic) |
 |OpenAI GPT-3.5 | |:x: | | |
 |Google PaLM | |:x: | | |
 |Inflection Pi | |:x: | | |
 
 ## Benchmarks
 
-We benchmark LLMs across the tasks of classification and summarization. More precisely, we finetune LLMs on the following experiments:
+We benchmark LLMs across the tasks of classification and summarization. More precisely, we assess the metrics of finetuned LLMs on classification and summarization tasks. Additionally, we perform cost estimation and load testing comparisons for inference purposes. 
 
 1. Classification: Sample efficiency VS Accuracy
 2. Summarization: Fine-tuning
+3. Cost Estimation and Load Testing
 
 Note:
 
@@ -170,7 +172,7 @@ We use the samsum dataset which contains chat conversations and their summarized
 |ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       | 
 |ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |
 
-## Cost estimation and load testing
+### Cost estimation and load testing
 
 We deployed the models mentioned above on two servers: FastApi and the HuggingFace Text Generation Inference server. The goal was to compare the cost and latency between our custom server, developed using FastApi, and the inference server (TGI), which comes with many built-in optimizations.
 
@@ -178,7 +180,7 @@ All servers were run and received inference requests on an AWS g5.4xlarge instan
 
 Below, two tables summarize our observations for all the models, tasks, and most used deployment options explored in this repository (we also tried LLama on Nvidia A100 using the Ray server; more details can be found [here](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/llama2/README.md)). Generally, the TGI server is more cost-effective than the custom server and simpler to set up. It provided better RPS, throughput, and lower latency. A different inference server, [vLLm](https://vllm.readthedocs.io), can offer even higher maximum RPS compared to TGI (you can find more details about our load testing experiments with it for LLama-2 [here](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/llama2/README.md)). Last thing to mention is that models designed for classification are slower than those for summarization. Aslo, the model's size (number of training parameters) doesn't significantly impact its performance.
 
-### Text Generation Inference
+#### Text Generation Inference
 
 |                          | Classification |         |         |		  |             | 		 |Summarization|        |        |		  |         |		|
 |--------------------------|----------------|---------|---------|---------|-------------|----------|-------------|--------|--------|--------|---------|--------|
@@ -188,7 +190,7 @@ Below, two tables summarize our observations for all the models, tasks, and most
 | Throughput               | 78.5       	| 30.3    | 57.3    | 26.13   |      19.81    |	9.60		 | 45.5        | 53.8   | 96.06  |41.5	  |	36.10	    |	22.16		|
 | Latency 90% (seconds)    | 1.5       		| 2.7     | 1.44    |   3.98  |      4.8    |	12.04		 | 2.03        | 1.82   | 0.7139 |2.5	  |	2.6	   |	5.15		|
 
-### FastApi
+#### FastApi
 
 |                          | Classification |         |         |		  |           | 		 |Summarization|        |        |		  |         |		    |
 |--------------------------|----------------|---------|---------|---------|-----------|----------|-------------|--------|--------|--------|---------|-----------|
