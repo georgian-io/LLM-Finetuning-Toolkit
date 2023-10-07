@@ -1,7 +1,13 @@
-Important: Llama2 has the option of using flash attention to speed up inference. In order to use flash attention, please do:
+Important: Mistral has the option of using flash attention to speed up inference. In order to use flash attention, please do:
 
 ```shell
-MAX_JOBS=4 pip install flash-attn --no-build-isolation
+pip install -U flash-attn --no-build-isolation
+```
+
+```shell
+git clone https://github.com/huggingface/peft
+cd peft
+pip install .
 ```
 
 # Contents:
