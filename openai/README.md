@@ -77,16 +77,18 @@ The Few-Shot prompting approach failed due to the prompt surpassing the token li
 
 |Training samples (fraction) | GPT-3.5-turbo |
 |:--------------------------:|:-------------:|
-|266   (2.5%)                |36.24          |
-|533   (5%)                  |46.65          |
-|1066  (10%)                 |54.15          |
-|2666  (25%)                 |67.07          |
-|5332  (50%)                 |72.00          |
-|10664 (100%)                |71.91          |
+|266   (2.5%)                |73.81          |
+|533   (5%)                  |56.17          |
+|1066  (10%)                 |47.32          |
+|2666  (25%)                 |49.15          |
+|5332  (50%)                 |78.84          |
+|10664 (100%)                |79.41          |
 
 <u> Insight: </u>
 
-We can see that GPT-3.5-turbo does a good job on a sample size as low as ~250! As we steadily increase the number of samples, the accuracy trends upwards as well.
+* We can see that GPT-3.5-turbo does a good job on a sample size as low as ~250!
+* It is surprising that the accuracy drops when the sample fraction is increased from 2.5% to 5%, 10% and 25%. Ideally, the performance should have increased with more training samples. It is challenging to understand why this happened as OpenAI does not give control to hyperparameters aside from n\_epochs.
+* However, the performance goes back up when half, and the entirety of training data is used. 
 
 
 
