@@ -39,30 +39,34 @@ def openai_api_call(
     prompt: str, model, custom_model, max_new_tokens: int, top_p: float=0.95, temperature: float=1e-3
 ):
     
-    if custom_model == "":
-        response =  openai.ChatCompletion.create(
-            model=model,
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=max_new_tokens,
-            temperature=temperature,
-            top_p=top_p,
-        )
-    else:
-        response =  openai.ChatCompletion.create(
-            model=custom_model,
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=max_new_tokens,
-            temperature=temperature,
-            top_p=top_p,
-        )
+    try:
+        if custom_model == "":
+            response =  openai.ChatCompletion.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=max_new_tokens,
+                temperature=temperature,
+                top_p=top_p,
+            )
+        else:
+            response =  openai.ChatCompletion.create(
+                model=custom_model,
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=max_new_tokens,
+                temperature=temperature,
+                top_p=top_p,
+            )
 
-    generation = response["choices"][0]["message"]["content"]
+        generation = response["choices"][0]["message"]["content"]
+
+    except:
+        generation = ""
 
     return generation
 
