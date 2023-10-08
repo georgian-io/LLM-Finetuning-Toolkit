@@ -129,7 +129,7 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 |Mistral     | |:white_check_mark: | | |
 |OpenLlama   | |:white_check_mark: | | |
 |SalesForce XGen | |:white_check_mark: | | |
-|Mosaic MPT | |:white_check_mark: | | | 
+|Mosaic MPT |:white_check_mark: |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/mosaic-mpt/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/mosaic-mpt) | 
 |Cerebras | |:white_check_mark: | | |
 |Writer Palmyra |:white_check_mark: |:x: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/palmyra/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/palmyra) |
 |AI21 Jurassic-2 |:white_check_mark: |:x: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/jurassic-2/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/jurassic-2) |
