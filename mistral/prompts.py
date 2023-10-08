@@ -126,6 +126,7 @@ def get_newsgroup_data_for_ft(mode="train", train_sample_fraction=0.99):
         train_df,
         train_size=train_sample_fraction,
         stratify=train_df["label"],
+        random_state=42,
     )
     train_data = train_df["text"]
     train_labels = train_df["label"]
