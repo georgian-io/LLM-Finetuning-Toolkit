@@ -5,6 +5,7 @@ import evaluate
 import os
 import ujson
 from pathlib import Path
+import pickle
 import warnings
 
 from prompts import (
@@ -157,9 +158,10 @@ def infer_finetuned_model(args):
             args.train_sample_fraction
         )
         content = "You are a helpful assistant who can classify newsletters into the right categories."
-
+    
     save_path = f"{args.task_type}_{args.model_id}_metrics.pkl"
     ctr = 0
+    results, labels = [], []
     if os.path.exists(save_path):
         with open(save_path, "rb") as handle:
             metrics = pickle.load(handle)
@@ -185,7 +187,7 @@ def infer_finetuned_model(args):
         results.append(result)
         labels.append(y)
 
-        print(f"Example {ctr}/{len(test_data)} | GT: {label} | Pred: {y}")
+        print(f"Example {ctr}/{len(test_x)} | GT: {y} | Pred: {result}")
         ctr += 1
 
         # Save every 100 iterations in case of network errors
