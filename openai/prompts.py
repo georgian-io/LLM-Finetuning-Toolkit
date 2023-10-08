@@ -33,6 +33,7 @@ Dialogue: ```{dialogue}```
 Summary:
 """
 
+
 def clean_newsgroup_data(texts, labels):
     label2data = {}
     clean_data, clean_labels = [], []
@@ -106,6 +107,7 @@ def get_samsum_data():
         few_shot_samples += sample
 
     return few_shot_samples
+
 
 def get_samsum_data_for_ft():
     samsum_dataset = load_dataset("samsum")
