@@ -53,7 +53,6 @@ def compute_metrics_decoded(decoded_labs, decoded_preds, args):
 
 
 def main(args):
-
     save_dir = os.path.join(
         "baseline_results", args.pretrained_ckpt, args.task_type, args.prompt_type
     )
