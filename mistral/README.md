@@ -20,12 +20,7 @@ pip install .
 		- [ Performance ](#-performance-)
 			- [Classification](#classification)
 			- [Summarization](#summarization)
-		- [  Time \& Cost to Train  ](#--time--cost-to-train--)
-		- [ Inference ](#-inference-)
-			- [Llama-7B Classification](#llama-7b-classification)
-			- [Llama-13B Classification](#llama-13b-classification)
-			- [Llama-7B Summarization](#llama-7b-summarization)
-			- [Llama-13B Summarization](#llama-13b-summarization)
+	
 
 ## What is Mistral? 
 
@@ -56,20 +51,13 @@ This folder contains ready-to-use scripts, using which you can do the following:
 	* ```run_lora.sh```: Ablation study on LoRA's parameters 
 	* ```sample_ablate.sh```: Ablation study over sample complexities
 * Infer Mistral using trained checkpoints:
-	* ```mistral_baseline_inference.py```: Infer in zero-shot and few-shot settings using Mistral-3B
+	* ```mistral_baseline_inference.py```: Infer in zero-shot and few-shot settings using Mistral-7B
 	* ```mistral_classification_inference.py```: Infer on News Group classification dataset
 	* ```mistral_summarization_inference.py```: Infer on Samsum summarization dataset
 * Infer across a different settings:
 	* ```baseline_inference.sh```: Loop over all settings to perform zero-shot and few-shot prompting across classification and summarization tasks
 
 ## Evaluation Framework
-
-In this section, we bring to you our insights after extensively experimenting with Mistral Base-7B across different tasks. For a thorough evaluation, we need to evaluate the __four pillars__:
-
-* Performance
-* Cost to Train
-* Time to Train
-* Inference Costs
 
 
 ### <img src="../assets/rocket.gif" width="32" height="32"/> Performance <img src="../assets/rocket.gif" width="32" height="32"/>
@@ -81,9 +69,10 @@ We evaluated Mistral under the following conditions:
 	* Summarization: Samsum dataset. 
 * Experiments:
 	* Sample Efficiency vs Accuracy
-	* Zero-Shot prompting vs Few-Shot prompting vs PeFT QLoRA
+	* Zero-Shot prompting vs Few-Shot prompting vs PeFT QLoRA (for summarization)
 * Training config:
-	* Epochs: 5
+	* Epochs: 5 (for classification)
+	* Epochs: 1 (for summarization)
 	* Mistral-7B:
 		* PeFT technique: QLoRA
 		* Learning rate: 2e-4
