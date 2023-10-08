@@ -39,7 +39,7 @@ def prepare_samsum_data():
     summaries = val_dataset["summary"]
     val_instructions = prepare_instructions(dialogues, summaries)
 
-    return val_instructions[:10], summaries[:10]
+    return val_instructions, summaries
 
 
 def main(args):
