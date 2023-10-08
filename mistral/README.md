@@ -97,12 +97,12 @@ We evaluated Mistral under the following conditions:
 
 |Training samples (fraction) | Mistral Base-7B |
 |:--------------------------:|:---------------:|
-|266   (2.5%)                |36.24            |
-|533   (5%)                  |46.65            |
-|1066  (10%)                 |54.15            |
-|2666  (25%)                 |67.07            |
-|5332  (50%)                 |72.00            |
-|10664 (100%)                |71.91            |
+|266   (2.5%)                |            |
+|533   (5%)                  |            |
+|1066  (10%)                 |            |
+|2666  (25%)                 |            |
+|5332  (50%)                 |            |
+|10664 (100%)                |74.36            |
 
 <u> Insight: </u>
 
@@ -116,24 +116,22 @@ The above table shows how performance of different LLMs track with sample effici
 
 |Method         | Mistral-7B Zero-Shot  | Mistral-7B Few-Shot  | Fine-Tuning + QLoRA |
 |:-------------:|:---------------------:|:--------------------:|:-------------------:|
-|ROUGE-1 (in %) |32.77                  |38.87                 |                |
-|ROUGE-2 (in %) |10.64                  |16.71                 |                |
+|ROUGE-1 (in %) |32.77                  |38.87                 |53.61                |
+|ROUGE-2 (in %) |10.64                  |16.71                 |29.28                |
 
 
-<u> Insight: </u>
-
-Looking at the ROUGE-1 and ROUGE-2 scores, we see that Mistral-7B’s performance consistently shines in comparison to Mistral-13B. However, post fine-tuning with QLoRA, Mistral-13B comes out ahead by a small margin. In our opinion, Mistral-7B can be a great candidate to consider for summarization and QnA tasks as it delivers strong results despite being smaller than Mistral-13B.
+Looking at the ROUGE-1 and ROUGE-2 scores, we see that Mistral-7B’s performance increases from zero-shot to few-shot to fine-tuning settings. 
 
 
 <u> Table 3: Mistral vs Other LLMs </u>
 
-|Model          | Flan-T5-Base Full Fine-Tune | Flan-T5-Large | Falcon-7B | RP-3B | RP-7B | Mistral-7B | Mistral-13B |
-|:-------------:|:---------------------------:|:-------------:|:---------:|:-----:|:-----:|:---------:|:----------:|
-|ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       | 
-|ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |
+|Model          | Flan-T5-Base Full Fine-Tune | Flan-T5-Large | Falcon-7B | RP-3B | RP-7B | Llama2-7B | Llama2-13B | Mistral-7B |
+|:-------------:|:---------------------------:|:-------------:|:---------:|:-----:|:-----:|:---------:|:----------:|:----------:|
+|ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       |53.61       |
+|ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |29.28       |
 
 <u> Insight: </u>
 
-Both versions of Mistral achieve competitive results, with Mistral-13B taking the lead once again. In our opinion, Mistral and Falcon are good candidates to consider for summarization tasks. The 7B versions of both Mistral and Falcon can deliver good performance at potentially lower latencies.
+Mistral-7B achieves the best results, even when compared with Falcon-7B and Llama2-7B. This makes Mistral-7B, in our opinion, the best model to leverage in the 7B parameter space.
 
 
