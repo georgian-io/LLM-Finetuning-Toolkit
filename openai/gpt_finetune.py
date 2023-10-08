@@ -19,12 +19,13 @@ from sklearn.metrics import (
     recall_score,
 )
 
-# Obtain from OpenAI's website 
-openai.organization = os.getenv("OPENAI_ORG_KEY") 
+# Obtain from OpenAI's website
+openai.organization = os.getenv("OPENAI_ORG_KEY")
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 metric = evaluate.load("rouge")
 warnings.filterwarnings("ignore")
+
 
 def compute_metrics_decoded(decoded_labs, decoded_preds, args):
     if args.task_type == "summarization":
@@ -46,17 +47,19 @@ def compute_metrics_decoded(decoded_labs, decoded_preds, args):
 
 
 def openai_api_call(
-    content: str, test_x: str, custom_model,
-    max_new_tokens: int, top_p: float=0.95,
-    temperature: float=1e-3,
+    content: str,
+    test_x: str,
+    custom_model,
+    max_new_tokens: int,
+    top_p: float = 0.95,
+    temperature: float = 1e-3,
 ):
-    
     try:
-        response =  openai.ChatCompletion.create(
+        response = openai.ChatCompletion.create(
             model=custom_model,
             messages=[
                 {"role": "system", "content": content},
-                {"role": "user", "content": test_x}
+                {"role": "user", "content": test_x},
             ],
             max_tokens=max_new_tokens,
             temperature=temperature,
@@ -76,27 +79,18 @@ def write_jsonl(file_path, lines):
     lines (list): The JSON-serializable contents of each line.
     """
     data = [ujson.dumps(line, escape_forward_slashes=False) for line in lines]
-    Path(file_path).open('w', encoding='utf-8').write('\n'.join(data))
+    Path(file_path).open("w", encoding="utf-8").write("\n".join(data))
 
 
 def prepare_data_in_openai_format(content, train_x, train_y):
-
     FINETUNE_FORMAT = {
         "messages": [
             {
                 "role": "system",
-                "content": content, 
+                "content": content,
             },
-
-            {
-                "role": "user",
-                "content": train_x
-            },
-
-            {
-                "role": "assistant",
-                "content": train_y
-            }
+            {"role": "user", "content": train_x},
+            {"role": "assistant", "content": train_y},
         ]
     }
 
@@ -104,7 +98,6 @@ def prepare_data_in_openai_format(content, train_x, train_y):
 
 
 def upload_training_file(args):
-
     if args.task_type == "summarization":
         train_x, train_y, _, _ = get_samsum_data_for_ft()
         content = "You are a helpful assistant who can summarize conversations."
@@ -113,13 +106,10 @@ def upload_training_file(args):
             os.makedirs(save_dir)
         file_path = os.path.join(save_dir, "train_samsum.jsonl")
     else:
-        train_x, train_y, _, _ = get_newsgroup_data_for_ft(
-            args.train_sample_fraction
-        )
+        train_x, train_y, _, _ = get_newsgroup_data_for_ft(args.train_sample_fraction)
         content = "You are a helpful assistant who can classify newsletters into the right categories."
         save_dir = os.path.join(
-            "data",
-            f"{args.task_type}_sample-fraction-{args.train_sample_fraction}"
+            "data", f"{args.task_type}_sample-fraction-{args.train_sample_fraction}"
         )
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
@@ -133,10 +123,7 @@ def upload_training_file(args):
     write_jsonl(file_path, data)
     print("JSON file written.....")
 
-    openai.File.create(
-        file=open(file_path, "rb"),
-        purpose='fine-tune'
-    )
+    openai.File.create(file=open(file_path, "rb"), purpose="fine-tune")
     print("File created.....")
 
 
@@ -144,7 +131,7 @@ def submit_finetuning_job(args):
     openai.FineTuningJob.create(
         training_file=args.training_file_id,
         model=args.model,
-        hyperparameters={"n_epochs":args.epochs}
+        hyperparameters={"n_epochs": args.epochs},
     )
     print("Finetuning job submitted")
 
@@ -154,11 +141,9 @@ def infer_finetuned_model(args):
         _, _, test_x, test_y = get_samsum_data_for_ft()
         content = "You are a helpful assistant who can summarize conversations."
     else:
-        _, _, test_x, test_y = get_newsgroup_data_for_ft(
-            args.train_sample_fraction
-        )
+        _, _, test_x, test_y = get_newsgroup_data_for_ft(args.train_sample_fraction)
         content = "You are a helpful assistant who can classify newsletters into the right categories."
-    
+
     save_path = f"{args.task_type}_{args.model_id}_metrics.pkl"
     ctr = 0
     results, labels = [], []
@@ -178,7 +163,9 @@ def infer_finetuned_model(args):
             continue
 
         result = openai_api_call(
-            content, x, args.model_id,
+            content,
+            x,
+            args.model_id,
             max_new_tokens=20 if args.task_type == "classification" else 50,
             top_p=0.95,
             temperature=1e-3,
@@ -196,7 +183,7 @@ def infer_finetuned_model(args):
             print(metrics)
             metrics["predictions"] = results
             metrics["labels"] = labels
- 
+
             with open(save_path, "wb") as handle:
                 pickle.dump(metrics, handle)
 
@@ -211,14 +198,13 @@ def infer_finetuned_model(args):
     print("----------------------------------------")
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
         "--job_type",
         default="upload_data",
-        choices=["upload_data", "submit_job", "infer_finetuned_model"]
+        choices=["upload_data", "submit_job", "infer_finetuned_model"],
     )
 
     parser.add_argument("--task_type", default="summarization", type=str)
@@ -229,9 +215,7 @@ if __name__ == "__main__":
     parser.add_argument("--training_file_id", default="file-abc123")
 
     parser.add_argument(
-        "--model_id",
-        default="ft:gpt-3.5-turbo-0613:georgian::87Dj76DB",
-        type=str
+        "--model_id", default="ft:gpt-3.5-turbo-0613:georgian::87Dj76DB", type=str
     )
 
     args = parser.parse_args()
@@ -242,4 +226,3 @@ if __name__ == "__main__":
         submit_finetuning_job(args)
     elif args.job_type == "infer_finetuned_model":
         infer_finetuned_model(args)
-

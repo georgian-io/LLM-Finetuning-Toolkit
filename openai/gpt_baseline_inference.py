@@ -27,8 +27,8 @@ from sklearn.metrics import (
 )
 
 
-# Obtain from OpenAI's website 
-openai.organization = os.getenv("OPENAI_ORG_KEY") 
+# Obtain from OpenAI's website
+openai.organization = os.getenv("OPENAI_ORG_KEY")
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 metric = evaluate.load("rouge")
@@ -36,27 +36,31 @@ warnings.filterwarnings("ignore")
 
 
 def openai_api_call(
-    prompt: str, model, custom_model, max_new_tokens: int, top_p: float=0.95, temperature: float=1e-3
+    prompt: str,
+    model,
+    custom_model,
+    max_new_tokens: int,
+    top_p: float = 0.95,
+    temperature: float = 1e-3,
 ):
-    
     try:
         if custom_model == "":
-            response =  openai.ChatCompletion.create(
+            response = openai.ChatCompletion.create(
                 model=model,
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": prompt}
+                    {"role": "user", "content": prompt},
                 ],
                 max_tokens=max_new_tokens,
                 temperature=temperature,
                 top_p=top_p,
             )
         else:
-            response =  openai.ChatCompletion.create(
+            response = openai.ChatCompletion.create(
                 model=custom_model,
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": prompt}
+                    {"role": "user", "content": prompt},
                 ],
                 max_tokens=max_new_tokens,
                 temperature=temperature,
@@ -97,7 +101,11 @@ def main(args):
         )
     else:
         save_dir = os.path.join(
-            "baseline_results", "custom", args.custom_model, args.task_type, args.prompt_type
+            "baseline_results",
+            "custom",
+            args.custom_model,
+            args.task_type,
+            args.prompt_type,
         )
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
@@ -182,10 +190,10 @@ def main(args):
 
         elif args.prompt_type == "fine-tuned":
             example = data + "\n"
-        
+
         start = time.time()
         result = openai_api_call(
-            example, 
+            example,
             model=args.model_type,
             custom_model=args.custom_model,
             max_new_tokens=20 if args.task_type == "classification" else 50,
