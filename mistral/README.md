@@ -95,20 +95,18 @@ We evaluated Mistral under the following conditions:
 
 <u> Table 1: Sample Efficiency vs Accuracy </u>
 
-|Training samples (fraction) | Distilbert | Bert | Flan-T5 Large | Falcon-7B | RP-3B | RP-7B | Mistral-7B | Mistral-13B |
-|:--------------------------:|:----------:|:----:|:-------------:|:---------:|:-----:|:-----:|:---------:|:----------:|
-|266   (2.5%)                |36.24       |16.91 |59.86          |61.85      |55.32  |58.17  |52.10      |66.23       |
-|533   (5%)                  |46.65       |30.75 |68.84          |64.02      |57.49  |60.31  |54.72      |67.45       |
-|1066  (10%)                 |54.15       |53.73 |73.38          |67.52      |65.45  |67.22  |55.97      |71.69       |
-|2666  (25%)                 |67.07       |68.41 |75.45          |70.32      |67.18  |69.53  |69.20      |73.50       |
-|5332  (50%)                 |72.00       |72.46 |75.43          |72.42      |70.58  |70.96  |69.09      |77.87       |
-|10664 (100%)                |71.91       |74.15 |72.31          |76.37      |72.34  |75.52  |75.30      |77.93       |
+|Training samples (fraction) | Mistral Base-7B |
+|:--------------------------:|:---------------:|
+|266   (2.5%)                |36.24            |
+|533   (5%)                  |46.65            |
+|1066  (10%)                 |54.15            |
+|2666  (25%)                 |67.07            |
+|5332  (50%)                 |72.00            |
+|10664 (100%)                |71.91            |
 
 <u> Insight: </u>
 
-The above table shows how performance of different LLMs track with sample efficiency. The last row of the table demonstrates the performance when the entire dataset is used. We can see that Mistral-13B outperforms all other models in terms of accuracy. Moreover, the first row of the table corresponding to the lowest fraction of training samples show a similar trend. Mistral-13B achieves the best performance in a low data situation across all models.
-
-Mistral-7B, the smallest version of Llama, is unable to achieve competitive results when compared with other models across different sample fractions. This shows the significance of the extra parameters contained in Mistral-13B in comparison to Mistral-7B.
+The above table shows how performance of different LLMs track with sample efficiency. The last row of the table demonstrates the performance when the entire dataset is used. 
 
 
 
@@ -117,20 +115,14 @@ Mistral-7B, the smallest version of Llama, is unable to achieve competitive resu
 <u> Table 2: Zero-Shot prompting vs Few-Shot prompting vs Fine-Tuning QLoRA </u>
 
 |Method         | Mistral-7B Zero-Shot  | Mistral-7B Few-Shot  | Fine-Tuning + QLoRA |
-|:-------------:|:--------------------:|:-------------------:|:-------------------:|
-|ROUGE-1 (in %) |30.06                 |35.57                |51.71                |
-|ROUGE-2 (in %) |8.61                  |14.23                |26.86                |
-
-
-|Method         | Mistral-13B Zero-Shot  | Mistral-13B Few-Shot  | Fine-Tuning + QLoRA |
 |:-------------:|:---------------------:|:--------------------:|:-------------------:|
-|ROUGE-1 (in %) |11.02                  |22.50                 |52.97                |
-|ROUGE-2 (in %) |3.38                   |9.25                  |28.32                |
+|ROUGE-1 (in %) |32.77                  |38.87                 |                |
+|ROUGE-2 (in %) |10.64                  |16.71                 |                |
 
 
 <u> Insight: </u>
 
-The Mistral-7B version performs significantly better than Mistral-13B in a zero-shot and few-shot setting. Looking at the ROUGE-1 and ROUGE-2 scores, we see that Mistral-7B’s performance consistently shines in comparison to Mistral-13B. However, post fine-tuning with QLoRA, Mistral-13B comes out ahead by a small margin. In our opinion, Mistral-7B can be a great candidate to consider for summarization and QnA tasks as it delivers strong results despite being smaller than Mistral-13B.
+Looking at the ROUGE-1 and ROUGE-2 scores, we see that Mistral-7B’s performance consistently shines in comparison to Mistral-13B. However, post fine-tuning with QLoRA, Mistral-13B comes out ahead by a small margin. In our opinion, Mistral-7B can be a great candidate to consider for summarization and QnA tasks as it delivers strong results despite being smaller than Mistral-13B.
 
 
 <u> Table 3: Mistral vs Other LLMs </u>
