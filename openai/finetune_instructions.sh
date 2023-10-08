@@ -59,5 +59,8 @@ python gpt_finetune.py --job_type infer_finetuned_model --task_type classificati
 python gpt_finetune.py --job_type infer_finetuned_model --task_type classification --model_id ft:gpt-3.5-turbo-0613:georgian::87EoCdcG
 
 # 0.5
+python gpt_finetune.py --job_type infer_finetuned_model --task_type classification --model_id ft:gpt-3.5-turbo-0613:georgian::87FzhTQt
 
 # 0.99
+python gpt_finetune.py --job_type infer_finetuned_model --task_type classification --model_id ft:gpt-3.5-turbo-0613:georgian::87GsKvdl
+
