@@ -11,43 +11,60 @@ from prompts import (
     get_newsgroup_data_for_ft,
     get_samsum_data_for_ft,
 )
-
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    precision_score,
+    recall_score,
+)
 
 # Obtain from OpenAI's website 
 openai.organization = "org-Qxm4Gb8DM4gPh1hlxL8eCrsO"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+metric = evaluate.load("rouge")
 warnings.filterwarnings("ignore")
+
+def compute_metrics_decoded(decoded_labs, decoded_preds, args):
+    if args.task_type == "summarization":
+        rouge = metric.compute(
+            predictions=decoded_preds, references=decoded_labs, use_stemmer=True
+        )
+        metrics = {metric: round(rouge[metric] * 100.0, 3) for metric in rouge.keys()}
+
+    elif args.task_type == "classification":
+        metrics = {
+            "micro_f1": f1_score(decoded_labs, decoded_preds, average="micro"),
+            "macro_f1": f1_score(decoded_labs, decoded_preds, average="macro"),
+            "precision": precision_score(decoded_labs, decoded_preds, average="micro"),
+            "recall": recall_score(decoded_labs, decoded_preds, average="micro"),
+            "accuracy": accuracy_score(decoded_labs, decoded_preds),
+        }
+
+    return metrics
 
 
 def openai_api_call(
-    prompt: str, model, custom_model, max_new_tokens: int, top_p: float=0.95, temperature: float=1e-3
+    content: str, test_x: str, custom_model,
+    max_new_tokens: int, top_p: float=0.95,
+    temperature: float=1e-3,
 ):
     
-    if custom_model == "":
-        response =  openai.ChatCompletion.create(
-            model=model,
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=max_new_tokens,
-            temperature=temperature,
-            top_p=top_p,
-        )
-    else:
+    try:
         response =  openai.ChatCompletion.create(
             model=custom_model,
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt}
+                {"role": "system", "content": content},
+                {"role": "user", "content": test_x}
             ],
             max_tokens=max_new_tokens,
             temperature=temperature,
             top_p=top_p,
         )
 
-    generation = response["choices"][0]["message"]["content"]
+        generation = response["choices"][0]["message"]["content"]
+    except:
+        generation = ""
 
     return generation
 
@@ -131,6 +148,68 @@ def submit_finetuning_job(args):
     print("Finetuning job submitted")
 
 
+def infer_finetuned_model(args):
+    if args.task_type == "summarization":
+        _, _, test_x, test_y = get_samsum_data_for_ft()
+        content = "You are a helpful assistant who can summarize conversations."
+    else:
+        _, _, test_x, test_y = get_newsgroup_data_for_ft(
+            args.train_sample_fraction
+        )
+        content = "You are a helpful assistant who can classify newsletters into the right categories."
+
+    save_path = f"{args.task_type}_{args.model_id}_metrics.pkl"
+    ctr = 0
+    if os.path.exists(save_path):
+        with open(save_path, "rb") as handle:
+            metrics = pickle.load(handle)
+            results = metrics["predictions"]
+            labels = metrics["labels"]
+            ctr = len(results)
+
+    for i, (x, y) in enumerate(zip(test_x, test_y)):
+        if i < ctr:
+            continue
+        if not isinstance(x, str):
+            continue
+        if not isinstance(y, str):
+            continue
+
+        result = openai_api_call(
+            content, x, args.model_id,
+            max_new_tokens=20 if args.task_type == "classification" else 50,
+            top_p=0.95,
+            temperature=1e-3,
+        )
+
+        results.append(result)
+        labels.append(y)
+
+        print(f"Example {ctr}/{len(test_data)} | GT: {label} | Pred: {y}")
+        ctr += 1
+
+        # Save every 100 iterations in case of network errors
+        if ctr % 50 == 0:
+            metrics = compute_metrics_decoded(labels, results, args)
+            print(metrics)
+            metrics["predictions"] = results
+            metrics["labels"] = labels
+ 
+            with open(save_path, "wb") as handle:
+                pickle.dump(metrics, handle)
+
+    metrics = compute_metrics_decoded(labels, results, args)
+    print(metrics)
+    metrics["predictions"] = results
+    metrics["labels"] = labels
+    with open(save_path, "wb") as handle:
+        pickle.dump(metrics, handle)
+
+    print(f"Completed inference {save_path}")
+    print("----------------------------------------")
+
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
@@ -142,6 +221,12 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", default=1, type=int)
     parser.add_argument("--model", default="gpt-3.5-turbo")
     parser.add_argument("--training_file_id", default="file-abc123")
+
+    parser.add_argument(
+        "--model_id",
+        default="ft:gpt-3.5-turbo-0613:georgian::87Dj76DB",
+        type=str
+    )
 
     args = parser.parse_args()
 
