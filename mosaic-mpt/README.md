@@ -21,7 +21,7 @@ MPT-7B is a decoder-style transformer pretrained from scratch on 1T tokens of En
 
 MPT models come in two sizes, and can be leveraged depending on the task at hand.
 
-| MPT variation | Parameters  |
+| MPT variation    | Parameters  |
 |:----------------:|:-----------:|
 |Base              |7B           |
 |Instruct          |7B           | 
