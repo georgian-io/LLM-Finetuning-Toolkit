@@ -73,9 +73,26 @@ NOTE:
 
 The Few-Shot prompting approach failed due to the prompt surpassing the token limit of 4097 used by GPT-3.5-turbo. However, in the Zero-Shot setting, the model performed relatively well, achieving a 60.22% accuracy on the classification task. 
 
+<u> Table 2: Sample Efficiency vs Accuracy </u>
+
+|Training samples (fraction) | GPT-3.5-turbo |
+|:--------------------------:|:-------------:|
+|266   (2.5%)                |36.24          |
+|533   (5%)                  |46.65          |
+|1066  (10%)                 |54.15          |
+|2666  (25%)                 |67.07          |
+|5332  (50%)                 |72.00          |
+|10664 (100%)                |71.91          |
+
+<u> Insight: </u>
+
+We can see that GPT-3.5-turbo does a good job on a sample size as low as ~250! As we steadily increase the number of samples, the accuracy trends upwards as well.
+
+
+
 #### Summarization ####
 
-<u> Table 2: Zero-Shot prompting vs Few-Shot prompting vs Fine-Tuning </u>
+<u> Table 3: Zero-Shot prompting vs Few-Shot prompting vs Fine-Tuning </u>
 
 |Method         | Zero-Shot  | Few-Shot  | Fine-Tuning |
 |:-------------:|:----------:|:---------:|:-----------:|
