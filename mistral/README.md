@@ -13,8 +13,8 @@ pip install .
 # Contents:
 
 - [Contents:](#contents)
-	- [What is Mistral?](#what-is-llama2)
-	- [Variations of Mistral and Parameters](#variations-of-llama2-and-parameters)
+	- [What is Mistral?](#what-is-mistral)
+	- [Variations of Mistral and Parameters](#variations-of-mistral-and-parameters)
 	- [What does this folder contain?](#what-does-this-folder-contain)
 	- [Evaluation Framework](#evaluation-framework)
 		- [ Performance ](#-performance-)
@@ -29,7 +29,8 @@ pip install .
 
 ## What is Mistral? 
 
-Llama 2 is the latest addition to the open-source large language model that is released by Meta. Based on Meta’s benchmarking results, it is the best available open-source large language model that can also be used for commercial purposes. Llama 2 comes in 3 different versions: 7B, 13B, and 70B.
+Mistral-7B-v0.1 is Mistral AI’s first Large Language Model (LLM). Mistral-7B-v0.1 is a decoder-based LM with the following architectural choices: (i) Sliding Window Attention, (ii) GQA (Grouped Query Attention) and (iii) Byte-fallback BPE tokenizer.
+
 
 ## Variations of Mistral and Parameters
 
@@ -37,34 +38,33 @@ Mistral models come in two sizes, and can be leveraged depending on the task at 
 
 | Mistral variation | Parameters  |
 |:----------------:|:-----------:|
-|Base-7B           |7B           |
-|Base-13B          |13B          |           
-|Base-70B          |70B          |
+|Base              |7B           |
+|Instruct          |7B           |           
 
-In this repository, we have experimented with the 7B and 13B variations. 
+In this repository, we have experimented with the Base 7B variation. 
 
 ## What does this folder contain? 
 
 This folder contains ready-to-use scripts, using which you can do the following:
 	
 * Finetuning Mistral using PeFT methodology QLoRA:
-	* ```llama2_classification.py```: Finetune on News Group classification dataset
-	* ```llama2_summarization.py```: Finetune on Samsum summarization dataset
+	* ```mistral_classification.py```: Finetune on News Group classification dataset
+	* ```mistral_summarization.py```: Finetune on Samsum summarization dataset
 * Prompts used:
 	* ```prompts.py```: Zero-shot, Few-shot and instruction tuning for classification and summarization
 * Perform hyperparameter optimization over a well-constrained search space:
 	* ```run_lora.sh```: Ablation study on LoRA's parameters 
 	* ```sample_ablate.sh```: Ablation study over sample complexities
 * Infer Mistral using trained checkpoints:
-	* ```llama2_baseline_inference.py```: Infer in zero-shot and few-shot settings using Mistral-3B or 7B Instruct versions
-	* ```llama2_classification_inference.py```: Infer on News Group classification dataset
-	* ```llama2_summarization_inference.py```: Infer on Samsum summarization dataset
+	* ```mistral_baseline_inference.py```: Infer in zero-shot and few-shot settings using Mistral-3B or 7B Instruct versions
+	* ```mistral_classification_inference.py```: Infer on News Group classification dataset
+	* ```mistral_summarization_inference.py```: Infer on Samsum summarization dataset
 * Infer across a different settings:
 	* ```baseline_inference.sh```: Loop over all settings to perform zero-shot and few-shot prompting across classification and summarization tasks
 
 ## Evaluation Framework
 
-In this section, we bring to you our insights after extensively experimenting with Mistral-7B and 13B across different tasks. For a thorough evaluation, we need to evaluate the __four pillars__:
+In this section, we bring to you our insights after extensively experimenting with Mistral Base-7B across different tasks. For a thorough evaluation, we need to evaluate the __four pillars__:
 
 * Performance
 * Cost to Train
@@ -79,31 +79,14 @@ We evaluated Mistral under the following conditions:
 * Tasks & Datasets:
 	* Classification: News Group dataset, which is a 20-way classification task.
 	* Summarization: Samsum dataset. 
-* Competing Models:
-	* BERT-Base (110M parameters)
-	* Distilbert (66M parameters)
-	* Flan-T5 Large (780M parameters)
-	* Falcon-7B (7B parameters)
-	* RedPajama (3B / 7B parameters)
 * Experiments:
 	* Sample Efficiency vs Accuracy
 	* Zero-Shot prompting vs Few-Shot prompting vs PeFT QLoRA
 * Training config:
 	* Epochs: 5
-	* Mistral-7B/13B:
+	* Mistral-7B:
 		* PeFT technique: QLoRA
 		* Learning rate: 2e-4
-	* RedPajama 3B/7B:
-		* PeFT technique: QLoRA
-		* Learning rate: 2e-4
-	* Falcon-7B:
-		* PeFT technique: QLoRA
-		* Learning rate: 2e-4
-	* Flan-T5 Large:
-		* PeFT technique: LoRA
-		* Learning rate: 1e-3
-	* BERT/Distilbert:
-		* Learning rate: 2e-5
 * Hardware:
 	* Cloud provider: AWC EC2
 	* Instance: g5.2xlarge
