@@ -116,8 +116,8 @@ def get_newsgroup_data_for_ft(mode="train", train_sample_fraction=0.99):
         train_data, train_labels
     )
 
-    test_data = newsgroup_dataset["train"]["text"]
-    test_labels = newsgroup_dataset["train"]["label"]
+    test_data = newsgroup_dataset["test"]["text"]
+    test_labels = newsgroup_dataset["test"]["label"]
     _, test_data, test_labels = clean_newsgroup_data(test_data, test_labels)
 
     # sample n points from training data
