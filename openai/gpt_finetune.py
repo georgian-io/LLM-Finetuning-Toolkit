@@ -213,7 +213,11 @@ def infer_finetuned_model(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--job_type", default="upload_data", choices=["upload_data", "submit_job"])
+    parser.add_argument(
+        "--job_type",
+        default="upload_data",
+        choices=["upload_data", "submit_job", "infer_finetuned_model"]
+    )
 
     parser.add_argument("--task_type", default="summarization", type=str)
     parser.add_argument("--train_sample_fraction", default=0.25, type=float)
@@ -234,4 +238,6 @@ if __name__ == "__main__":
         upload_training_file(args)
     elif args.job_type == "submit_job":
         submit_finetuning_job(args)
+    elif args.job_type == "infer_finetuned_model":
+        infer_finetuned_model(args)
 
