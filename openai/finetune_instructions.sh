@@ -1,7 +1,9 @@
-# Upload data for summarization task
+# Phase 1: Upload data to OpenAI
+
+# Summarization
 python gpt_finetune.py --job_type upload_data --task_type summarization 
 
-# Upload data for classification task
+# Classification
 python gpt_finetune.py --job_type upload_data --task_type classification --train_sample_fraction 0.025
 python gpt_finetune.py --job_type upload_data --task_type classification --train_sample_fraction 0.05
 python gpt_finetune.py --job_type upload_data --task_type classification --train_sample_fraction 0.1
@@ -9,10 +11,13 @@ python gpt_finetune.py --job_type upload_data --task_type classification --train
 python gpt_finetune.py --job_type upload_data --task_type classification --train_sample_fraction 0.5
 python gpt_finetune.py --job_type upload_data --task_type classification --train_sample_fraction 0.99
 
-# Submit finetuning job for summarization
+
+# Phase 2: Submit finetuning job to OpenAI
+
+# Summarization
 python gpt_finetune.py --job_type submit_job --epochs 1 --model gpt-3.5-turbo --training_file_id file-6IuuVdURWMQu4Xox0GVKDvML
 
-# Submit finetuning job for classification
+# Classification
 
 # 0.025
 python gpt_finetune.py --job_type submit_job --epochs 5 --model gpt-3.5-turbo --training_file_id file-fUSQKZSOh2Y9J1IVTIUMHrEf 
@@ -31,3 +36,25 @@ python gpt_finetune.py --job_type submit_job --epochs 5 --model gpt-3.5-turbo --
 
 # 0.99
 python gpt_finetune.py --job_type submit_job --epochs 5 --model gpt-3.5-turbo --training_file_id file-q8E4UMMC7bEr1lRf0EVbBVDA
+
+
+
+# Phase 3: Infer finetuned model
+
+# Summarization
+python gpt_finetune.py --task_type summarization --model_id ft:gpt-3.5-turbo-0613:georgian::87Dj76DB
+
+# Classification
+
+# 0.025
+python gpt_finetune.py --task_type classification --model_id ft:gpt-3.5-turbo-0613:georgian::87Dq5Smr
+
+# 0.05
+
+# 0.1
+
+# 0.25
+
+# 0.5
+
+# 0.99
