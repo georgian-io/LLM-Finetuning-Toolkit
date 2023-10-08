@@ -3,11 +3,9 @@ import openai
 import argparse
 import evaluate
 import os
-import pandas as pd
-import requests
-import time
 import ujson
 from pathlib import Path
+import warnings
 
 from prompts import (
     get_newsgroup_data_for_ft,
@@ -92,18 +90,29 @@ def upload_training_file(args):
     if args.task_type == "summarization":
         train_x, train_y, _, _ = get_samsum_data_for_ft()
         content = "You are a helpful assistant who can summarize conversations."
-        file_path = os.path.join(args.task_type, "train_samsum.jsonl")
+        save_dir = os.path.join("data", args.task_type)
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        file_path = os.path.join(save_dir, "train_samsum.jsonl")
     else:
-        train_x, train_y, _, _ = get_newsgroup_data_for_ft(args.train_sample_fraction)
+        train_x, train_y, _, _ = get_newsgroup_data_for_ft(
+            args.train_sample_fraction
+        )
         content = "You are a helpful assistant who can classify newsletters into the right categories."
-        file_path = os.path.join(f"{args.task_type}_sample-fraction-{args.train_sample_fraction}", "train_newsgroup.jsonl")
+        save_dir = os.path.join(
+            "data",
+            f"{args.task_type}_sample-fraction-{args.train_sample_fraction}"
+        )
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        file_path = os.path.join(save_dir, "train_newsgroup.jsonl")
 
     data = []
     for x, y in zip(train_x, train_y):
-        example = prepare_data_in_openai_format(content, train_x, train_y)
+        example = prepare_data_in_openai_format(content, x, y)
         data.append(example)
 
-    write_json(file_path, data)
+    write_jsonl(file_path, data)
     print("JSON file written.....")
 
     openai.File.create(
@@ -119,12 +128,13 @@ def submit_finetuning_job(args):
         model=args.model,
         hyperparameters={"n_epochs":args.epochs}
     )
+    print("Finetuning job submitted")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--job_type", default="upload_data", options=["upload_data", "submit_job"])
+    parser.add_argument("--job_type", default="upload_data", choices=["upload_data", "submit_job"])
 
     parser.add_argument("--task_type", default="summarization", type=str)
     parser.add_argument("--train_sample_fraction", default=0.25, type=float)
