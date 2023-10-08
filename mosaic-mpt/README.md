@@ -10,8 +10,6 @@
 			- [Summarization](#summarization)
 	
 
-# TODO: 
-
 ## What is MPT? 
 
 MPT-7B is a decoder-style transformer pretrained from scratch on 1T tokens of English text and code. This model was trained by MosaicML. MPT-7B is part of the family of MosaicPretrainedTransformer (MPT) models, which use a modified transformer architecture optimized for efficient training and inference. [Source](https://huggingface.co/mosaicml/mpt-7b)
