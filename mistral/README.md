@@ -56,7 +56,7 @@ This folder contains ready-to-use scripts, using which you can do the following:
 	* ```run_lora.sh```: Ablation study on LoRA's parameters 
 	* ```sample_ablate.sh```: Ablation study over sample complexities
 * Infer Mistral using trained checkpoints:
-	* ```mistral_baseline_inference.py```: Infer in zero-shot and few-shot settings using Mistral-3B or 7B Instruct versions
+	* ```mistral_baseline_inference.py```: Infer in zero-shot and few-shot settings using Mistral-3B
 	* ```mistral_classification_inference.py```: Infer on News Group classification dataset
 	* ```mistral_summarization_inference.py```: Infer on Samsum summarization dataset
 * Infer across a different settings:
