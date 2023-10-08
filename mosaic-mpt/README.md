@@ -74,9 +74,9 @@ We evaluated MPT under the following conditions:
 
 <u> Table 1: Sample Efficiency vs Accuracy </u>
 
-|Training samples (fraction) | MPT Base-7B |
-|:--------------------------:|:-----------:|
-|10664 (100%)                |0.0          |
+|Training samples (fraction) | MPT-7B |
+|:--------------------------:|:------:|
+|10664 (100%)                |0.0     |
 
 
 MPT-7B does not produce the right labels. It tends to also generate a lot of additional text, which causes accuracy to suffer. Since MPT-7B is unable to learn despite being trained on the entire training set, we do not perform the ablation study on sample complexity vs performance. 
