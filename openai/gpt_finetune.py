@@ -4,22 +4,14 @@ import argparse
 import evaluate
 import os
 import pandas as pd
-import pickle
-import numpy as np
-import warnings
 import requests
 import time
+import ujson
+from pathlib import Path
 
-from datasets import load_dataset
 from prompts import (
     get_newsgroup_data_for_ft,
     get_samsum_data_for_ft,
-)
-from sklearn.metrics import (
-    accuracy_score,
-    f1_score,
-    precision_score,
-    recall_score,
 )
 
 
@@ -27,51 +19,9 @@ from sklearn.metrics import (
 openai.organization = "org-Qxm4Gb8DM4gPh1hlxL8eCrsO"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-metric = evaluate.load("rouge")
 warnings.filterwarnings("ignore")
 
 
-def prepare_data_in_openai_format(content, train_x, train_y):
-
-    FINETUNE_FORMAT = {
-        "messages": [
-            {
-                "role": "system",
-                "content": content, 
-            },
-
-            {
-                "role": "user",
-                "content": train_x
-            },
-
-            {
-                "role": "assistant",
-                "content": train_y
-            }
-        ]
-    }
-
-    return FINETUNE_FORMAT
-
-
-def prepare_data_in_openai_format(task_type, train_x, train_y):
-    if task_type == "summarization":
-
-
-
-def main(args):
-
-    if args.task_type == "summarization":
-        train_x, train_y, _, _ = get_samsum_data_for_ft()
-        content = "You are a helpful assistant who can summarize conversations."
-    else:
-        train_x, train_y, _, _ = get_newsgroup_data_for_ft(args.train_sample_fraction)
-        content = "You are a helpful assistant who can classify newsletters into the right categories."
-
-    data = []
-
-    if args.task_type == "summarization":
 def openai_api_call(
     prompt: str, model, custom_model, max_new_tokens: int, top_p: float=0.95, temperature: float=1e-3
 ):
@@ -104,171 +54,89 @@ def openai_api_call(
     return generation
 
 
-def compute_metrics_decoded(decoded_labs, decoded_preds, args):
+def write_jsonl(file_path, lines):
+    """Create a .jsonl file and dump contents.
+    file_path (unicode / Path): The path to the output file.
+    lines (list): The JSON-serializable contents of each line.
+    """
+    data = [ujson.dumps(line, escape_forward_slashes=False) for line in lines]
+    Path(file_path).open('w', encoding='utf-8').write('\n'.join(data))
+
+
+def prepare_data_in_openai_format(content, train_x, train_y):
+
+    FINETUNE_FORMAT = {
+        "messages": [
+            {
+                "role": "system",
+                "content": content, 
+            },
+
+            {
+                "role": "user",
+                "content": train_x
+            },
+
+            {
+                "role": "assistant",
+                "content": train_y
+            }
+        ]
+    }
+
+    return FINETUNE_FORMAT
+
+
+def upload_training_file(args):
+
     if args.task_type == "summarization":
-        rouge = metric.compute(
-            predictions=decoded_preds, references=decoded_labs, use_stemmer=True
-        )
-        metrics = {metric: round(rouge[metric] * 100.0, 3) for metric in rouge.keys()}
-
-    elif args.task_type == "classification":
-        metrics = {
-            "micro_f1": f1_score(decoded_labs, decoded_preds, average="micro"),
-            "macro_f1": f1_score(decoded_labs, decoded_preds, average="macro"),
-            "precision": precision_score(decoded_labs, decoded_preds, average="micro"),
-            "recall": recall_score(decoded_labs, decoded_preds, average="micro"),
-            "accuracy": accuracy_score(decoded_labs, decoded_preds),
-        }
-
-    return metrics
-
-
-def main(args):
-    if args.custom_model == "":
-        save_dir = os.path.join(
-            "baseline_results", args.model_type, args.task_type, args.prompt_type
-        )
+        train_x, train_y, _, _ = get_samsum_data_for_ft()
+        content = "You are a helpful assistant who can summarize conversations."
+        file_path = os.path.join(args.task_type, "train_samsum.jsonl")
     else:
-        save_dir = os.path.join(
-            "baseline_results", "custom", args.custom_model, args.task_type, args.prompt_type
-        )
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
+        train_x, train_y, _, _ = get_newsgroup_data_for_ft(args.train_sample_fraction)
+        content = "You are a helpful assistant who can classify newsletters into the right categories."
+        file_path = os.path.join(f"{args.task_type}_sample-fraction-{args.train_sample_fraction}", "train_newsgroup.jsonl")
 
-    if args.task_type == "classification":
-        dataset = load_dataset("rungalileo/20_Newsgroups_Fixed")
-        test_dataset = dataset["test"]
-        test_data, test_labels = test_dataset["text"], test_dataset["label"]
+    data = []
+    for x, y in zip(train_x, train_y):
+        example = prepare_data_in_openai_format(content, train_x, train_y)
+        data.append(example)
 
-        newsgroup_classes, few_shot_samples, _ = get_newsgroup_data()
+    write_json(file_path, data)
+    print("JSON file written.....")
 
-    elif args.task_type == "summarization":
-        dataset = load_dataset("samsum")
-        test_dataset = dataset["test"]
-        test_data, test_labels = test_dataset["dialogue"], test_dataset["summary"]
+    openai.File.create(
+        file=open(file_path, "rb"),
+        purpose='fine-tune'
+    )
+    print("File created.....")
 
-        few_shot_samples = get_samsum_data()
 
-    if args.prompt_type == "zero-shot":
-        if args.task_type == "classification":
-            prompt = ZERO_SHOT_CLASSIFIER_PROMPT
-        elif args.task_type == "summarization":
-            prompt = ZERO_SHOT_SUMMARIZATION_PROMPT
-
-    elif args.prompt_type == "few-shot":
-        if args.task_type == "classification":
-            prompt = FEW_SHOT_CLASSIFIER_PROMPT
-        elif args.task_type == "summarization":
-            prompt = FEW_SHOT_SUMMARIZATION_PROMPT
-
-    elif args.prompt_type == "fine-tuned":
-        prompt = ""
-
-    times = []
-    results = []
-    good_data, good_labels = [], []
-    ctr = 0
-
-    # Load existing results
-    if os.path.exists(os.path.join(save_dir, "metrics.pkl")):
-        with open(os.path.join(save_dir, "metrics.pkl"), "rb") as handle:
-            metrics = pickle.load(handle)
-            results = metrics["predictions"]
-            good_labels = metrics["labels"]
-            good_data = metrics["data"]
-            times = metrics["response_times"]
-            ctr = len(results)
-
-    # for instruct, label in zip(instructions, labels):
-    for i, (data, label) in enumerate(zip(test_data, test_labels)):
-        # skip already processed
-        if i < ctr:
-            continue
-        if not isinstance(data, str):
-            continue
-        if not isinstance(label, str):
-            continue
-
-        if args.prompt_type == "zero-shot":
-            if args.task_type == "classification":
-                example = prompt.format(
-                    newsgroup_classes=newsgroup_classes,
-                    sentence=data,
-                )
-            elif args.task_type == "summarization":
-                example = prompt.format(
-                    dialogue=data,
-                )
-
-        elif args.prompt_type == "few-shot":
-            if args.task_type == "classification":
-                example = prompt.format(
-                    newsgroup_classes=newsgroup_classes,
-                    few_shot_samples=few_shot_samples,
-                    sentence=data,
-                )
-            elif args.task_type == "summarization":
-                example = prompt.format(
-                    few_shot_samples=few_shot_samples,
-                    dialogue=data,
-                )
-
-        elif args.prompt_type == "fine-tuned":
-            example = data + "\n"
-        
-        start = time.time()
-        result = openai_api_call(
-            example, 
-            model=args.model_type,
-            custom_model=args.custom_model,
-            max_new_tokens=20 if args.task_type == "classification" else 50,
-            top_p=0.95,
-            temperature=1e-3,
-        )
-        diff = time.time() - start
-
-        # Extract the generated text, and do basic processing
-        result = result.replace("\n", "").lstrip().rstrip()
-        results.append(result)
-        good_labels.append(label)
-        good_data.append(data)
-        times.append(diff)
-
-        print(f"Example {ctr}/{len(test_data)} | GT: {label} | Pred: {result}")
-        ctr += 1
-
-        # Save every 100 iterations in case of network errors
-        if ctr % 50 == 0:
-            metrics = compute_metrics_decoded(good_labels, results, args)
-            print(metrics)
-            metrics["predictions"] = results
-            metrics["labels"] = good_labels
-            metrics["data"] = good_data
-            metrics["response_times"] = times
-
-            with open(os.path.join(save_dir, "metrics.pkl"), "wb") as handle:
-                pickle.dump(metrics, handle)
-
-    metrics = compute_metrics_decoded(good_labels, results, args)
-    print(metrics)
-    metrics["predictions"] = results
-    metrics["labels"] = good_labels
-    metrics["data"] = good_data
-    metrics["response_times"] = times
-
-    with open(os.path.join(save_dir, "metrics.pkl"), "wb") as handle:
-        pickle.dump(metrics, handle)
-
-    print(f"Completed experiment {save_dir}")
-    print("----------------------------------------")
+def submit_finetuning_job(args):
+    openai.FineTuningJob.create(
+        training_file=args.training_file_id,
+        model=args.model,
+        hyperparameters={"n_epochs":args.epochs}
+    )
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--prompt_type", default="zero-shot")
-    parser.add_argument("--task_type", default="classification")
-    parser.add_argument("--model_type", default="gpt-3.5-turbo")
-    parser.add_argument("--custom_model", default="")
+
+    parser.add_argument("--job_type", default="upload_data", options=["upload_data", "submit_job"])
+
+    parser.add_argument("--task_type", default="summarization", type=str)
+    parser.add_argument("--train_sample_fraction", default=0.25, type=float)
+
+    parser.add_argument("--epochs", default=1, type=int)
+    parser.add_argument("--model", default="gpt-3.5-turbo")
+    parser.add_argument("--training_file_id", default="file-abc123")
+
     args = parser.parse_args()
 
-    main(args)
+    if args.job_type == "upload_data":
+        upload_training_file(args)
+    elif args.job_type == "submit_job":
+        submit_finetuning_job(args)
+
