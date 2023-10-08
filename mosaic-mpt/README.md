@@ -104,7 +104,6 @@ Looking at the ROUGE-1 and ROUGE-2 scores, we see that MPT-7B’s performance in
 |ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       |53.61       |23.5    |
 |ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |29.28       |9.67    |
 
-<u> Insight: </u>
 
 MPT-7B gets the lowest results, even when compared with models that are smaller than itself, i.e., Flan-T5-Large and  RP-3B. In our opinion, other 7B models are better choices to consider for fine-tuning purposes.
 
