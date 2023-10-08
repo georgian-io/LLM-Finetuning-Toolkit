@@ -42,12 +42,12 @@ python gpt_finetune.py --job_type submit_job --epochs 5 --model gpt-3.5-turbo --
 # Phase 3: Infer finetuned model
 
 # Summarization
-python gpt_finetune.py --task_type summarization --model_id ft:gpt-3.5-turbo-0613:georgian::87Dj76DB
+python gpt_finetune.py --job_type infer_finetuned_model --task_type summarization --model_id ft:gpt-3.5-turbo-0613:georgian::87Dj76DB
 
 # Classification
 
 # 0.025
-python gpt_finetune.py --task_type classification --model_id ft:gpt-3.5-turbo-0613:georgian::87Dq5Smr
+python gpt_finetune.py --job_type infer_finetuned_model --task_type classification --model_id ft:gpt-3.5-turbo-0613:georgian::87Dq5Smr
 
 # 0.05
 
