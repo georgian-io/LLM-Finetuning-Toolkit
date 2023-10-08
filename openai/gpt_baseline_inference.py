@@ -28,7 +28,7 @@ from sklearn.metrics import (
 
 
 # Obtain from OpenAI's website 
-openai.organization = "org-Qxm4Gb8DM4gPh1hlxL8eCrsO"
+openai.organization = os.getenv("OPENAI_ORG_KEY") 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 metric = evaluate.load("rouge")
