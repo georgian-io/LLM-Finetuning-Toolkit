@@ -61,6 +61,7 @@ def main(args):
                     outputs.detach().cpu().numpy(), skip_special_tokens=True
                 )[0]
                 result = result[len(instruct) :]
+                print(result)
             except:
                 result = ""
                 oom_examples.append(input_ids.shape[-1])
