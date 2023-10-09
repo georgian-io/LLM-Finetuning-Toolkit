@@ -146,7 +146,7 @@ Note:
 * RP refers to RedPajama.
 
 <details>
-<summary>### Classification: Sample efficiency VS Accuracy</summary>
+<summary>Classification: Sample efficiency VS Accuracy</summary>
 
 We use the Newsgroup dataset which is a 20-way classification problem. Each document needs to be identified as one of the 20 possible newsgroups. To check how quickly LLMs can learn on small number of samples, we compare them with the likes of BERT and Distilbert. Following table captures how models perform as we increase the number of training samples.
 
@@ -159,8 +159,10 @@ We use the Newsgroup dataset which is a 20-way classification problem. Each docu
 |5332  (50%)                 |72.00       |72.46 |75.43          |72.42      |70.58  |70.96  |69.09      |77.87       |
 |10664 (100%)                |71.91       |74.15 |72.31          |76.37      |72.34  |75.52  |75.30      |77.93       |
 
+</details>
 
-<summary>### Summarization: Finetuning</summary>
+<details>
+<summary>Summarization: Finetuning</summary>
 
 We use the samsum dataset which contains chat conversations and their summarized versions. The task here is for LLMs to learn how best to summarize conversations by learning from pairs of conversations and corresponding summaries. Following table captures how LLMs perform on this task.
 
