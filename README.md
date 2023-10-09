@@ -184,15 +184,30 @@ We use the Newsgroup dataset which is a 20-way classification problem. Each docu
 |Llama2-7B                    |52.10       |54.72     |55.97       |69.20       |69.09       |75.30         |
 |Llama2-13B                   |66.23       |67.45     |71.69       |73.50       |77.87       |77.93         |
 |Mosaic MPT-7B                |:x:         |:x:       |:x:         |:x:         |:x:         |0.0           |
-|Mistral-7B                   |
+|Mistral-7B                   |49.30       |48.14     |58.41       |64.89       |73.10       |74.36         |
+|Palmyra 30B                  |:x:         |:x:       |:x:         |:x:         |:x:         |:x:           |
+|Jurassic J2-Light            |:x:         |:x:       |:x:         |:x:         |:x:         |:x:           |
+|Jurassic J2-Mid              |:x:         |:x:       |:x:         |:x:         |:x:         |:x:           |
+|Jurassic J2-Ultra            |:x:         |:x:       |:x:         |:x:         |:x:         |:x:           |
+|OpenAI GPT-3.5-Turbo         |73.81       |56.17     |47.32       |49.15       |78.84       |79.41         |
 
+
+* Palmyra does not have finetuning capabilities.
+* Jurassic J2 models' finetuning capabilities on the classification task were not evaluated.
 
 </details>
 
+
 <details>
-<summary>Summarization: Finetuning</summary>
+<summary>Summarization: Zero-shot prompting VS Few-shot prompting VS Fine-Tuning</summary>
 
 We use the samsum dataset which contains chat conversations and their summarized versions. The task here is for LLMs to learn how best to summarize conversations by learning from pairs of conversations and corresponding summaries. Following table captures how LLMs perform on this task.
+
+|Model          |Zero-Shot Prompting    ||Few-Shot Prompting   ||Fine-Tuning      ||
+|               |ROUGE-1      | ROUGE-2  |ROUGE-1    | ROUGE-2  |ROUGE-1  |ROUGE-2 |
+|:-------------:|:-----------:|:--------:|:---------:|:--------:|:-------:|:------:|
+|Flan-T5-Base   |:x:          |:x:       |:x:        |:x:       |47.23    |21.01   |
+
 
 |Model          | Flan-T5-Base Full Fine-Tune | Flan-T5-Large | Falcon-7B | RP-3B | RP-7B | Llama2-7B | Llama2-13B |
 |:-------------:|:---------------------------:|:-------------:|:---------:|:-----:|:-----:|:---------:|:----------:|
