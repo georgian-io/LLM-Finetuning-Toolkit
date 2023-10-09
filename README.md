@@ -141,15 +141,12 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 
 We benchmark LLMs across the tasks of classification and summarization. More precisely, we assess the metrics of finetuned LLMs on classification and summarization tasks. Additionally, we perform cost estimation and load testing comparisons for inference purposes. 
 
-1. Classification: Sample efficiency VS Accuracy
-2. Summarization: Fine-tuning
-3. Cost Estimation and Load Testing
-
 Note:
 
 * RP refers to RedPajama.
 
-### Classification: Sample efficiency VS Accuracy
+<details>
+<summary>### Classification: Sample efficiency VS Accuracy</summary>
 
 We use the Newsgroup dataset which is a 20-way classification problem. Each document needs to be identified as one of the 20 possible newsgroups. To check how quickly LLMs can learn on small number of samples, we compare them with the likes of BERT and Distilbert. Following table captures how models perform as we increase the number of training samples.
 
@@ -163,7 +160,7 @@ We use the Newsgroup dataset which is a 20-way classification problem. Each docu
 |10664 (100%)                |71.91       |74.15 |72.31          |76.37      |72.34  |75.52  |75.30      |77.93       |
 
 
-### Summarization: Finetuning
+<summary>### Summarization: Finetuning</summary>
 
 We use the samsum dataset which contains chat conversations and their summarized versions. The task here is for LLMs to learn how best to summarize conversations by learning from pairs of conversations and corresponding summaries. Following table captures how LLMs perform on this task.
 
@@ -171,6 +168,8 @@ We use the samsum dataset which contains chat conversations and their summarized
 |:-------------:|:---------------------------:|:-------------:|:---------:|:-----:|:-----:|:---------:|:----------:|
 |ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       | 
 |ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |
+
+</details>
 
 ### Cost estimation and load testing
 
