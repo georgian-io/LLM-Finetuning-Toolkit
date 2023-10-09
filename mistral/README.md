@@ -89,13 +89,14 @@ We evaluated Mistral under the following conditions:
 |266   (2.5%)                |            |
 |533   (5%)                  |            |
 |1066  (10%)                 |            |
-|2666  (25%)                 |            |
-|5332  (50%)                 |            |
-|10664 (100%)                |74.36            |
+|2666  (25%)                 |64.89       |
+|5332  (50%)                 |73.10       |
+|10664 (100%)                |74.36       |
+
 
 <u> Insight: </u>
 
-The above table shows how performance of different LLMs track with sample efficiency. The last row of the table demonstrates the performance when the entire dataset is used. 
+The above table shows how performance of different LLMs track with sample efficiency. The last row of the table demonstrates the performance when the entire dataset is used.  
 
 
 
