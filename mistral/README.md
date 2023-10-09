@@ -86,17 +86,15 @@ We evaluated Mistral under the following conditions:
 
 |Training samples (fraction) | Mistral Base-7B |
 |:--------------------------:|:---------------:|
-|266   (2.5%)                |            |
-|533   (5%)                  |            |
+|266   (2.5%)                |49.30            |
+|533   (5%)                  |48.14            |
 |1066  (10%)                 |            |
-|2666  (25%)                 |64.89       |
-|5332  (50%)                 |73.10       |
-|10664 (100%)                |74.36       |
+|2666  (25%)                 |64.89            |
+|5332  (50%)                 |73.10            |
+|10664 (100%)                |74.36            |
 
 
-<u> Insight: </u>
-
-The above table shows how performance of different LLMs track with sample efficiency. The last row of the table demonstrates the performance when the entire dataset is used.  
+The above table shows how performance of Mistral-7B track with the number of training samples. The last row of the table demonstrates the performance when the entire dataset is used.  
 
 
 
@@ -120,7 +118,6 @@ Looking at the ROUGE-1 and ROUGE-2 scores, we see that Mistral-7B’s performanc
 |ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       |53.61       |
 |ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |29.28       |
 
-<u> Insight: </u>
 
 Mistral-7B achieves the best results, even when compared with Falcon-7B and Llama2-7B. This makes Mistral-7B, in our opinion, the best model to leverage in the 7B parameter space.
 
