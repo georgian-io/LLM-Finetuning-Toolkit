@@ -203,16 +203,22 @@ We use the Newsgroup dataset which is a 20-way classification problem. Each docu
 
 We use the samsum dataset which contains chat conversations and their summarized versions. The task here is for LLMs to learn how best to summarize conversations by learning from pairs of conversations and corresponding summaries. Following table captures how LLMs perform on this task.
 
-|Model          |Zero-Shot Prompting    ||Few-Shot Prompting   ||Fine-Tuning      ||
-|               |ROUGE-1      | ROUGE-2  |ROUGE-1    | ROUGE-2  |ROUGE-1  |ROUGE-2 |
-|:-------------:|:-----------:|:--------:|:---------:|:--------:|:-------:|:------:|
-|Flan-T5-Base   |:x:          |:x:       |:x:        |:x:       |47.23    |21.01   |
-
-
-|Model          | Flan-T5-Base Full Fine-Tune | Flan-T5-Large | Falcon-7B | RP-3B | RP-7B | Llama2-7B | Llama2-13B |
-|:-------------:|:---------------------------:|:-------------:|:---------:|:-----:|:-----:|:---------:|:----------:|
-|ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       | 
-|ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |
+|Model               |ZS ROUGE-1 |ZS ROUGE-2 |FS ROUGE-1 |FS ROUGE-2 |FT ROUGE-1 |FT ROUGE-2 |
+|:------------------:|:---------:|:------- -:|:---------:|:---------:|:---------:|:---------:|
+|Flan-T5-Base Full FT|:x:        |:x:        |:x:        |:x:        |47.23      |21.01      |
+|Flan-T5-Large       |:x:        |:x:        |:x:        |:x:        |49.21      |23.39      |
+|Falcon-7B           |32.21      |10.08      |34.12      |11.9       |52.18      |27.84      |
+|RedPajama-3B        |30.09      |10.48      |29.16      |10.05      |47.75      |23.53      |
+|RedPajama-7B        |30.85      |11.30      |23.22      |8.24       |49.96      |25.94      |
+|Llama2-7B           |30.06      |8.61       |35.57      |14.23      |51.71      |26.86      |
+|Llama2-13B          |11.02      |3.38       |22.50      |9.25       |52.97      |28.32      |
+|Mosaic MPT-7B       |32.86      |10.41      |34.71      |12.26      |23.5       |9.67       |
+|Mistral Base-7B     |32.77      |10.64      |38.87      |16.71      |53.61      |29.28      |
+|Writer Palmyra 30B  |33.68      |12.18      |39.28      |16.19      |:x:        |:x:        |
+|Jurassic J2-Light   |38.21      |14.78      |40.73      |17.09      |44.69      |20.15      |
+|Jurassic J2-Mid     |39.11      |15.59      |43.39      |18.34      |48.38      |23.90      |
+|Jurassic J2-Ultra   |41.63      |17.27      |45.31      |19.27      |:x:        |:x:        |
+|OpenAI GPT-3.5-Turbo|36.41      |13.31      |39.08      |15.83      |55.91      |31.88      |            
 
 </details>
 
