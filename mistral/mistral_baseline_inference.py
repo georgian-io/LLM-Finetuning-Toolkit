@@ -53,7 +53,6 @@ def compute_metrics_decoded(decoded_labs, decoded_preds, args):
 
 
 def main(args):
-
     save_dir = os.path.join(
         "baseline_results", args.pretrained_ckpt, args.task_type, args.prompt_type
     )
@@ -186,7 +185,7 @@ if __name__ == "__main__":
     parser.add_argument("--pretrained_ckpt", default="mistralai/Mistral-7B-v0.1")
     parser.add_argument("--prompt_type", default="zero-shot")
     parser.add_argument("--task_type", default="classification")
-    parser.add_argument('--use_flash_attention', action=argparse.BooleanOptionalAction)
+    parser.add_argument("--use_flash_attention", action=argparse.BooleanOptionalAction)
     args = parser.parse_args()
 
     main(args)
