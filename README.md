@@ -203,8 +203,9 @@ We use the Newsgroup dataset which is a 20-way classification problem. Each docu
 
 We use the samsum dataset which contains chat conversations and their summarized versions. The task here is for LLMs to learn how best to summarize conversations by learning from pairs of conversations and corresponding summaries. Following table captures how LLMs perform on this task.
 
+
 |Model               |ZS ROUGE-1 |ZS ROUGE-2 |FS ROUGE-1 |FS ROUGE-2 |FT ROUGE-1 |FT ROUGE-2 |
-|:------------------:|:---------:|:------- -:|:---------:|:---------:|:---------:|:---------:|
+|:------------------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|
 |Flan-T5-Base Full FT|:x:        |:x:        |:x:        |:x:        |47.23      |21.01      |
 |Flan-T5-Large       |:x:        |:x:        |:x:        |:x:        |49.21      |23.39      |
 |Falcon-7B           |32.21      |10.08      |34.12      |11.9       |52.18      |27.84      |
