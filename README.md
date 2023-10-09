@@ -143,7 +143,7 @@ We benchmark LLMs across the tasks of classification and summarization. More pre
 
 
 <details>
-<summary>Classification: Zero-shot and Few-shot prompting</summary>
+<summary>Classification: Zero-shot prompting VS Few-shot prompting VS Fine-Tuning </summary>
 
 We use the Newsgroup dataset which is a 20-way classification problem. Each document needs to be identified as one of the 20 possible newsgroups. To check how quickly LLMs can learn on small number of samples, we compare them with the likes of BERT and Distilbert. Following table captures how models perform as we increase the number of training samples.
 
@@ -155,12 +155,17 @@ We use the Newsgroup dataset which is a 20-way classification problem. Each docu
 |Llama2 7B             |:white_check_mark: |0.00                       |:x:                      |75.30                       |
 |Llama2 13B            |:white_check_mark: |0.00                       |:x:                      |77.93                       |
 |Mosaic MPT 7B         |:white_check_mark: |0.00                       |:x:                      |0.00                        |
-|Mistral 7B            |:white_check_mark: |0.00                       |:x:                      |
-|Palmyra 30B           |:x:                |15.23                      |:x:                      |
-|Jurassic J2-Light     |:x:                |1.82                       |:x:                      |
-|Jurassic J2-Mid       |:x:                |22.93                      |:x:                      |
-|Jurassic J2-Ultra     |:x:                |43.62                      |:x:                      |
-|OpenAI GPT-3.5-Turbo  |:x:                |60.22                      |:x:                      |
+|Mistral 7B            |:white_check_mark: |0.00                       |:x:                      |74.36                       |
+|Palmyra 30B           |:x:                |15.23                      |:x:                      |:x:                         |
+|Jurassic J2-Light     |:x:                |1.82                       |:x:                      |:x:                         |
+|Jurassic J2-Mid       |:x:                |22.93                      |:x:                      |:x:                         |
+|Jurassic J2-Ultra     |:x:                |43.62                      |:x:                      |:x:                         |
+|OpenAI GPT-3.5-Turbo  |:x:                |60.22                      |:x:                      |79.41                       |
+
+
+* Few-shot Accuracy could not be computed since the prompt length is very large and cannot be accommodated in the prompt.
+* Palmyra does not have finetuning capabilities.
+* Jurassic J2 models' finetuning capabilities on the classification task were not evaluated.
 
 </details>
 
@@ -170,16 +175,17 @@ We use the Newsgroup dataset which is a 20-way classification problem. Each docu
 
 |Model / # samples (fraction) | 266 (2.5%) | 533 (5%) | 1066 (10%) | 2666 (25%) | 5332 (50%) | 10664 (100%) |
 |:---------------------------:|:----------:|:--------:|:----------:|:----------:|:----------:|:------------:|
+|Distilbert                   |36.24       |46.65     |54.15       |67.07       |72.00       |71.91         |
+|Bert                         |16.91       |30.75     |53.73       |68.41       |72.46       |74.15         |
+|Flan-T5-Large                |59.86       |68.84     |73.38       |75.45       |75.43       |72.31         |
+|Falcon-7B                    |61.85       |64.02     |67.52       |70.32       |72.42       |76.37         |
+|RedPajama-3B                 |55.32       |57.49     |65.45       |67.18       |70.58       |72.34         |
+|RedPajama-7B                 |58.17       |60.31     |67.22       |69.53       |70.96       |75.52         |
+|Llama2-7B                    |52.10       |54.72     |55.97       |69.20       |69.09       |75.30         |
+|Llama2-13B                   |66.23       |67.45     |71.69       |73.50       |77.87       |77.93         |
+|Mosaic MPT-7B                |:x:         |:x:       |:x:         |:x:         |:x:         |0.0           |
+|Mistral-7B                   |
 
-
-|Training samples (fraction) | Distilbert | Bert | Flan-T5 Large | Falcon-7B | RP-3B | RP-7B | Llama2-7B | Llama2-13B |
-|:--------------------------:|:----------:|:----:|:-------------:|:---------:|:-----:|:-----:|:---------:|:----------:|
-|266   (2.5%)                |36.24       |16.91 |59.86          |61.85      |55.32  |58.17  |52.10      |66.23       |
-|533   (5%)                  |46.65       |30.75 |68.84          |64.02      |57.49  |60.31  |54.72      |67.45       |
-|1066  (10%)                 |54.15       |53.73 |73.38          |67.52      |65.45  |67.22  |55.97      |71.69       |
-|2666  (25%)                 |67.07       |68.41 |75.45          |70.32      |67.18  |69.53  |69.20      |73.50       |
-|5332  (50%)                 |72.00       |72.46 |75.43          |72.42      |70.58  |70.96  |69.09      |77.87       |
-|10664 (100%)                |71.91       |74.15 |72.31          |76.37      |72.34  |75.52  |75.30      |77.93       |
 
 </details>
 
