@@ -134,6 +134,7 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 |Writer Palmyra |:white_check_mark: |:x: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/palmyra/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/palmyra) |
 |AI21 Jurassic-2 |:white_check_mark: |:x: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/jurassic-2/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/jurassic-2) |
 |OpenAI GPT-3.5 |:white_check_mark: |:x: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/gpt-3.5-turbo/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/gpt-3.5-turbo) |
+|Cohere Command | |:x: | | |
 |Google PaLM | |:x: | | |
 |Inflection Pi | |:x: | | |
 
