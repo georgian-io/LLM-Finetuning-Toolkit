@@ -126,7 +126,7 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 |Falcon      |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/falcon/README.md) | [Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/falcon) |
 |RedPajama   |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/redPajama/README.md) | [Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/redPajama) |
 |Llama-2     |:white_check_mark: |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/llama2/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/llama2) |
-|Mistral     | |:white_check_mark: | | |
+|Mistral     |:white_check_mark: |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/mistral/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/mistral) |
 |OpenLlama   | |:white_check_mark: | | |
 |SalesForce XGen | |:white_check_mark: | | |
 |Mosaic MPT |:white_check_mark: |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/mosaic-mpt/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/mosaic-mpt) | 
@@ -134,6 +134,7 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 |Writer Palmyra |:white_check_mark: |:x: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/palmyra/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/palmyra) |
 |AI21 Jurassic-2 |:white_check_mark: |:x: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/jurassic-2/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/jurassic-2) |
 |OpenAI GPT-3.5 |:white_check_mark: |:x: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/gpt-3.5-turbo/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/gpt-3.5-turbo) |
+|Cohere Command | |:x: | | |
 |Google PaLM | |:x: | | |
 |Inflection Pi | |:x: | | |
 
@@ -141,38 +142,94 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 
 We benchmark LLMs across the tasks of classification and summarization. More precisely, we assess the metrics of finetuned LLMs on classification and summarization tasks. Additionally, we perform cost estimation and load testing comparisons for inference purposes. 
 
-1. Classification: Sample efficiency VS Accuracy
-2. Summarization: Fine-tuning
-3. Cost Estimation and Load Testing
 
-Note:
-
-* RP refers to RedPajama.
-
-### Classification: Sample efficiency VS Accuracy
+<details>
+<summary>Classification: Zero-shot prompting VS Few-shot prompting VS Fine-Tuning </summary>
 
 We use the Newsgroup dataset which is a 20-way classification problem. Each document needs to be identified as one of the 20 possible newsgroups. To check how quickly LLMs can learn on small number of samples, we compare them with the likes of BERT and Distilbert. Following table captures how models perform as we increase the number of training samples.
 
-|Training samples (fraction) | Distilbert | Bert | Flan-T5 Large | Falcon-7B | RP-3B | RP-7B | Llama2-7B | Llama2-13B |
-|:--------------------------:|:----------:|:----:|:-------------:|:---------:|:-----:|:-----:|:---------:|:----------:|
-|266   (2.5%)                |36.24       |16.91 |59.86          |61.85      |55.32  |58.17  |52.10      |66.23       |
-|533   (5%)                  |46.65       |30.75 |68.84          |64.02      |57.49  |60.31  |54.72      |67.45       |
-|1066  (10%)                 |54.15       |53.73 |73.38          |67.52      |65.45  |67.22  |55.97      |71.69       |
-|2666  (25%)                 |67.07       |68.41 |75.45          |70.32      |67.18  |69.53  |69.20      |73.50       |
-|5332  (50%)                 |72.00       |72.46 |75.43          |72.42      |70.58  |70.96  |69.09      |77.87       |
-|10664 (100%)                |71.91       |74.15 |72.31          |76.37      |72.34  |75.52  |75.30      |77.93       |
+|Model                 |Open-Source?       | Zero-shot Accuracy (in %) |Few-shot Accuracy (in %) | Fine-Tuning + QLoRA (in %) |
+|:--------------------:|:-----------------:|:-------------------------:|:-----------------------:|:--------------------------:|
+|Falcon 7B             |:white_check_mark: |1.08                       |:x:                      |76.37                       |
+|RedPajama 3B          |:white_check_mark: |0.00                       |:x:                      |72.34                       |
+|RedPajama 7B          |:white_check_mark: |0.00                       |:x:                      |75.52                       |
+|Llama2 7B             |:white_check_mark: |0.00                       |:x:                      |75.30                       |
+|Llama2 13B            |:white_check_mark: |0.00                       |:x:                      |77.93                       |
+|Mosaic MPT 7B         |:white_check_mark: |0.00                       |:x:                      |0.00                        |
+|Mistral 7B            |:white_check_mark: |0.00                       |:x:                      |74.36                       |
+|Palmyra 30B           |:x:                |15.23                      |:x:                      |:x:                         |
+|Jurassic J2-Light     |:x:                |1.82                       |:x:                      |:x:                         |
+|Jurassic J2-Mid       |:x:                |22.93                      |:x:                      |:x:                         |
+|Jurassic J2-Ultra     |:x:                |43.62                      |:x:                      |:x:                         |
+|OpenAI GPT-3.5-Turbo  |:x:                |60.22                      |:x:                      |79.41                       |
 
 
-### Summarization: Finetuning
+* Few-shot Accuracy could not be computed since the prompt length is very large and cannot be accommodated in the prompt.
+* Palmyra does not have finetuning capabilities.
+* Jurassic J2 models' finetuning capabilities on the classification task were not evaluated.
+
+</details>
+
+
+<details>
+<summary>Classification: Sample efficiency VS Accuracy</summary>
+
+|Model / # samples (fraction) | 266 (2.5%) | 533 (5%) | 1066 (10%) | 2666 (25%) | 5332 (50%) | 10664 (100%) |
+|:---------------------------:|:----------:|:--------:|:----------:|:----------:|:----------:|:------------:|
+|Distilbert                   |36.24       |46.65     |54.15       |67.07       |72.00       |71.91         |
+|Bert                         |16.91       |30.75     |53.73       |68.41       |72.46       |74.15         |
+|Flan-T5-Large                |59.86       |68.84     |73.38       |75.45       |75.43       |72.31         |
+|Falcon-7B                    |61.85       |64.02     |67.52       |70.32       |72.42       |76.37         |
+|RedPajama-3B                 |55.32       |57.49     |65.45       |67.18       |70.58       |72.34         |
+|RedPajama-7B                 |58.17       |60.31     |67.22       |69.53       |70.96       |75.52         |
+|Llama2-7B                    |52.10       |54.72     |55.97       |69.20       |69.09       |75.30         |
+|Llama2-13B                   |66.23       |67.45     |71.69       |73.50       |77.87       |77.93         |
+|Mosaic MPT-7B                |:x:         |:x:       |:x:         |:x:         |:x:         |0.0           |
+|Mistral-7B                   |49.30       |48.14     |58.41       |64.89       |73.10       |74.36         |
+|Palmyra 30B                  |:x:         |:x:       |:x:         |:x:         |:x:         |:x:           |
+|Jurassic J2-Light            |:x:         |:x:       |:x:         |:x:         |:x:         |:x:           |
+|Jurassic J2-Mid              |:x:         |:x:       |:x:         |:x:         |:x:         |:x:           |
+|Jurassic J2-Ultra            |:x:         |:x:       |:x:         |:x:         |:x:         |:x:           |
+|OpenAI GPT-3.5-Turbo         |73.81       |56.17     |47.32       |49.15       |78.84       |79.41         |
+
+
+* Palmyra does not have finetuning capabilities.
+* Jurassic J2 models' finetuning capabilities on the classification task were not evaluated.
+
+</details>
+
+
+<details>
+<summary>Summarization: Zero-shot prompting VS Few-shot prompting VS Fine-Tuning</summary>
 
 We use the samsum dataset which contains chat conversations and their summarized versions. The task here is for LLMs to learn how best to summarize conversations by learning from pairs of conversations and corresponding summaries. Following table captures how LLMs perform on this task.
 
-|Model          | Flan-T5-Base Full Fine-Tune | Flan-T5-Large | Falcon-7B | RP-3B | RP-7B | Llama2-7B | Llama2-13B |
-|:-------------:|:---------------------------:|:-------------:|:---------:|:-----:|:-----:|:---------:|:----------:|
-|ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       | 
-|ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |
+* ZS = Zero-shot
+* FS = Few-shot
+* FT = Fine-Tuning
 
-### Cost estimation and load testing
+
+|Model               |ZS Rouge-1 |ZS Rouge-2 |FS Rouge-1 |FS Rouge-2 |FT Rouge-1 |FT Rouge-2 |
+|:------------------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|
+|Flan-T5-Base Full FT|:x:        |:x:        |:x:        |:x:        |47.23      |21.01      |
+|Flan-T5-Large       |:x:        |:x:        |:x:        |:x:        |49.21      |23.39      |
+|Falcon-7B           |32.21      |10.08      |34.12      |11.9       |52.18      |27.84      |
+|RedPajama-3B        |30.09      |10.48      |29.16      |10.05      |47.75      |23.53      |
+|RedPajama-7B        |30.85      |11.30      |23.22      |8.24       |49.96      |25.94      |
+|Llama2-7B           |30.06      |8.61       |35.57      |14.23      |51.71      |26.86      |
+|Llama2-13B          |11.02      |3.38       |22.50      |9.25       |52.97      |28.32      |
+|Mosaic MPT-7B       |32.86      |10.41      |34.71      |12.26      |23.5       |9.67       |
+|Mistral Base-7B     |32.77      |10.64      |38.87      |16.71      |53.61      |29.28      |
+|Writer Palmyra 30B  |33.68      |12.18      |39.28      |16.19      |:x:        |:x:        |
+|Jurassic J2-Light   |38.21      |14.78      |40.73      |17.09      |44.69      |20.15      |
+|Jurassic J2-Mid     |39.11      |15.59      |43.39      |18.34      |48.38      |23.90      |
+|Jurassic J2-Ultra   |41.63      |17.27      |45.31      |19.27      |:x:        |:x:        |
+|OpenAI GPT-3.5-Turbo|36.41      |13.31      |39.08      |15.83      |55.91      |31.88      |            
+
+</details>
+
+<details>
+<summary>Cost estimation and load testing</summary>
 
 We deployed the models mentioned above on two servers: FastApi and the HuggingFace Text Generation Inference server. The goal was to compare the cost and latency between our custom server, developed using FastApi, and the inference server (TGI), which comes with many built-in optimizations.
 
@@ -201,6 +258,7 @@ Below, two tables summarize our observations for all the models, tasks, and most
 | Latency 90% (seconds)    | 28.01       	| -    	  | 26.4    |   28.1  |      27.3    |	27.9		 | 18.27       | -   	| 28.4   |29.527  |	28.1	    |	5.1		|
 
 In conclusion, the TGI server offers a more cost-efficient and streamlined approach compared to custom servers, delivering superior performance metrics. While classification models tend to be slower, the size of the model, in terms of training parameters, doesn't notably affect its efficiency. Choosing the right server and model type is crucial for optimizing cost and latency.
+</details>
 
 ## Contributing
 
