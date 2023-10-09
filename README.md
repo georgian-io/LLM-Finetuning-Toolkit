@@ -173,7 +173,8 @@ We use the samsum dataset which contains chat conversations and their summarized
 
 </details>
 
-### Cost estimation and load testing
+<details>
+<summary>Cost estimation and load testing</summary>
 
 We deployed the models mentioned above on two servers: FastApi and the HuggingFace Text Generation Inference server. The goal was to compare the cost and latency between our custom server, developed using FastApi, and the inference server (TGI), which comes with many built-in optimizations.
 
@@ -202,6 +203,7 @@ Below, two tables summarize our observations for all the models, tasks, and most
 | Latency 90% (seconds)    | 28.01       	| -    	  | 26.4    |   28.1  |      27.3    |	27.9		 | 18.27       | -   	| 28.4   |29.527  |	28.1	    |	5.1		|
 
 In conclusion, the TGI server offers a more cost-efficient and streamlined approach compared to custom servers, delivering superior performance metrics. While classification models tend to be slower, the size of the model, in terms of training parameters, doesn't notably affect its efficiency. Choosing the right server and model type is crucial for optimizing cost and latency.
+</details>
 
 ## Contributing
 
