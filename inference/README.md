@@ -113,3 +113,27 @@ For building FastApi application, do the following:
       "temperature": 0
       }'
    ```
+
+# Benchmark
+
+## Text generation 
+
+### Llama-7b Summarization 
+
+1. Go to load testing directory:
+   
+   ```
+   cd load_testing/vegeta/text_gen/summarization/
+   ```
+
+2. Activate bash scripts
+
+   ```
+   chmod +x vegeta
+   chmod +x ./llama_7b/vegeta_script.sh
+   chmod +x ./run_load_testing.sh
+   ```
+3. After the server has started, run the benchmark
+   
+   ```
+   ./run_load_testing.sh ./llama_7b/vegeta_script.sh my_results.txt
