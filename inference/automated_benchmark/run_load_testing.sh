@@ -1,5 +1,10 @@
 #!/bin/bash
 
+SCRIPT_PATH="$1"
+MODEL_TYPE="$2"
+TASK="$3"
+RESULT_PATH="$4"
+
 rps_values=()
 
 for ((rps=5; rps<=190; rps+=10)); do
@@ -12,7 +17,7 @@ for rps in "${rps_values[@]}"; do
     echo "Running load test for $rps RPS..."
     
     for ((i=1; i<=$repetitions; i++)); do
-        sudo $1 $2 $3 test_text.json $rps $4
+        sudo $SCRIPT_PATH $MODEL_TYPE $TASK test_text.json $rps $RESULT_PATH
         sleep 4
     done
 

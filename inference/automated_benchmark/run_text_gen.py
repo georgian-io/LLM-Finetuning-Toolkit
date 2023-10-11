@@ -11,15 +11,26 @@ import sys
 @click.option("--model_type", default="falcon", prompt=True, help="Model type (llama, flan, falcon, red_pajama):")
 @click.option("--task", default="classification", prompt=True, help="Task (classification, summarization): ")
 @click.option("--compute", default="a10", prompt=True, help="Compute type (a100, a10): ")
-def main(huggingface_token, huggingface_username, model_name, model_type, task, compute):
+@click.option("--servers", default="a10", prompt=True, help="Compute type (tgi, ray, triton, vllm): list through ', ' ")
+def main(huggingface_token, huggingface_username, model_name, model_type, task, compute, servers):
 
-    directory = f"./benchmark_results/raw/{model_name.split('/')[1]}"
-    Path(directory).mkdir(parents=True, exist_ok=True)
+    results_directories = [f"./benchmark_results/{folder}/{model_name}/{compute}" 
+                           for folder in ["raw", "processed", "plots"]]
+    for directory in results_directories:
+        Path(directory).mkdir(parents=True, exist_ok=True)
 
-    results_path = f"{directory}/tgi_{compute}.txt"
-    subprocess.run("docker stop $(docker ps -q)".split())
-    subprocess.run(["chmod", "+x", "./text_gen.sh"])
-    subprocess.run(["./text_gen.sh", f"{huggingface_username}/{model_name}", huggingface_token, model_type, task, results_path])
+    servers = servers.split(", ")
+    
+    for server in servers:
+        results_path = f"./benchmark_results/raw/{model_name}/{compute}/{server}.txt"
+        subprocess.run("docker stop $(docker ps -q)".split())
+        subprocess.run(["chmod", "+x", f"./{server}.sh"])
+        subprocess.run([f"./{server}.sh", f"{huggingface_username}/{model_name}", huggingface_token, model_type, task, results_path])
 
 if __name__ == "__main__":
-    main()
+    model_name = "a"
+    compute = "b"
+    server = "c"
+    directory = f"./benchmark_results/raw/{model_name}/{compute}/{server}"
+    Path(directory).mkdir(parents=True, exist_ok=True)
+    #main()
