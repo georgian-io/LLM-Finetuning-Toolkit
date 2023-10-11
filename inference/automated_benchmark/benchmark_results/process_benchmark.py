@@ -2,11 +2,11 @@ import csv
 import os
 import sys
     
-def save_data_for_final_table(model_name, task, data, instance_cost):
-    csv_file_path = f"./processed/{model_name}.csv"
-    headers = ["name", "rps", "latency", "throughput", "cost"]
+def save_data_for_final_table(csv_file_path, task, data, instance_cost):
+    print(csv_file_path, task, data, instance_cost)
+    headers = ["compute", "server", "rps", "latency", "throughput", "cost"]
     num_of_tokens = 120 if task == "summarization" else 101
-    data.append(instance_cost / (data[1] * 3600 * num_of_tokens) * 1000) # calculating price per 1K tokens 
+    data.append(instance_cost / (data[2] * 3600 * num_of_tokens) * 1000) # calculating price per 1K tokens 
     if not os.path.isfile(csv_file_path) or os.path.getsize(csv_file_path) == 0:
         write_mode = 'a'  
         with open(csv_file_path, mode=write_mode, newline='') as file:
@@ -19,9 +19,8 @@ def save_data_for_final_table(model_name, task, data, instance_cost):
         writer = csv.writer(file)
         writer.writerow(data)
         
-def save_data_for_final_plot(benchmark_exp, requests, latencies, throughputs):
+def save_data_for_final_plot(csv_file_path, requests, latencies, throughputs):
     headers = ["number of requests", "latency", "throughput"]
-    csv_file_path = f"./processed/{benchmark_exp}.csv"
     with open(csv_file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(headers)
@@ -29,8 +28,11 @@ def save_data_for_final_plot(benchmark_exp, requests, latencies, throughputs):
             writer.writerow(data_row)
 
 
-def get_metrics(model_name, benchmark_exp, task, instance_cost):
-    f = open(f"./raw/{benchmark_exp}.txt")
+def get_metrics(model_name, task, compute, server, instance_cost):
+    f = open(f"./benchmark_results/raw/{model_name}/{compute}/{server}.txt")
+    
+    path_processed = f"./benchmark_results/processed/{model_name}.csv"
+    path_plot = f"./benchmark_results/plots/{model_name}/{compute}/{server}.csv"
     text = f.readlines()
     result_dict = {}
     max_rps = 0
@@ -60,9 +62,15 @@ def get_metrics(model_name, benchmark_exp, task, instance_cost):
     latencies = [result_dict_ready[val][0] for val in result_dict_ready.keys()]
     throughputs = [result_dict_ready[val][1] for val in result_dict_ready.keys()]
    
-    save_data_for_final_table(model_name, task, [benchmark_exp, max_rps, latencies[-1], throughputs[-1]], instance_cost)
-    save_data_for_final_plot(model_name, )
-    return requests, latencies, throughputs, max_rps
+    save_data_for_final_table(path_processed, task, [compute, server, max_rps, latencies[-1], 
+                                                     throughputs[-1]], instance_cost)
+    save_data_for_final_plot(path_plot, requests, latencies, throughputs)
 
 if __name__ == '__main__':
-    print()
+    
+    model_name = sys.argv[1].split('/')[1]
+    task = sys.argv[2]
+    compute = sys.argv[3]
+    server = sys.argv[4]
+    instance_cost = float(sys.argv[5])
+    get_metrics(model_name, task, compute, server, instance_cost)
