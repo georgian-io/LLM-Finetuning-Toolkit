@@ -2,29 +2,29 @@
 
 MODEL_TYPE="$1"
 TASK="$2"
-RESULT_PATH="$3"
-
-echo $RESULT_PATH
+SERVER="$3"
+RESULT_PATH="$4"
+HUGGINGFACE_REPO="$5"
 
 rps_values=()
 
-for ((rps=5; rps<=20; rps+=10)); do
+for ((rps=5; rps<=240; rps+=10)); do
     rps_values+=($rps)
 done
 
 repetitions=3
 
 for rps in "${rps_values[@]}"; do
-    echo "Running load test for $rps RPS..."
+    echo "Running load test fsor $rps RPS..."
     
     for ((i=1; i<=$repetitions; i++)); do
-        random_string=$(/opt/conda/bin/python get_prompt.py $MODEL_TYPE $TASK)
-        echo $random_string
-        echo "{\"inputs\":\"$random_string\"}" > test_text.json
+        request=$(/opt/conda/bin/python send_post_request.py $MODEL_TYPE $TASK $SERVER $HUGGINGFACE_REPO)
 
-        ./vegeta attack -duration=1s -rate=$rps/1s -targets=target.list | ./vegeta report --type=text >> $RESULT_PATH
+        echo "$request" > test_text.json
+
+        sudo ./vegeta attack -duration=1s -rate=$rps/1s -targets=target.list | ./vegeta report --type=text >> $RESULT_PATH
         
-        sleep 6
+        sleep 3
     done
 
     echo "Load test for $rps RPS completed."

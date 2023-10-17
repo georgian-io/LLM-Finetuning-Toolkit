@@ -1,0 +1,3 @@
+POST r
+Content-Type: application/json
+@./test_text.json
