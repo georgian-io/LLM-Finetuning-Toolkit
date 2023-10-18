@@ -4,21 +4,15 @@ from typing import Dict
 import torch 
 from peft import AutoPeftModelForCausalLM, PeftConfig, PeftModel
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM
-import sys 
-import os 
-import json
 from ray.serve import Application
 from ray import serve
-import ray
 
 @serve.deployment(ray_actor_options={"num_gpus": 1})
 class TextClassificationDeployment:
     def __init__(self, model_type, task, lora_weights):
         if model_type == "flan":
             config = PeftConfig.from_pretrained(lora_weights)
-            self._model = AutoModelForSeq2SeqLM.from_pretrained(
-                config.base_model_name_or_path,
-            )
+            self._model = AutoModelForSeq2SeqLM.from_pretrained(config.base_model_name_or_path,)
             self._model = PeftModel.from_pretrained(self._model, lora_weights)
             self.tokenizer = AutoTokenizer.from_pretrained(config.base_model_name_or_path)
         else:
@@ -51,4 +45,4 @@ class TextClassificationDeployment:
         return self.generate(json_request['text'])
 
 def app_builder(args: Dict[str, str]) -> Application:
-    return TextClassificationDeployment.bind(args["model_type"], args["task"], args["lora_weights"])
+    return TextClassificationDeployment.bind(args["model_type"], args["task"], args["path_to_lora_weights"])

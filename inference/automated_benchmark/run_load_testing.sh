@@ -6,11 +6,11 @@ SERVER="$3"
 RESULT_PATH="$4"
 HUGGINGFACE_REPO="$5"
 
-rps_values=()
+rps_values=(10)
 
-for ((rps=5; rps<=240; rps+=10)); do
-    rps_values+=($rps)
-done
+#for ((rps=5; rps<=240; rps+=10)); do
+#    rps_values+=($rps)
+#done
 
 repetitions=3
 
@@ -20,9 +20,9 @@ for rps in "${rps_values[@]}"; do
     for ((i=1; i<=$repetitions; i++)); do
         request=$(/opt/conda/bin/python send_post_request.py $MODEL_TYPE $TASK $SERVER $HUGGINGFACE_REPO)
 
-        echo "$request" > test_text.json
+        echo "$request" > input.json
 
-        sudo ./vegeta attack -duration=1s -rate=$rps/1s -targets=target.list | ./vegeta report --type=text >> $RESULT_PATH
+        ./vegeta attack -duration=7s -rate=$rps/1s -targets=target.list | ./vegeta report --type=text >> $RESULT_PATH
         
         sleep 3
     done
