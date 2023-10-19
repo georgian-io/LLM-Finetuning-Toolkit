@@ -1,8 +1,8 @@
 import csv
 import os
 from enum_types import Server, Task
-from constants import MICROSECONDS_LENGTH, MILLISECONDS_LENGTH, SECONDS_LENGTH
-from constants import NUMBER_OF_MICROSEC_IN_SECOND, NUMBER_OF_MS_IN_SECOND
+from constants import MICROSECONDS_LENGTH, MILLISECONDS_LENGTH, SECONDS_LENGTH, MINUTES_LENGTH
+from constants import NUMBER_OF_MICROSEC_IN_SECOND, NUMBER_OF_MS_IN_SECOND, NUMBER_OF_SECONDS_IN_MINUTE
 from constants import RAW_DIR, PROCESSED_DIR, PLOTS_DIR, TOO_MANY_REQUEST_ERROR
 import typer
 
@@ -51,6 +51,8 @@ def convert_to_seconds(time):
         return float(time[:-MILLISECONDS_LENGTH]) / NUMBER_OF_MS_IN_SECOND
     elif 'µs' in time:
         return float(time[:-MICROSECONDS_LENGTH]) / NUMBER_OF_MICROSEC_IN_SECOND
+    elif 'm' in time and 's' in time:
+        return float(time[:-MINUTES_LENGTH]) * NUMBER_OF_SECONDS_IN_MINUTE
     else:
         return float(time[:-SECONDS_LENGTH])
 
