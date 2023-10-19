@@ -63,5 +63,3 @@ if __name__ == '__main__':
 
     build_plot(args.title, files_and_titles)
     print(list_files_in_folder(folder_path))
-
-#LLama-2-7B Classification (Nvidia A10)

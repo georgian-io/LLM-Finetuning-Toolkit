@@ -22,7 +22,7 @@ for rps in "${rps_values[@]}"; do
 
         echo "$request" > input.json
 
-        ./vegeta attack -duration=7s -rate=$rps/1s -targets=target.list | ./vegeta report --type=text >> $RESULT_PATH
+        ./vegeta attack -duration=600s -rate=$rps/1s -targets=target.list | ./vegeta report --type=text >> $RESULT_PATH
         
         sleep 3
     done
