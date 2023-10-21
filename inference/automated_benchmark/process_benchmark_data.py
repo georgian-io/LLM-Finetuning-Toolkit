@@ -62,6 +62,7 @@ def convert_to_seconds(time):
 def get_metrics(huggingface_rep: str, task: str, hardware: str, server: str, instance_cost: str):
     instance_cost = float(instance_cost)
     model_name = huggingface_rep.split('/')[1]
+    rate = 0
     with open(f"{RAW_DIR}/{model_name}/{hardware}/{server}.txt") as f:
         path_processed = f"{PROCESSED_DIR}/{model_name}.csv"
         path_plot = f"{PLOTS_DIR}/{model_name}/{hardware}/{server}.csv"
@@ -76,6 +77,7 @@ def get_metrics(huggingface_rep: str, task: str, hardware: str, server: str, ins
                 if raw[0] == 'Requests':
                     pos_of_total_request_value = 4
                     pos_of_throughput_value = 6
+                    pos_of_rate_value = 5
 
                     total_request = int(raw[pos_of_total_request_value][:-1])
                     if result_dict.get(total_request) is None:
@@ -87,6 +89,7 @@ def get_metrics(huggingface_rep: str, task: str, hardware: str, server: str, ins
                         result_dict[total_request]['count'] += 1
                         result_dict[total_request]['throughput'].append(convert_to_seconds(raw[pos_of_throughput_value]))
                     max_total_request = total_request
+                    rate = float(raw[pos_of_rate_value][:-1])
                 if raw[0] == 'Duration':
                     pos_of_duration_value = 4
                     result_dict[max_total_request]['duration'].append(convert_to_seconds(raw[pos_of_duration_value]))
@@ -112,9 +115,10 @@ def get_metrics(huggingface_rep: str, task: str, hardware: str, server: str, ins
         throughputs = [result_dict[num_req]['throughput'] for num_req in result_dict]
         durations = [result_dict[num_req]['duration'] for num_req in result_dict]
 
-        save_data_for_final_table(path_processed, task, [hardware, server, max_total_request, result_dict[max_total_request]['latency_with_deviation'], 
+        save_data_for_final_table(path_processed, task, [hardware, server, rate, result_dict[max_total_request]['latency_with_deviation'], 
                                                         result_dict[max_total_request]['throughput_with_deviation'], 
-                                                        result_dict[max_total_request]['duration_with_deviation']], instance_cost)
+                                                        result_dict[max_total_request]['duration_with_deviation']], 
+                                                        instance_cost)
         save_data_for_final_plot(path_plot, requests, latencies, throughputs, durations)
 
 if __name__ == '__main__':
