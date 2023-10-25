@@ -1,0 +1,24 @@
+Requests      [total, rate, throughput]         6000, 10.00, 10.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 339.294ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  209.643ms, 313.385ms, 307.147ms, 381.599ms, 384.362ms, 389.793ms, 1.68s
+Bytes In      [total, mean]                     210000, 35.00
+Bytes Out     [total, mean]                     1356000, 226.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:6000  
+Error Set:
+Requests      [total, rate, throughput]         6000, 10.00, 10.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 157.251ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  151.761ms, 199.659ms, 199.517ms, 209.719ms, 212.066ms, 215.718ms, 689.701ms
+Bytes In      [total, mean]                     180000, 30.00
+Bytes Out     [total, mean]                     4086000, 681.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:6000  
+Error Set:
+Requests      [total, rate, throughput]         6000, 10.00, 10.00
+Duration      [total, attack, wait]             10m0s, 10m0s, 148.088ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  148.088ms, 199.123ms, 199.218ms, 209.162ms, 211.37ms, 214.31ms, 223.676ms
+Bytes In      [total, mean]                     180000, 30.00
+Bytes Out     [total, mean]                     2046000, 341.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:6000  
+Error Set:

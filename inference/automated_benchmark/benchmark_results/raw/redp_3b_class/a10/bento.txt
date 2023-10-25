@@ -1,0 +1,32 @@
+Requests      [total, rate, throughput]         3, 4.50, 0.12
+Duration      [total, attack, wait]             25.052s, 666.748ms, 24.385s
+Latencies     [min, mean, 50, 90, 95, 99, max]  8.481s, 16.454s, 16.163s, 24.719s, 24.719s, 24.719s, 24.719s
+Bytes In      [total, mean]                     2964, 988.00
+Bytes Out     [total, mean]                     1029, 343.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:3  
+Error Set:
+Requests      [total, rate, throughput]         5, 6.25, 0.00
+Duration      [total, attack, wait]             30.8s, 800.004ms, 30s
+Latencies     [min, mean, 50, 90, 95, 99, max]  30s, 30s, 30s, 30s, 30s, 30s, 30s
+Bytes In      [total, mean]                     0, 0.00
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           0.00%
+Status Codes  [code:count]                      0:5  
+Error Set:Requests      [total, rate, throughput]         5, 6.25, 4.11
+Duration      [total, attack, wait]             1.215s, 800.022ms, 415.101ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  259.316ms, 337.774ms, 337.813ms, 415.101ms, 415.101ms, 415.101ms, 415.101ms
+Bytes In      [total, mean]                     1525, 305.00
+Bytes Out     [total, mean]                     1530, 306.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:5  
+Error Set:
+Requests      [total, rate, throughput]         1643, 10.01, 0.87
+Duration      [total, attack, wait]             3m14s, 2m44s, 30s
+Latencies     [min, mean, 50, 90, 95, 99, max]  346.056ms, 27.452s, 30s, 30s, 30s, 30s, 30s
+Bytes In      [total, mean]                     60648, 36.91
+Bytes Out     [total, mean]                     60648, 36.91
+Success       [ratio]                           10.23%
+Status Codes  [code:count]                      0:1475  200:168  
+Error Set:
+Post "http://0.0.0.0:3000/summarize": context deadline exceeded (Client.Timeout exceeded while awaiting headers)

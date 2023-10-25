@@ -1,0 +1,16 @@
+service: "script:svc"
+include:
+- "*.py"
+python:
+    packages:
+    - torch
+    - pydantic
+    - transformers
+    - torchvision
+    - torchaudio
+    extra_index_url:
+    - "https://download.pytorch.org/whl/cu113"
+docker:
+    distro: debian
+    python_version: "3.8.12"
+    cuda_version: "11.6.2"

@@ -32,7 +32,8 @@ DATASETS = {
 ENDPOINTS = {
     "vllm": 'http://0.0.0.0:8000/v1/completions',
     "tgi": 'http://0.0.0.0:8080/generate',
-    "ray": 'http://localhost:8000/'
+    "ray": 'http://localhost:8000/',
+    "bentoml": 'http://0.0.0.0:3000/generate'
 }
 
 def get_promt_huggingface(model_type, task):
@@ -69,6 +70,7 @@ def create_post_request(server: str, prompt: str, task: str, huggingface_repo: s
         "tgi": '{{"inputs": "{0}"}}'.format(prompt),
         "vllm": '{{"model": "{0}", "prompt": "{1}", "max_tokens": {2}, "temperature": 0}}'.format(huggingface_repo, prompt, max_tokens),
         "ray": '{{"text": "{0}"}}'.format(prompt),
+        "bentoml": '{{"text": "{0}"}}'.format(prompt),
     }
 
     return POST_BODY[server]
