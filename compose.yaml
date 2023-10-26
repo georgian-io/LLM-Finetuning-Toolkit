@@ -8,3 +8,11 @@ services:
       - ${PYTHON_ARGS}
     volumes:
       - .:/code
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
