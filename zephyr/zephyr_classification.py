@@ -121,7 +121,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--pretrained_ckpt", default="HuggingFaceH4/zephyr-7b-alpha")
+    parser.add_argument("--pretrained_ckpt", default="HuggingFaceH4/zephyr-7b-beta")
     parser.add_argument("--lora_r", default=8, type=int)
     parser.add_argument("--epochs", default=5, type=int)
     parser.add_argument("--dropout", default=0.1, type=float)

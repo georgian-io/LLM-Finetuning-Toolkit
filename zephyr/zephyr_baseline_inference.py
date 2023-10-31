@@ -182,7 +182,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--pretrained_ckpt", default="HuggingFaceH4/zephyr-7b-alpha")
+    parser.add_argument("--pretrained_ckpt", default="HuggingFaceH4/zephyr-7b-beta")
     parser.add_argument("--prompt_type", default="zero-shot")
     parser.add_argument("--task_type", default="classification")
     parser.add_argument("--use_flash_attention", action=argparse.BooleanOptionalAction)

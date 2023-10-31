@@ -28,13 +28,13 @@ Zephyr models come in two variations, and can be leveraged depending on the task
 |:----------------:|:-----------:|
 |alpha (α)         |7B           |
 |beta (β)          |7B           |           
-
-In this repository, we have experimented with the 7B-α variation. 
+In this repository, we have experimented with the 7B-β variation. 
 
 ## What does this folder contain? 
 
 This folder contains ready-to-use scripts, using which you can do the following:
 	
+
 * Finetuning Zephyr using PeFT methodology QLoRA:
 	* ```zephyr_classification.py```: Finetune on News Group classification dataset
 	* ```zephyr_summarization.py```: Finetune on Samsum summarization dataset
@@ -80,7 +80,7 @@ TODO: UPDATE FOR ZEPHYR
 <u> Table 1: Sample Efficiency vs Accuracy </u>
 
 # TODO: Add column with Neptune enabled
-|Training samples (fraction) | Zephyr-7B-α     | 
+|Training samples (fraction) | Zephyr-7B-β     | 
 |:--------------------------:|:---------------:|
 |266   (2.5%)                |49.30            |
 |533   (5%)                  |48.14            |
@@ -101,7 +101,7 @@ TODO: UPDATE FOR ZEPHYR
 
 # TODO: Add column with Neftune enabled
 
-|Method         | Zephyr-7B-α Zero-Shot | Zephyr-7B-α Few-Shot | Fine-Tuning + QLoRA |
+|Method         | Zephyr-7B-β Zero-Shot | Zephyr-7B-β Few-Shot | Fine-Tuning + QLoRA |
 |:-------------:|:---------------------:|:--------------------:|:-------------------:|
 |ROUGE-1 (in %) |32.77                  |38.87                 |53.61                |
 |ROUGE-2 (in %) |10.64                  |16.71                 |29.28                |
