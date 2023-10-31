@@ -1,3 +1,9 @@
+Important: Zephyr has the option of using flash attention to speed up inference (since it uses Mistral as its base model). In order to use flash attention, please do:
+
+```shell
+pip install -U flash-attn --no-build-isolation
+```
+
 ```shell
 git clone https://github.com/huggingface/peft
 cd peft
