@@ -30,7 +30,7 @@ TODO
 
 Zephyr models come in two variations, and can be leveraged depending on the task at hand.
 
-| Zephyr variation| Parameters  |
+| Zephyr Variant   | Parameters  |
 |:----------------:|:-----------:|
 |alpha (α)         |7B           |
 |beta (β)          |7B           |           
@@ -72,7 +72,7 @@ We evaluated Zephyr under the following conditions:
 * Training config:
 	* Epochs: 5 (for classification)
 	* Epochs: 1 (for summarization)
-	* Zephyr-7B-α:
+	* Zephyr-7B-β:
 		* PeFT technique: QLoRA
 		* Learning rate: 2e-4
 * Hardware:
@@ -81,48 +81,38 @@ We evaluated Zephyr under the following conditions:
 	
 #### Classification ####
 
-TODO: UPDATE FOR ZEPHYR
-
 <u> Table 1: Sample Efficiency vs Accuracy </u>
 
-# TODO: Add column with Neptune enabled
-|Training samples (fraction) | Zephyr-7B-β     | 
-|:--------------------------:|:---------------:|
-|266   (2.5%)                |49.30            |
-|533   (5%)                  |48.14            |
-|1066  (10%)                 |58.41            |
-|2666  (25%)                 |64.89            |
-|5332  (50%)                 |73.10            |
-|10664 (100%)                |74.36            |
-
+|Training samples (fraction) | Zephyr-7B-β     | Zephyr-7B-β w/ NEFTune  |
+|:--------------------------:|:---------------:|:-----------------------:|
+|266   (2.5%)                |~~49.30~~        | -                       |
+|533   (5%)                  |~~48.14~~        | -                       |
+|1066  (10%)                 |~~58.41~~        | -                       |
+|2666  (25%)                 |~~64.89~~        | -                       |
+|5332  (50%)                 |~~73.10~~        | -                       |
+|10664 (100%)                |~~74.36~~        | -                       |
 
 TODO: Commentary
 
 
 #### Summarization ####
 
-TODO: UPDATE FOR ZEPHYR
-
 <u> Table 2: Zero-Shot prompting vs Few-Shot prompting vs Fine-Tuning QLoRA </u>
 
-# TODO: Add column with Neftune enabled
-
-|Method         | Zephyr-7B-β Zero-Shot | Zephyr-7B-β Few-Shot | Fine-Tuning + QLoRA |
-|:-------------:|:---------------------:|:--------------------:|:-------------------:|
-|ROUGE-1 (in %) |32.77                  |38.87                 |53.61                |
-|ROUGE-2 (in %) |10.64                  |16.71                 |29.28                |
-
+|Method         | Zephyr-7B-β Zero-Shot | Zephyr-7B-β Few-Shot | Fine-Tuning + QLoRA | Fine-Tuning + QLoRA + NEFTune  |
+|:-------------:|:---------------------:|:--------------------:|:-------------------:|:------------------------------:|
+|ROUGE-1 (in %) |~~32.77~~              |~~38.87~~             |~~53.61~~            | -                              |
+|ROUGE-2 (in %) |~~10.64~~              |~~16.71~~             |~~29.28~~            | -                              |
 
 TODO: Commentary
 
+
 <u> Table 3: Zephyr vs Other LLMs </u>
 
-TODO: Add Zephyr Column
-|Model          | Flan-T5-Base Full Fine-Tune | Flan-T5-Large | Falcon-7B | RP-3B | RP-7B | Llama2-7B | Llama2-13B | Mistral-7B |
-|:-------------:|:---------------------------:|:-------------:|:---------:|:-----:|:-----:|:---------:|:----------:|:----------:|
-|ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       |53.61       |
-|ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |29.28       |
-
+|Model          | Flan-T5-Base Full Fine-Tune | Flan-T5-Large | Falcon-7B | RP-3B | RP-7B | Llama2-7B | Llama2-13B | Mistral-7B | Zephyr-7B-β  |
+|:-------------:|:---------------------------:|:-------------:|:---------:|:-----:|:-----:|:---------:|:----------:|:----------:|:------------:|
+|ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       |53.61       | -            |
+|ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |29.28       | -	           |	
 
 TODO: Commentary
 
