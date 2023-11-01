@@ -10,6 +10,13 @@ cd peft
 pip install .
 ```
 
+Important: To enable neftune, must install `trl` from source:
+```shell
+git clone https://github.com/huggingface/trl.git
+cd trl/
+pip install .
+```
+
 # Contents:
 
 - [Contents:](#contents)
