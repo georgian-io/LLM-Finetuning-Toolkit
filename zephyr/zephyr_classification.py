@@ -64,7 +64,7 @@ def main(args):
     model = prepare_model_for_kbit_training(model)
     model = get_peft_model(model, peft_config)
 
-    results_dir = f"experiments/classification-sampleFraction-{args.train_sample_fraction}_epochs-{args.epochs}_rank-{args.lora_r}_dropout-{args.dropout}"
+    results_dir = f"experiments/classification-sampleFraction-{args.train_sample_fraction}_epochs-{args.epochs}_rank-{args.lora_r}_dropout-{args.dropout}_neftune-{args.neftune}"
 
     training_args = TrainingArguments(
         output_dir=results_dir,
@@ -87,9 +87,6 @@ def main(args):
 
     max_seq_length = 512  # max sequence length for model and packing of the dataset
 
-    # TODO: add neftune noise alpha
-    #       - recommended: 5
-    #       - do it with/without for 0.01 + 0.03
     trainer = SFTTrainer(
         model=model,
         train_dataset=train_dataset,
@@ -99,6 +96,7 @@ def main(args):
         packing=True,
         args=training_args,
         dataset_text_field="instructions",
+        neftune_noise_alpha=args.neftune
     )
 
     trainer_stats = trainer.train()
@@ -127,6 +125,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", default=5, type=int)
     parser.add_argument("--dropout", default=0.1, type=float)
     parser.add_argument("--train_sample_fraction", default=0.99, type=float)
+    parser.add_argument("--neftune", default=None, type=float)
 
     args = parser.parse_args()
     main(args)
