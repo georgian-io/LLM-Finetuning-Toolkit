@@ -99,7 +99,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--experiment_dir",
-        default="experiments/summarization_epochs-1_rank-64_dropout-0.1",
+        default="experiments/summarization_epochs-1_rank-64_dropout-0.1_neftune-None",
     )
 
     args = parser.parse_args()
