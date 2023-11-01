@@ -90,7 +90,7 @@ def main(args):
     model = prepare_model_for_kbit_training(model)
     model = get_peft_model(model, peft_config)
 
-    results_dir = f"experiments/summarization_epochs-{args.epochs}_rank-{args.lora_r}_dropout-{args.dropout}"
+    results_dir = f"experiments/summarization_epochs-{args.epochs}_rank-{args.lora_r}_dropout-{args.dropout}_neftune-{args.neftune}"
 
     training_args = TrainingArguments(
         output_dir=results_dir,
@@ -125,7 +125,7 @@ def main(args):
         packing=True,
         args=training_args,
         dataset_text_field="instructions",
-        # neptune_noise_alpha
+        neftune_noise_alpha=args.neftune
     )
 
     trainer_stats = trainer.train()
@@ -153,6 +153,7 @@ if __name__ == "__main__":
     parser.add_argument("--lora_r", default=64, type=int)
     parser.add_argument("--epochs", default=1, type=int)
     parser.add_argument("--dropout", default=0.1, type=float)
+    parser.add_argument("--neftune", default=None, type=float)
 
     args = parser.parse_args()
     main(args)
