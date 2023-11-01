@@ -57,6 +57,7 @@ def main(args):
         r=args.lora_r,
         bias="none",
         task_type="CAUSAL_LM",
+        target_modules=["q_proj", "v_proj"] # Using the same target_modules as mistral from peft defaults
     )
 
     # prepare model for training

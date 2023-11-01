@@ -84,6 +84,7 @@ def main(args):
         r=args.lora_r,
         bias="none",
         task_type="CAUSAL_LM",
+        target_modules=["q_proj", "v_proj"] # Using the same target_modules as mistral from peft defaults
     )
 
     # prepare model for training
@@ -113,9 +114,6 @@ def main(args):
 
     max_seq_length = 512  # max sequence length for model and packing of the dataset
 
-    # TODO: add neftune noise alpha
-    #       - recommended: 5
-    #       - do it for summarization with / without
     trainer = SFTTrainer(
         model=model,
         train_dataset=train_dataset,
