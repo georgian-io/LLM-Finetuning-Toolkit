@@ -78,20 +78,31 @@ def main(args):
     tokenizer.padding_side = "right"
 
     # LoRA config based on QLoRA paper
+    full_modules = ["q_proj",
+                    "k_proj",
+                    "v_proj",
+                    "o_proj",
+                    "gate_proj",
+                    "up_proj",
+                    "down_proj",
+                    "lm_head"]
+
+    attn_modules = ["q_proj", "v_proj"]
+
     peft_config = LoraConfig(
         lora_alpha=16,
         lora_dropout=args.dropout,
         r=args.lora_r,
         bias="none",
         task_type="CAUSAL_LM",
-        target_modules=["q_proj", "v_proj"] # Using the same target_modules as mistral from peft defaults
+        target_modules=full_modules if args.full_tune else attn_modules
     )
 
     # prepare model for training
     model = prepare_model_for_kbit_training(model)
     model = get_peft_model(model, peft_config)
 
-    results_dir = f"experiments/summarization_epochs-{args.epochs}_rank-{args.lora_r}_dropout-{args.dropout}_neftune-{args.neftune}"
+    results_dir = f"experiments/summarization_epochs-{args.epochs}_rank-{args.lora_r}_dropout-{args.dropout}_neftune-{args.neftune}_full_tune-{args.full_tune}"
 
     training_args = TrainingArguments(
         output_dir=results_dir,
@@ -152,6 +163,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", default=1, type=int)
     parser.add_argument("--dropout", default=0.1, type=float)
     parser.add_argument("--neftune", default=None, type=float)
+    parser.add_argument("--full_tune", default=False, type=float)
 
     args = parser.parse_args()
     main(args)
