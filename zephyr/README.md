@@ -106,10 +106,10 @@ TODO: Commentary
 
 <u> Table 2: Zero-Shot prompting vs Few-Shot prompting vs Fine-Tuning QLoRA </u>
 
-|Method         | Zephyr-7B-β Zero-Shot | Zephyr-7B-β Few-Shot | Fine-Tuning + QLoRA | Fine-Tuning + QLoRA + NEFTune  |
-|:-------------:|:---------------------:|:--------------------:|:-------------------:|:------------------------------:|
-|ROUGE-1 (in %) |33.93                  |35.99                 |52.84                |52.97                          |
-|ROUGE-2 (in %) |11.21                  |12.97                 |27.75                |28.44                          |
+|Method         | Zephyr-7B-β Zero-Shot | Zephyr-7B-β Few-Shot | Fine-Tuning + QLoRA | Fine-Tuning + QLoRA + NEFTune  | Fine-Tuning + QLoRA + Full Module Tuning |
+|:-------------:|:---------------------:|:--------------------:|:-------------------:|:------------------------------:|:----------------------------------------:|
+|ROUGE-1 (in %) |33.93                  |35.99                 |52.84                |52.97                           | 53.50                                    |
+|ROUGE-2 (in %) |11.21                  |12.97                 |27.75                |28.44                           | 29.66                                    |
 
 TODO: Commentary
 
