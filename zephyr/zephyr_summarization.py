@@ -163,7 +163,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", default=1, type=int)
     parser.add_argument("--dropout", default=0.1, type=float)
     parser.add_argument("--neftune", default=None, type=float)
-    parser.add_argument("--full_tune", default=False, type=float)
+    parser.add_argument("--full_tune", default=False, type=bool)
 
     args = parser.parse_args()
     main(args)
