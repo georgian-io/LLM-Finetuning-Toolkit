@@ -51,13 +51,24 @@ def main(args):
     tokenizer.padding_side = "right"
 
     # LoRA config based on QLoRA paper
+    full_modules = ["q_proj",
+                    "k_proj",
+                    "v_proj",
+                    "o_proj",
+                    "gate_proj",
+                    "up_proj",
+                    "down_proj",
+                    "lm_head"]
+
+    attn_modules = ["q_proj", "v_proj"]
+
     peft_config = LoraConfig(
         lora_alpha=16,
         lora_dropout=args.dropout,
         r=args.lora_r,
         bias="none",
         task_type="CAUSAL_LM",
-        target_modules=["q_proj", "v_proj"] # Using the same target_modules as mistral from peft defaults
+        target_modules=full_modules if args.full_tune else attn_modules
     )
 
     # prepare model for training
@@ -126,6 +137,7 @@ if __name__ == "__main__":
     parser.add_argument("--dropout", default=0.1, type=float)
     parser.add_argument("--train_sample_fraction", default=0.99, type=float)
     parser.add_argument("--neftune", default=None, type=float)
+    parser.add_argument("--full_tune", default=False, type=bool)
 
     args = parser.parse_args()
     main(args)
