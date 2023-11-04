@@ -94,9 +94,9 @@ We evaluated Zephyr under the following conditions:
 |:--------------------------:|:---------------:|:-----------------------:|
 |266   (2.5%)                |46.05            | 49.61                   |
 |533   (5%)                  |55.66            | 60.33                   |
-|1066  (10%)                 |66.48            | 64.65                    |
-|2666  (25%)                 |66.73            | -                       |
-|5332  (50%)                 |69.54            | -                       |
+|1066  (10%)                 |66.48            | 64.65                   |
+|2666  (25%)                 |66.73            | 68.04                   |
+|5332  (50%)                 |69.54            | 72.10                   |
 |10664 (100%)                |74.90            | -                       |
 
 TODO: Commentary
@@ -106,10 +106,10 @@ TODO: Commentary
 
 <u> Table 2: Zero-Shot prompting vs Few-Shot prompting vs Fine-Tuning QLoRA </u>
 
-|Method         | Zephyr-7B-β Zero-Shot | Zephyr-7B-β Few-Shot | Fine-Tuning + QLoRA | Fine-Tuning + QLoRA + NEFTune  | Fine-Tuning + QLoRA + Full Module Tuning |
-|:-------------:|:---------------------:|:--------------------:|:-------------------:|:------------------------------:|:----------------------------------------:|
-|ROUGE-1 (in %) |33.93                  |35.99                 |52.84                |52.97                           | 53.50                                    |
-|ROUGE-2 (in %) |11.21                  |12.97                 |27.75                |28.44                           | 29.66                                    |
+|Method         | Zephyr-7B-β Zero-Shot | Zephyr-7B-β Few-Shot | Fine-Tuning + QLoRA | Fine-Tuning + QLoRA + NEFTune  | Fine-Tuning + QLoRA + Full Module Tuning | Fine-Tuning + QLoRA + NEFTune + Full Module Tuning | 
+|:-------------:|:---------------------:|:--------------------:|:-------------------:|:------------------------------:|:----------------------------------------:|:--------------------------------------------------:|
+|ROUGE-1 (in %) |33.93                  |35.99                 |52.84                |52.97                           | 53.50                                    | 53.05                                              |
+|ROUGE-2 (in %) |11.21                  |12.97                 |27.75                |28.44                           | 29.66                                    | 29.23                                              |
 
 TODO: Commentary
 
