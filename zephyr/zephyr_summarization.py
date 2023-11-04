@@ -102,7 +102,7 @@ def main(args):
     model = prepare_model_for_kbit_training(model)
     model = get_peft_model(model, peft_config)
 
-    results_dir = f"experiments/summarization_epochs-{args.epochs}_rank-{args.lora_r}_dropout-{args.dropout}_neftune-{args.neftune}_full_tune-{args.full_tune}"
+    results_dir = f"experiments/summarization_epochs-{args.epochs}_rank-{args.lora_r}_dropout-{args.dropout}_neftune-{args.neftune}_fullTune-{args.full_tune}"
 
     training_args = TrainingArguments(
         output_dir=results_dir,
