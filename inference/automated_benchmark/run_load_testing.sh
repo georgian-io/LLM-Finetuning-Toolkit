@@ -8,10 +8,6 @@ HUGGINGFACE_REPO="$5"
 
 rps_values=(10)
 
-#for ((rps=5; rps<=240; rps+=10)); do
-#    rps_values+=($rps)
-#done
-
 repetitions=3
 
 for rps in "${rps_values[@]}"; do

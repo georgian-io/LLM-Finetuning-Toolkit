@@ -17,10 +17,12 @@ def calculate_num_of_tokens(task, server):
         actual_output_tokens = expected_output_tokens_class
         if server == Server.RAY.value:
             actual_output_tokens += input_tokens
-    else:
+    elif task == Task.SUMMARIZATION.value:
         actual_output_tokens = expected_output_tokens_summ
         if server == Server.RAY.value:
             actual_output_tokens += input_tokens
+    else:
+        actual_output_tokens += 100
 
     return input_tokens, actual_output_tokens
 
@@ -40,14 +42,6 @@ def save_data_for_final_table(csv_file_path, task, data, instance_cost):
         if write_header:
             writer.writerow(headers)
         writer.writerow(data)
-        
-def save_data_for_final_plot(csv_file_path, requests, latencies, throughputs, durations):
-    headers = ["number of requests", "latency", "throughput", "duration"]
-    with open(csv_file_path, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(headers)
-        for data_row in zip(requests, latencies, throughputs, durations):
-            writer.writerow(data_row)
 
 def convert_to_seconds(time):
     if 'ms' in time:
@@ -65,7 +59,6 @@ def get_metrics(huggingface_rep: str, task: str, hardware: str, server: str, ins
     rate = 0
     with open(f"{RAW_DIR}/{model_name}/{hardware}/{server}.txt") as f:
         path_processed = f"{PROCESSED_DIR}/{model_name}.csv"
-        path_plot = f"{PLOTS_DIR}/{model_name}/{hardware}/{server}.csv"
         benchmark_logs = f.readlines()
         result_dict = {}
         max_total_request = 0
@@ -110,16 +103,10 @@ def get_metrics(huggingface_rep: str, task: str, hardware: str, server: str, ins
                 result_dict[num_req][f"{key}_with_deviation"] = f"{formatted_mean}±{formatted_std_dev}"
                 result_dict[num_req][key] = mean_value
 
-        requests = list(result_dict.keys())
-        latencies = [result_dict[num_req]['latency'] for num_req in result_dict]
-        throughputs = [result_dict[num_req]['throughput'] for num_req in result_dict]
-        durations = [result_dict[num_req]['duration'] for num_req in result_dict]
-
         save_data_for_final_table(path_processed, task, [hardware, server, rate, result_dict[max_total_request]['latency_with_deviation'], 
                                                         result_dict[max_total_request]['throughput_with_deviation'], 
                                                         result_dict[max_total_request]['duration_with_deviation']], 
                                                         instance_cost)
-        save_data_for_final_plot(path_plot, requests, latencies, throughputs, durations)
 
 if __name__ == '__main__':
     typer.run(get_metrics)

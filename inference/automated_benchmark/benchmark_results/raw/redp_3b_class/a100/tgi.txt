@@ -1,0 +1,34 @@
+Requests      [total, rate, throughput]         30000, 50.00, 49.97
+Duration      [total, attack, wait]             10m0s, 10m0s, 397.25ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  226.668ms, 340.193ms, 339.078ms, 432.132ms, 439.579ms, 453.71ms, 474.042ms
+Bytes In      [total, mean]                     1590000, 53.00
+Bytes Out     [total, mean]                     20160000, 672.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:30000
+Error Set:
+Requests      [total, rate, throughput]         36000, 60.00, 59.99
+Duration      [total, attack, wait]             10m0s, 10m0s, 149.141ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  142.079ms, 212.878ms, 213.871ms, 268.584ms, 277.543ms, 282.999ms, 329.39ms
+Bytes In      [total, mean]                     1512180, 42.01
+Bytes Out     [total, mean]                     24264000, 674.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:36000
+Error Set:
+Requests      [total, rate, throughput]         36000, 60.00, 59.98
+Duration      [total, attack, wait]             10m0s, 10m0s, 193.04ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  115.69ms, 176.604ms, 176.354ms, 223.71ms, 228.938ms, 234.567ms, 272.191ms
+Bytes In      [total, mean]                     1584000, 44.00
+Bytes Out     [total, mean]                     3852000, 107.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:36000
+Error Set:
+~
+~
+~
+~
+~
+~
+~
+~
+~
+                                                                                                           83,10         Bot
