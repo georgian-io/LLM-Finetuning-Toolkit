@@ -76,6 +76,8 @@ We evaluated Zephyr under the following conditions:
 * Experiments:
 	* Sample Efficiency vs Accuracy
 	* Zero-Shot prompting vs Few-Shot prompting vs PeFT QLoRA (for summarization)
+	* Training with [NEFTune](https://arxiv.org/abs/2310.05914) vs without
+	* Tuning only attention modules (default for `peft` library) vs all modules
 * Training config:
 	* Epochs: 5 (for classification)
 	* Epochs: 1 (for summarization)
@@ -95,11 +97,13 @@ We evaluated Zephyr under the following conditions:
 |266   (2.5%)                |46.05            |49.61                    |65.36                              |67.23                                        |
 |533   (5%)                  |55.66            |60.33                    |72.26                              |72.94                                        |
 |1066  (10%)                 |66.48            |64.65                    |73.29                              |72.82                                        |
-|2666  (25%)                 |66.73            |68.04                    | -                                 | -                                           |
-|5332  (50%)                 |69.54            |72.10                    | -                                 | -                                           |
-|10664 (100%)                |74.90            |72.93                    | -                                 | -                                           |
+|2666  (25%)                 |66.73            |68.04                    |74.27                              |75.85                                        |
+|5332  (50%)                 |69.54            |72.10                    |74.83                              |74.40                                        |
+|10664 (100%)                |74.90            |72.93                    |77.76                              |77.86                                        |
 
-TODO: Commentary
+- Zephyr performance is roughly in-line with that of its base model, Mistral; however, we note that the performance tends to converge faster
+- NEFTune tends to help model training when there is few examples; however as training set size increases, the performance is the same as non-NEFTune
+- Tuning on all modules (attention + linear) makes the model converge much faster
 
 
 #### Summarization ####
@@ -111,7 +115,9 @@ TODO: Commentary
 |ROUGE-1 (in %) |33.93                  |35.99                 |52.84                |52.97                           | 53.50                                    | 53.05                                              |
 |ROUGE-2 (in %) |11.21                  |12.97                 |27.75                |28.44                           | 29.66                                    | 29.23                                              |
 
-TODO: Commentary
+- Zephyr performance is roughly in-line with Mistral but slightly underperforms
+- Few-shot approach only yields slight improvement in ROUGE metrics over zero-shot
+- Fine-tuning works the best, but we note that using NEFTune and tuning on all modules only yield marginal performance improvements
 
 
 <u> Table 3: Zephyr vs Other LLMs </u>
@@ -121,5 +127,4 @@ TODO: Commentary
 |ROUGE-1 (in %) |47.23                        |49.21          |52.18      |47.75  |49.96  |51.71      |52.97       |53.61       |52.84         |
 |ROUGE-2 (in %) |21.01                        |23.39          |27.84      |23.53  |25.94  |26.86      |28.32       |29.28       |28.44	       |	
 
-TODO: Commentary
-
+- Zephyr achieves results comparable to Mistral, which is the best among 7B parameter models
