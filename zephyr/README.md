@@ -30,8 +30,8 @@ pip install .
 	
 
 ## What is Zephyr? 
+[Zephyr](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta) models are specifically tailored to function as a helpful assistant. It is an enhanced iteration of Mistral-7B, refined using Direct Preference Optimization (DPO) on a combination of public and synthetic datasets. Notably, the model demonstrates improved performance on MT Bench, resulting in a more helpful output. The authors [report](https://arxiv.org/abs/2310.16944) SOTA results on MT-Bench even compared with models that have much higher parameter counts (40B-70B).
 
-TODO
 
 ## Variations of Zephyr and Parameters
 
@@ -40,8 +40,9 @@ Zephyr models come in two variations, and can be leveraged depending on the task
 | Zephyr Variant   | Parameters  |
 |:----------------:|:-----------:|
 |alpha (α)         |7B           |
-|beta (β)          |7B           |           
-In this repository, we have experimented with the 7B-β variation. 
+|beta (β)          |7B           |
+
+Beta variant is newer and more performant. In this repository, we have experimented with the 7B-β variation. 
 
 ## What does this folder contain? 
 
