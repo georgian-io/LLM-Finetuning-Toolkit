@@ -1,0 +1,9 @@
+#!/bin/bash
+
+HUGGINGFACE_REPO="$1"
+TOKEN="$2"
+MODEL_TYPE="$3"
+
+echo $HUGGINGFACE_REPO
+echo $TOKEN
+echo $MODEL_TYPE
