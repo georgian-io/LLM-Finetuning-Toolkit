@@ -127,6 +127,7 @@ Our plan is to perform these experiments on all the LLMs below. To that end, thi
 |RedPajama   |:white_check_mark:   |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/redPajama/README.md) | [Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/redPajama) |
 |Llama-2     |:white_check_mark: |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/llama2/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/llama2) |
 |Mistral     |:white_check_mark: |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/mistral/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/mistral) |
+|Zephyr     |:white_check_mark: |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/zephyr/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/zephyr) |
 |OpenLlama   | |:white_check_mark: | | |
 |SalesForce XGen | |:white_check_mark: | | |
 |Mosaic MPT |:white_check_mark: |:white_check_mark: |[Link](https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/mosaic-mpt/README.md) |[Folder](https://github.com/georgian-io/LLM-Finetuning-Hub/tree/main/mosaic-mpt) | 
@@ -157,6 +158,7 @@ We use the Newsgroup dataset which is a 20-way classification problem. Each docu
 |Llama2 13B            |:white_check_mark: |0.00                       |:x:                      |77.93                       |
 |Mosaic MPT 7B         |:white_check_mark: |0.00                       |:x:                      |0.00                        |
 |Mistral 7B            |:white_check_mark: |0.00                       |:x:                      |74.36                       |
+|Zephyr-7B-β .         |:white_check_mark: |:x:                        |:x:                      |74.90                       |
 |Palmyra 30B           |:x:                |15.23                      |:x:                      |:x:                         |
 |Jurassic J2-Light     |:x:                |1.82                       |:x:                      |:x:                         |
 |Jurassic J2-Mid       |:x:                |22.93                      |:x:                      |:x:                         |
@@ -186,6 +188,7 @@ We use the Newsgroup dataset which is a 20-way classification problem. Each docu
 |Llama2-13B                   |66.23       |67.45     |71.69       |73.50       |77.87       |77.93         |
 |Mosaic MPT-7B                |:x:         |:x:       |:x:         |:x:         |:x:         |0.0           |
 |Mistral-7B                   |49.30       |48.14     |58.41       |64.89       |73.10       |74.36         |
+|Zephyr-7B-β                  |46.05       |55.66     |66.48       |66.73       |69.54       |74.90         |
 |Palmyra 30B                  |:x:         |:x:       |:x:         |:x:         |:x:         |:x:           |
 |Jurassic J2-Light            |:x:         |:x:       |:x:         |:x:         |:x:         |:x:           |
 |Jurassic J2-Mid              |:x:         |:x:       |:x:         |:x:         |:x:         |:x:           |
@@ -220,6 +223,7 @@ We use the samsum dataset which contains chat conversations and their summarized
 |Llama2-13B          |11.02      |3.38       |22.50      |9.25       |52.97      |28.32      |
 |Mosaic MPT-7B       |32.86      |10.41      |34.71      |12.26      |23.5       |9.67       |
 |Mistral Base-7B     |32.77      |10.64      |38.87      |16.71      |53.61      |29.28      |
+|Zephyr-7B-β .       |33.93      |11.21      |35.99      |12.97      |52.84      |27.75      |
 |Writer Palmyra 30B  |33.68      |12.18      |39.28      |16.19      |:x:        |:x:        |
 |Jurassic J2-Light   |38.21      |14.78      |40.73      |17.09      |44.69      |20.15      |
 |Jurassic J2-Mid     |39.11      |15.59      |43.39      |18.34      |48.38      |23.90      |
