@@ -4,36 +4,24 @@ import numpy as np
 from enum_types import Server, Task
 from constants import MICROSECONDS_LENGTH, MILLISECONDS_LENGTH, SECONDS_LENGTH, MINUTES_LENGTH
 from constants import NUMBER_OF_MICROSEC_IN_SECOND, NUMBER_OF_MS_IN_SECOND, NUMBER_OF_SECONDS_IN_MINUTE
-from constants import RAW_DIR, PROCESSED_DIR, PLOTS_DIR, TOO_MANY_REQUEST_ERROR
+from constants import TOO_MANY_REQUEST_ERROR
 import typer
+from utils import load_json
+from constants import CONFIG_FILE_PATH
 
-def calculate_num_of_tokens(task, server):
-    input_tokens = 100
-    expected_output_tokens_class = 4
-    expected_output_tokens_summ = 50
-    actual_output_tokens = 0
-
+def num_of_output_tokens(task):
     if task == Task.CLASSIFICATION.value:
-        actual_output_tokens = expected_output_tokens_class
-        if server == Server.RAY.value:
-            actual_output_tokens += input_tokens
+        output_tokens = 4
     elif task == Task.SUMMARIZATION.value:
-        actual_output_tokens = expected_output_tokens_summ
-        if server == Server.RAY.value:
-            actual_output_tokens += input_tokens
-    else:
-        actual_output_tokens += 100
+        output_tokens = 50
 
-    return input_tokens, actual_output_tokens
+    return output_tokens
 
-def save_data_for_final_table(csv_file_path, task, data, instance_cost):
+def save_data_for_final_table(csv_file_path, task, data):
     headers = ["hardware", "server", "rps", "latency_with_deviation", "throughput_with_deviation", "duration_with_deviation", 
-               "input_tokens", "output_tokens", "cost"]
-    input_tokens, output_tokens = calculate_num_of_tokens(task, data[1])
-    number_of_seconds = 3600
-    number_of_tokens = 1000
-    cost = instance_cost / (data[2] * number_of_seconds * (input_tokens + output_tokens)) * number_of_tokens
-    data.extend([input_tokens, output_tokens, "{:.10f}".format(cost)])
+               "input_tokens", "output_tokens"]
+    input_tokens, output_tokens = 100, num_of_output_tokens(task)
+    data.extend([input_tokens, output_tokens])
 
     write_header = not os.path.exists(csv_file_path) or os.path.getsize(csv_file_path) == 0
 
@@ -53,12 +41,11 @@ def convert_to_seconds(time):
     else:
         return float(time[:-SECONDS_LENGTH])
 
-def get_metrics(huggingface_rep: str, task: str, hardware: str, server: str, instance_cost: str):
-    instance_cost = float(instance_cost)
-    model_name = huggingface_rep.split('/')[1]
+def get_metrics(raw_results_path: str, processed_results_path: str, hardware: str):
     rate = 0
-    with open(f"{RAW_DIR}/{model_name}/{hardware}/{server}.txt") as f:
-        path_processed = f"{PROCESSED_DIR}/{model_name}.csv"
+    config = load_json(CONFIG_FILE_PATH)
+    server = config["server"]
+    with open(raw_results_path) as f:
         benchmark_logs = f.readlines()
         result_dict = {}
         max_total_request = 0
@@ -103,10 +90,10 @@ def get_metrics(huggingface_rep: str, task: str, hardware: str, server: str, ins
                 result_dict[num_req][f"{key}_with_deviation"] = f"{formatted_mean}±{formatted_std_dev}"
                 result_dict[num_req][key] = mean_value
 
-        save_data_for_final_table(path_processed, task, [hardware, server, rate, result_dict[max_total_request]['latency_with_deviation'], 
+        save_data_for_final_table(processed_results_path, config["task"], [hardware, server, rate, result_dict[max_total_request]['latency_with_deviation'], 
                                                         result_dict[max_total_request]['throughput_with_deviation'], 
-                                                        result_dict[max_total_request]['duration_with_deviation']], 
-                                                        instance_cost)
+                                                        result_dict[max_total_request]['duration_with_deviation']])
 
 if __name__ == '__main__':
+
     typer.run(get_metrics)

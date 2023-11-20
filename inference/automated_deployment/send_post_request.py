@@ -4,6 +4,9 @@ from enum_types import Task
 import re
 import time
 import typer
+import json
+from utils import load_json
+from constants import CONFIG_FILE_PATH
 
 PROMPTS = {
     "llama": {
@@ -61,7 +64,7 @@ def get_promt_huggingface(model_type, task):
     prompt = template_prompt % random_sentence
     return prompt
 
-def create_post_request(server: str, prompt: str, task: str, huggingface_repo: str = None):
+def create_post_request(server: str, prompt: str, task: str, huggingface_repo: str):
     if task == "classification":
         max_tokens = 20
     else:
@@ -91,4 +94,11 @@ def main(model_type, task: str, server: str, huggingface_repo: str):
     print(post_body, end="")
 
 if __name__ == "__main__":
-    typer.run(main)
+
+    config = load_json(CONFIG_FILE_PATH) 
+    
+    huggingface_repo = ""
+    if config["server"] != "ray":
+        huggingface_repo = config["huggingface_repo"]
+    
+    main(config["model_type"], config["task"], config["server"], huggingface_repo)

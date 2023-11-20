@@ -1,29 +1,18 @@
 #!/bin/bash
 
-MODEL_TYPE="$1"
-TASK="$2"
-SERVER="$3"
-RESULT_PATH="$4"
-HUGGINGFACE_REPO="$5"
+RESULTS_PATH="$1"
+rps=10
 
-rps_values=(10)
+repetitions=1
 
-repetitions=3
+for ((i=1; i<=$repetitions; i++)); do
+    request=$(python3 send_post_request.py)
 
-for rps in "${rps_values[@]}"; do
-    echo "Running load test fsor $rps RPS..."
+    echo "$request" > input.json
+
+    ./vegeta attack -duration=5s -rate=$rps/1s -targets=target.list | ./vegeta report --type=text >> "${RESULTS_PATH}"
     
-    for ((i=1; i<=$repetitions; i++)); do
-        request=$(python send_post_request.py $MODEL_TYPE $TASK $SERVER $HUGGINGFACE_REPO)
-
-        echo "$request" > input.json
-
-        ./vegeta attack -duration=600s -rate=$rps/1s -targets=target.list | ./vegeta report --type=text >> $RESULT_PATH
-        
-        sleep 5
-    done
-
-    echo "Load test for $rps RPS completed."
+    sleep 5
 done
 
-echo "All load tests completed."
+ 

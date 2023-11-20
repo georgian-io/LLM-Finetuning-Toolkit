@@ -2,6 +2,7 @@ BASE_DIR = "./benchmark_results"
 PROCESSED_DIR = f"{BASE_DIR}/processed"
 PLOTS_DIR = f"{BASE_DIR}/plots"
 RAW_DIR = f"{BASE_DIR}/raw"
+CONFIG_FILE_PATH = './config.json'
 
 # length = length + 1 (for comma), example: "34.5ms," "10m0s"
 MILLISECONDS_LENGTH = 3
