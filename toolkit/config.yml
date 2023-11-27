@@ -1,0 +1,25 @@
+# Data Ingestion -------------------
+data:
+  type: 'json'            # one of 'json', 'csv', 'huggingface'
+  path: './toolkit/examples/example_data.json'
+  prompt: >               # prompt, make sure column inputs are enclosed in {} brackets and that they match your data
+    Below is an instruction that describes a task. 
+    Write a response that appropriately completes the request. 
+    ### Instruction: {instruction}
+    ### Input: {input} 
+  prompt-stub: >          # Stub to add for training at the end of prompt, for test set or inference, this is omitted; make sure only one variable is present
+    ### Output: {output}
+  test_size: 0.2          # Proportion of test as % of total 
+  stratify_by: output     # Which column to use when doing stratified sampling of train
+
+
+# Model Definition
+
+
+# Quantization Config
+
+
+# Mixed Precision Training
+
+
+# Output

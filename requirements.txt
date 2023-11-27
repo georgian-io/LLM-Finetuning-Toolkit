@@ -24,3 +24,8 @@ protobuf==3.20.*
 ai21==1.2.7
 openai==0.28.1
 ujson==5.8.0
+
+
+# for toolkit
+pyyaml
+ijson
