@@ -33,8 +33,7 @@ class CsvIngestor(Ingestor):
     @classmethod
     def _csv_generator(path: str):
         with open(path) as csvfile:
-            reader = csv.reader(csvfile)
-
+            reader = csv.DictReader(csvfile)
             for row in reader:
                 yield row
 
