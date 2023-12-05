@@ -1,0 +1,7 @@
+# for toolkit
+pyyaml
+ijson
+rich
+
+# formatting
+black
