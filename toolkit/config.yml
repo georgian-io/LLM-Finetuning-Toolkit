@@ -1,25 +1,31 @@
 # Data Ingestion -------------------
 data:
-  type: 'json'            # one of 'json', 'csv', 'huggingface'
-  path: './toolkit/examples/example_data.json'
-  prompt: >               # prompt, make sure column inputs are enclosed in {} brackets and that they match your data
+  # type: 'json'             # one of 'json', 'csv', 'huggingface'
+  # path: './examples/example_data.json'
+  type: 'huggingface'             # one of 'json', 'csv', 'huggingface'
+  path: 'yahma/alpaca-cleaned'
+  prompt: >-              # prompt, make sure column inputs are enclosed in {} brackets and that they match your data
     Below is an instruction that describes a task. 
     Write a response that appropriately completes the request. 
     ### Instruction: {instruction}
     ### Input: {input} 
-  prompt-stub: >          # Stub to add for training at the end of prompt, for test set or inference, this is omitted; make sure only one variable is present
-    ### Output: {output}
-  test_size: 0.2          # Proportion of test as % of total 
-  stratify_by: output     # Which column to use when doing stratified sampling of train
+    ### Output: 
+  prompt_stub: >-         # Stub to add for training at the end of prompt, for test set or inference, this is omitted; make sure only one variable is present
+    {output}
+  test_size: 0.5          # Proportion of test as % of total 
 
 
-# Model Definition
+# Model Definition -------------------
+model:
+  model_ckpt: 'PygmalionAI/pygmalion-1.3b'
+  quant_4bit: true
 
 
-# Quantization Config
+# Mixed Precision Training -------------------
+lora:
+  # rank:  128
+  # alpha_factor: 2
+  # dropout: 10
 
 
-# Mixed Precision Training
-
-
-# Output
+# Output -------------------
