@@ -48,14 +48,6 @@ if __name__ == "__main__":
     model, tokenizer = ModelLoader.get_model_and_tokenizer(**config["model"])
     console.print(f"{config['model']['model_ckpt']} Loaded :smile:")
 
-    # Tokenizing Dataset -------------------------------
-    # console.rule("[bold cyan]Encoding Dataset")
-    # with console.status("Encoding dataset...", spinner="monkey"):
-    #     train = train.map(lambda examples: tokenizer(examples['formatted_prompt']), batched=True)
-    #     test = test.map(lambda examples: tokenizer(examples['formatted_prompt']), batched=True)
-    # console.print(train[0])
-    # console.print("Dataset Encoded")
-
     # Injecting LoRA -------------------------------
     console.rule("[bold red]Injecting LoRA Adapters")
     config["lora"]["lora_alpha"] = (
