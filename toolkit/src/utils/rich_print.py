@@ -10,7 +10,7 @@ def inject_example_to_rich_layout(layout: Layout, layout_name: str, example: dic
 
     # Crate Table
     table = Table(expand=True)
-    colors = ["cyan", "green", "red"]
+    colors = ["navy_blue", "dark_green","spring_green3", "turquoise2", "cyan", "blue_violet", "royal_blue1", "steel_blue1","chartreuse1" ,"deep_pink4", "plum2", "red"]
 
     # Crate Formatted Text
     formatted = example.pop("formatted_prompt", None)

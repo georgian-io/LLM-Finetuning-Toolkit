@@ -1,44 +1,52 @@
 # Data Ingestion -------------------
 data:
-  type: 'json'             # one of 'json', 'csv', 'huggingface'
-  path: './examples/example_data.json'
+  # type: 'json'             # one of 'json', 'csv', 'huggingface'
+  # path: './examples/example_data.json'
   # type: 'huggingface'             # one of 'json', 'csv', 'huggingface'
   # path: 'yahma/alpaca-cleaned'
   prompt: >-              # prompt, make sure column inputs are enclosed in {} brackets and that they match your data
     Below is an instruction that describes a task. 
     Write a response that appropriately completes the request. 
-    ### Instruction: {instruction}
-    ### Input: {input} 
+    ### Instruction: parse the following email to the correct json output
+    ### Input: {body_text} 
     ### Output: 
   prompt_stub: >-         # Stub to add for training at the end of prompt, for test set or inference, this is omitted; make sure only one variable is present
-    {output}
-  test_size: 0.5          # Proportion of test as % of total 
+    {email_json}
+  test_size: 0.2          # Proportion of test as % of total 
 
 
 # Model Definition -------------------
 model:
-  model_ckpt: 'PygmalionAI/pygmalion-1.3b'
+  model_ckpt: 'teknium/OpenHermes-2-Mistral-7B'
   quant_4bit: true
 
 
 # LoRA Params -------------------
 lora:
   task_type: "CAUSAL_LM"
-  r:  128
+  r:  64
   alpha_factor: 2
   lora_dropout: 0.1
   bias: "none"
   target_modules: 
-    - "query_key_value"
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+    - lm_head
 
 # Training -------------------
 training:
   output_dir: './experiments/'
-  num_train_epochs: 5
-  per_device_train_batch_size: 6
-  gradient_accumulation_steps: 2
+  num_train_epochs: 3
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 1
   gradient_checkpointing: True
-  optim: "paged_adamw_32bit"
+  # optim: "paged_adamw_32bit"
+  optim: "adafactor"
   logging_steps: 100
   learning_rate: 2.0e-4
   bf16: true      # Set to true for mixed precision training on Newer GPUs
@@ -49,5 +57,11 @@ training:
   lr_scheduler_type: "constant"
 
 sft:
-  max_seq_length: 512
+  max_seq_length: 2000
 
+
+inference:
+  max_new_tokens: 2000
+  do_sample: True
+  top_p: 0.95
+  temperature: 1.0e-3

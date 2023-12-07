@@ -1,10 +1,14 @@
 import os
+import csv
 
 import yaml
 from rich.panel import Panel
 from rich.layout import Layout
 from rich.console import Console
+from rich.table import Table
+from rich.live import Live
 
+import torch
 from peft import LoraConfig, prepare_model_for_kbit_training, get_peft_model
 from transformers import TrainingArguments
 from trl import SFTTrainer
@@ -24,6 +28,8 @@ if __name__ == "__main__":
         config = yaml.safe_load(file)
 
     dataset_generator = DatasetGenerator(**config["data"])
+    train_columns = dataset_generator.train_columns
+    test_column = dataset_generator.test_column
 
     with console.status("Injecting Columns into Prompt...", spinner="monkey"):
         train, test = dataset_generator.get_dataset()
@@ -53,6 +59,9 @@ if __name__ == "__main__":
     config["lora"]["lora_alpha"] = (
         config["lora"].pop("alpha_factor", 2) * config["lora"]["r"]
     )
+    model.gradient_checkpointing_enable()
+    model.enable_input_require_grads()
+
     peft_config = LoraConfig(**config["lora"])
 
     model = prepare_model_for_kbit_training(model)
@@ -93,3 +102,49 @@ if __name__ == "__main__":
     trainer.model.save_pretrained(peft_model_id)
     tokenizer.save_pretrained(peft_model_id)
     console.print(f"Run saved at {output_dir}")
+
+    # Inference -------------------------------
+    console.rule("[bold pink]:face_with_monocle: Testing")
+    model.eval()
+
+    results = []
+    oom_examples = []
+    prompts, labels = test["formatted_prompt"], test[test_column]
+
+
+    for prompt, label in zip(prompts, labels):
+        inf_table = Table(title="Inference Results", show_lines=True)
+        inf_table.add_column("prompt")
+        inf_table.add_column("ground truth")
+        inf_table.add_column("predicted")
+
+        input_ids = tokenizer(
+            prompt, return_tensors="pt", truncation=True
+        ).input_ids.cuda()
+
+        with torch.inference_mode():
+            try:
+                outputs = model.generate(
+                    input_ids=input_ids, **config["inference"]
+                )
+                result = tokenizer.batch_decode(
+                    outputs.detach().cpu().numpy(), skip_special_tokens=True
+                )[0]
+                result = result[len(prompt) :]
+            except:
+                result = "[OOM ERROR]"
+                oom_examples.append(input_ids.shape[-1])
+
+
+        results.append((prompt, label, result))
+        inf_table.add_row(prompt, label, result)
+        console.print(inf_table)
+    
+    console.print("saving inference results...")
+
+    header = ["Prompt", "Ground Truth", "Predicted"]
+    with open(f"{output_dir}/output.csv", 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+        for row in results:
+            writer.writerow(row)
