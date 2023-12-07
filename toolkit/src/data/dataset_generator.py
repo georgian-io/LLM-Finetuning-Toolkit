@@ -20,7 +20,7 @@ class DatasetGenerator:
         self.ingestor: Ingestor = get_ingestor(type)
         self.ingestor: Ingestor = self.ingestor(path)
 
-        self.dataset: Dataset = self.ingestor.to_datasets()
+        self.dataset: Dataset = self.ingestor.to_dataset()
         self.prompt: str = prompt
         self.prompt_stub: str = prompt_stub
         self.test_size: float = float(test_size)

@@ -1,9 +1,9 @@
 # Data Ingestion -------------------
 data:
-  # type: 'json'             # one of 'json', 'csv', 'huggingface'
-  # path: './examples/example_data.json'
-  type: 'huggingface'             # one of 'json', 'csv', 'huggingface'
-  path: 'yahma/alpaca-cleaned'
+  type: 'json'             # one of 'json', 'csv', 'huggingface'
+  path: './examples/example_data.json'
+  # type: 'huggingface'             # one of 'json', 'csv', 'huggingface'
+  # path: 'yahma/alpaca-cleaned'
   prompt: >-              # prompt, make sure column inputs are enclosed in {} brackets and that they match your data
     Below is an instruction that describes a task. 
     Write a response that appropriately completes the request. 
@@ -21,11 +21,33 @@ model:
   quant_4bit: true
 
 
-# Mixed Precision Training -------------------
+# LoRA Params -------------------
 lora:
-  # rank:  128
-  # alpha_factor: 2
-  # dropout: 10
+  task_type: "CAUSAL_LM"
+  r:  128
+  alpha_factor: 2
+  lora_dropout: 0.1
+  bias: "none"
+  target_modules: 
+    - "query_key_value"
 
+# Training -------------------
+training:
+  output_dir: './experiments/'
+  num_train_epochs: 5
+  per_device_train_batch_size: 6
+  gradient_accumulation_steps: 2
+  gradient_checkpointing: True
+  optim: "paged_adamw_32bit"
+  logging_steps: 100
+  learning_rate: 2.0e-4
+  bf16: true      # Set to true for mixed precision training on Newer GPUs
+  tf32: true
+  # fp16: false     # Set to true for mixed precision training on Older GPUs
+  max_grad_norm: 0.3
+  warmup_ratio: 0.03
+  lr_scheduler_type: "constant"
 
-# Output -------------------
+sft:
+  max_seq_length: 512
+

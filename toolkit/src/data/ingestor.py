@@ -19,7 +19,7 @@ def get_ingestor(data_type: str):
 
 class Ingestor(ABC):
     @abstractmethod
-    def to_datasets(self):
+    def to_dataset(self) -> Dataset:
         pass
 
 
@@ -32,7 +32,7 @@ class JsonIngestor(Ingestor):
             for item in ijson.items(f, "item"):
                 yield item
 
-    def to_datasets(self):
+    def to_dataset(self) -> Dataset:
         return Dataset.from_generator(self._json_generator)
 
 
@@ -46,7 +46,7 @@ class CsvIngestor(Ingestor):
             for row in reader:
                 yield row
 
-    def to_datasets(self):
+    def to_dataset(self) -> Dataset:
         return Dataset.from_generator(self._csv_generator)
 
 
@@ -54,6 +54,6 @@ class HuggingfaceIngestor(Ingestor):
     def __init__(self, path: str):
         self.path = path
 
-    def to_datasets(self):
+    def to_dataset(self) -> Dataset:
         ds = load_dataset(self.path)
         return concatenate_datasets(ds.values())

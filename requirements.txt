@@ -29,3 +29,4 @@ ujson==5.8.0
 # for toolkit
 pyyaml
 ijson
+rich
