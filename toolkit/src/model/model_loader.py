@@ -31,7 +31,7 @@ class ModelLoader:
         model = AutoModelForCausalLM.from_pretrained(
             model_ckpt,
             quantization_config=bnb_config,
-            use_cache=False,
+            # use_cache=False,
             device_map="auto",
         )
 
@@ -41,7 +41,7 @@ class ModelLoader:
 
     @classmethod
     def _get_tokenizer(cls, model_ckpt: str):
-        tokenizer = AutoTokenizer.from_pretrained(model_ckpt)
+        tokenizer = AutoTokenizer.from_pretrained(model_ckpt, device_map="auto")
         tokenizer.pad_token = tokenizer.eos_token
         tokenizer.padding_side = "right"
 

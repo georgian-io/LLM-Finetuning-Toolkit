@@ -15,6 +15,7 @@ class DatasetGenerator:
         prompt: str,
         prompt_stub: str,
         test_size: float,
+        train_size: float
         # stratify_by: str
     ):
         self.ingestor: Ingestor = get_ingestor(type)
@@ -23,7 +24,8 @@ class DatasetGenerator:
         self.dataset: Dataset = self.ingestor.to_dataset()
         self.prompt: str = prompt
         self.prompt_stub: str = prompt_stub
-        self.test_size: float = float(test_size)
+        self.test_size: float = test_size
+        self.train_size: float = train_size
         # self.stratify_by: str = stratify_by
         self.train_columns: list = self._get_train_columns()
         self.test_column: str = self._get_test_column()
@@ -37,7 +39,7 @@ class DatasetGenerator:
         return re.findall(pattern, self.prompt_stub)[0]
 
     def _train_test_split(self):
-        self.dataset = self.dataset.train_test_split(test_size=self.test_size)
+        self.dataset = self.dataset.train_test_split(test_size=self.test_size, train_size=self.train_size)
 
     def _format_one_prompt(self, example, is_test: bool = False):
         train_mapping = {var_name: example[var_name] for var_name in self.train_columns}

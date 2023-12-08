@@ -7,24 +7,25 @@ data:
   prompt: >-              # prompt, make sure column inputs are enclosed in {} brackets and that they match your data
     Below is an instruction that describes a task. 
     Write a response that appropriately completes the request. 
-    ### Instruction: parse the following email to the correct json output
-    ### Input: {body_text} 
+    ### Instruction: please parse the email and parse the content into correctly formed JSON
+    ### Input: {body_text}
     ### Output: 
   prompt_stub: >-         # Stub to add for training at the end of prompt, for test set or inference, this is omitted; make sure only one variable is present
     {email_json}
-  test_size: 0.2          # Proportion of test as % of total 
+  test_size: 0.2          # Proportion of test as % of total; if integer then # of samples
+  train_size: 0.8          # Proportion of train as % of total; if integer then # of samples
 
 
 # Model Definition -------------------
 model:
-  model_ckpt: 'teknium/OpenHermes-2-Mistral-7B'
+  model_ckpt: 'NousResearch/Llama-2-7b-hf'
   quant_4bit: true
 
 
 # LoRA Params -------------------
 lora:
   task_type: "CAUSAL_LM"
-  r:  64
+  r:  128
   alpha_factor: 2
   lora_dropout: 0.1
   bias: "none"
@@ -36,14 +37,14 @@ lora:
     - gate_proj
     - up_proj
     - down_proj
-    - lm_head
+    # - lm_head
 
 # Training -------------------
 training:
   output_dir: './experiments/'
-  num_train_epochs: 3
+  num_train_epochs: 5
   per_device_train_batch_size: 1
-  gradient_accumulation_steps: 1
+  gradient_accumulation_steps: 4
   gradient_checkpointing: True
   # optim: "paged_adamw_32bit"
   optim: "adafactor"
@@ -57,11 +58,15 @@ training:
   lr_scheduler_type: "constant"
 
 sft:
-  max_seq_length: 2000
+  max_seq_length: 4096
+  neftune_noise_alpha: 5
 
 
 inference:
-  max_new_tokens: 2000
+  max_new_tokens: 2048
+  use_cache: True
   do_sample: True
+  # num_beams: 1
   top_p: 0.95
-  temperature: 1.0e-3
+  temperature: 0.05
+  repetition_penalty: 1.03
