@@ -4,9 +4,11 @@ from enum_types import Task
 import re
 import time
 import typer
+import requests
 import json
 from utils import load_json
 from constants import CONFIG_FILE_PATH
+import sys
 
 PROMPTS = {
     "llama": {
@@ -35,7 +37,7 @@ DATASETS = {
 ENDPOINTS = {
     "vllm": 'http://0.0.0.0:8000/v1/completions',
     "tgi": 'http://0.0.0.0:8080/generate',
-    "ray": 'http://localhost:8000/',
+    "ray": 'http://0.0.0.0:8000/',
     "bentoml": 'http://0.0.0.0:3000/generate',
     "triton_vllm":'http://0.0.0.0:8000/v2/models/vllm_model/generate'
 }
@@ -87,18 +89,34 @@ def update_endpoint(server):
     with open("./target.list", "w") as file:
         file.write(content)
 
-def main(model_type, task: str, server: str, huggingface_repo: str):
+def send_to_vegeta(model_type, task: str, server: str, huggingface_repo: str):
     prompt = get_promt_huggingface(model_type, task)
     update_endpoint(server)
     post_body = create_post_request(server, prompt, task, huggingface_repo)
     print(post_body, end="")
 
+def inference(task: str, server: str, huggingface_repo: str):
+    prompt = typer.prompt("Input: ")
+    post_body = create_post_request(server, prompt, task, huggingface_repo)
+    
+    json_payload = json.loads(post_body)
+
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    response = requests.post(ENDPOINTS[server], json=json_payload, headers=headers)
+    print(response.text)
+
 if __name__ == "__main__":
 
+    request_purpose = sys.argv[1]
     config = load_json(CONFIG_FILE_PATH) 
     
     huggingface_repo = ""
     if config["server"] != "ray":
         huggingface_repo = config["huggingface_repo"]
     
-    main(config["model_type"], config["task"], config["server"], huggingface_repo)
+    if request_purpose == "benchmark":
+        send_to_vegeta(config["model_type"], config["task"], config["server"], huggingface_repo)
+    else:
+        inference(config["task"], config["server"], huggingface_repo)

@@ -1,0 +1,10 @@
+{
+    "server": "tgi",  
+    "huggingface_repo": "mariiaponom/llama_7b_class",
+    "huggingface_token": "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",
+    "model_type": "llama",
+    "task": "classification",
+    "model_name": "llama_7b_class",
+    "duration": "10s",
+    "rate": "10"   
+}

@@ -9,19 +9,8 @@ import typer
 from utils import load_json
 from constants import CONFIG_FILE_PATH
 
-def num_of_output_tokens(task):
-    if task == Task.CLASSIFICATION.value:
-        output_tokens = 4
-    elif task == Task.SUMMARIZATION.value:
-        output_tokens = 50
-
-    return output_tokens
-
-def save_data_for_final_table(csv_file_path, task, data):
-    headers = ["hardware", "server", "rps", "latency_with_deviation", "throughput_with_deviation", "duration_with_deviation", 
-               "input_tokens", "output_tokens"]
-    input_tokens, output_tokens = 100, num_of_output_tokens(task)
-    data.extend([input_tokens, output_tokens])
+def save_data_for_final_table(csv_file_path, data):
+    headers = ["model", "server", "rps", "latency_with_deviation", "throughput_with_deviation", "duration_with_deviation"]
 
     write_header = not os.path.exists(csv_file_path) or os.path.getsize(csv_file_path) == 0
 
@@ -41,10 +30,11 @@ def convert_to_seconds(time):
     else:
         return float(time[:-SECONDS_LENGTH])
 
-def get_metrics(raw_results_path: str, processed_results_path: str, hardware: str):
+def get_metrics(raw_results_path: str, processed_results_path: str):
     rate = 0
     config = load_json(CONFIG_FILE_PATH)
     server = config["server"]
+    model = config["model_name"]
     with open(raw_results_path) as f:
         benchmark_logs = f.readlines()
         result_dict = {}
@@ -90,7 +80,7 @@ def get_metrics(raw_results_path: str, processed_results_path: str, hardware: st
                 result_dict[num_req][f"{key}_with_deviation"] = f"{formatted_mean}±{formatted_std_dev}"
                 result_dict[num_req][key] = mean_value
 
-        save_data_for_final_table(processed_results_path, config["task"], [hardware, server, rate, result_dict[max_total_request]['latency_with_deviation'], 
+        save_data_for_final_table(processed_results_path, [model, server, rate, result_dict[max_total_request]['latency_with_deviation'], 
                                                         result_dict[max_total_request]['throughput_with_deviation'], 
                                                         result_dict[max_total_request]['duration_with_deviation']])
 
