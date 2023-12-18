@@ -20,13 +20,16 @@ def main():
         Path(RAW_DIR).mkdir(parents=True, exist_ok=True)
 
         server = config["server"]
-        raw_results_path = f"{RAW_DIR}/{server}.txt"
-        processed_results_path = f"{PROCESSED_DIR}/{server}.csv"
+        model_name = config["model_name"]
+        raw_results_path = f"{RAW_DIR}/{model_name}_{server}.txt"
+        processed_results_path = f"{PROCESSED_DIR}/{model_name}.csv"
 
         subprocess.run("docker stop $(docker ps -q)".split())
         subprocess.run(["chmod", "+x", f"./script_benchmark.sh"])
+        print("Running benchmark...")
         subprocess.run([f"./script_benchmark.sh", raw_results_path, processed_results_path, 
                         config['duration'], config['rate']])
+        print("Benchmark is finished.")
     
 if __name__ == "__main__":
     main()
