@@ -96,7 +96,7 @@ def send_to_vegeta(model_type, task: str, server: str, huggingface_repo: str):
     print(post_body, end="")
 
 def inference(task: str, server: str, huggingface_repo: str):
-    prompt = typer.prompt("Input: ")
+    prompt = typer.prompt("Input")
     post_body = create_post_request(server, prompt, task, huggingface_repo)
     json_payload = json.loads(post_body)
     headers = {
