@@ -1,0 +1,7 @@
+{
+    "server": "tgi",  
+    "huggingface_repo": "NousResearch/Llama-2-7b-hf",
+    "huggingface_token": "",
+    "model_type": "llama",
+    "task": "classification"
+}

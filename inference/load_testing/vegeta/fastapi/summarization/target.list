@@ -1,3 +1,0 @@
-POST http://0.0.0.0:8080/predict
-Content-Type: application/json
-@./test_text.json
