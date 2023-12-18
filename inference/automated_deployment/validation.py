@@ -29,16 +29,21 @@ def validate_duration(config: dict):
     if duration is None or not re.match(r'^\d+s$', duration):
         raise ValidationError("The provided duration does not follow the format: 30s, 600s, etc.")
 
-
 def validate_rate(config: dict):
     rate = config.get('rate')
     if rate is None or not str(rate).isdigit():
         raise ValidationError("The rate should be an integer value.")
     
+def validate_max_tokens(config: dict):
+    max_tokens = config.get('max_tokens')
+    if max_tokens is None or not str(max_tokens).isdigit():
+        raise ValidationError("The max_tokens should be an integer value.")
+    
 def validate_inference_config(config: dict):
     validate_server(config)
     validate_model_type(config)
     validate_huggingface_repo(config)
+    validate_max_tokens(config)
     
 def validate_benchmark_config(config: dict):
     validate_duration(config)

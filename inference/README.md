@@ -1,20 +1,29 @@
 # Deployment
 
-In this section you can find the instructions on how to deploy your models different inference servers.
+In this section you can find the instructions on how to deploy your models using different inference servers.
+
+## Prerequisites
+
+### General 
 
 To follow these instructions you need:
 
 - Docker installed
-- Path of the folder with model weights (if you want to serve with Ray) or HuggingFace repository with merged model (follow steps 1-4 from [How to merge the model](#how-to-merge-the-model))
-- HuggingFace account
+- HuggingFace repository with a merged model (follow steps 1-4 from [How to merge the model](#how-to-merge-the-model))
 
 Note: To use GPUs, you need to install the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html). 
 
+### Load testing
+
+- [Vegeta](https://github.com/tsenart/vegeta) installed (follow [this guide](https://geshan.com.np/blog/2020/09/vegeta-load-testing-primer-with-examples/) for installation)
+
+
+
 ## Automated deployment and benchmark
 
-With automated deployment you can easily deploy LLama-2, RedPajama, Falcon or Flan model and load test it for different number of requests. You just need a published repo with a model on HuggingFace (for vLLM and TGI) or a folder with model files (for Ray).
+With automated deployment you can easily deploy LLama-2, RedPajama, Falcon or Flan models and load test them for different number of requests. 
 
-Go to <code> automated_deployment </code> folder.
+Go to <code> automated_deployment </code>folder.
 
 ```
 cd automated_deployment
@@ -30,11 +39,11 @@ Before running the inference, you will need to fill the <code>config.json</code>
     "huggingface_repo": "NousResearch/Llama-2-7b-hf",
     "huggingface_token": "",
     "model_type": "llama",
-    "task": "classification"
+    "max_tokens": 20
 }
 ```
 
-#### Server
+#### server
 
    Mappings for the possible servers you can deploy on:
 
@@ -45,19 +54,20 @@ Before running the inference, you will need to fill the <code>config.json</code>
    | Ray     | ```ray```     |
    |Triton Inference Server with vLLM backend | ```triton_vllm```|
 
-#### Path to the model
 
-In case of deploying on Ray you can load the model through local folder.
-
-#### HuggingFace token
+#### huggingface_token
 
 Read/Write token for your HuggingFace account.
 
-#### HuggingFace repository
+#### huggingface_repo
 
 The model repository on HuggingFace that stores model files. Pass in the format ```username/repo_name```. 
 
-#### Model type
+#### max_tokens
+
+Maximum number of tokens you model should generate (should be integer value). 
+
+#### model_type
 
 Mappings for different model types.
    | Model      | Type    |
@@ -67,9 +77,6 @@ Mappings for different model types.
    | RedPajama  | red_pajama  |
    | LLama-2      | llama  |
 
-#### Task
-
-You should specify task your model was trained for, either ```classification``` or ```summarization```.
 
 After modifying the fields according to your preferences, run next command to start the server:
 
@@ -77,26 +84,51 @@ After modifying the fields according to your preferences, run next command to st
 python run_inference.py
 ```
 
+
+
+### Send request to the server
+
+When the server has starter, you now are able to send the request. 
+
+1. Run the following command:
+
+```
+python send_post_request.py inference
+```
+2. You will be asked then to provide the input.
+
+For example:
+
+```
+Input: Classify the following sentence that is delimited with triple backticks. ### Sentence:I was wondering if anyone out there could enlighten me on this car I saw the other day. It was a 2-door sports car, looked to be from the late 60s/ early 70s. It was called a Bricklin. The doors were really small. In addition, the front bumper was separate from the rest of the body. This is all I know. If anyone can tellme a model name, engine specs, years of production, where this car is made, history, or whatever info you have on this funky looking car, please e-mail. ### Class:
+```
+
 ### Benchmark
 
 If you want to find out what latency, thoughput each server provides you can perform the benchmark using [Vegeta](https://github.com/tsenart/vegeta) load-testing tool.
 
+We currently support benchmark for classification/summarization tasks.
+
 Before running the command you will have to add few more fields to the `config.json`:
 ```
 {
-   ...
+    ...
 
+    "task": "classification",
     "model_name": "llama_7b_class",
     "duration": "10s",
     "rate": "10"
 }  
 ```
+#### task
 
-#### Model name
+You should specify task your model was trained for, either ```classification``` or ```summarization```.
 
-Text identifier of the model for summary table.
+#### model_name
 
-#### Duration and rate
+Text identifier of the model for summary table (can be anything).
+
+#### duration and rate
 
 Duration of the benchmark test. During each second certain name of requests (rate value) will be sent. If the duration is `10s` and rate is `20`, in total `200` requests will be sent.
 

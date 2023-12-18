@@ -66,11 +66,7 @@ def get_promt_huggingface(model_type, task):
     prompt = template_prompt % random_sentence
     return prompt
 
-def create_post_request(server: str, prompt: str, task: str, huggingface_repo: str):
-    if task == "classification":
-        max_tokens = 20
-    else:
-        max_tokens = 100
+def create_post_request(server: str, prompt: str, max_tokens: int, huggingface_repo: str):
 
     POST_BODY = {
         "tgi": '{{"inputs": "{0}"}}'.format(prompt),
@@ -89,15 +85,15 @@ def update_endpoint(server):
     with open("./target.list", "w") as file:
         file.write(content)
 
-def send_to_vegeta(model_type, task: str, server: str, huggingface_repo: str):
+def send_to_vegeta(model_type, task: str, server: str, max_tokens: str, huggingface_repo: str):
     prompt = get_promt_huggingface(model_type, task)
     update_endpoint(server)
-    post_body = create_post_request(server, prompt, task, huggingface_repo)
+    post_body = create_post_request(server, prompt, int(max_tokens), huggingface_repo)
     print(post_body, end="")
 
-def inference(task: str, server: str, huggingface_repo: str):
+def inference(max_tokens: str, server: str, huggingface_repo: str):
     prompt = typer.prompt("Input")
-    post_body = create_post_request(server, prompt, task, huggingface_repo)
+    post_body = create_post_request(server, prompt, int(max_tokens), huggingface_repo)
     json_payload = json.loads(post_body)
     headers = {
         'Content-Type': 'application/json'
@@ -112,6 +108,6 @@ if __name__ == "__main__":
     huggingface_repo = config["huggingface_repo"]
     
     if request_purpose == "benchmark":
-        send_to_vegeta(config["model_type"], config["task"], config["server"], huggingface_repo)
+        send_to_vegeta(config["model_type"], config["task"], config["server"], config["max_tokens"], huggingface_repo)
     else:
-        inference(config["task"], config["server"], huggingface_repo)
+        inference(config["max_tokens"], config["server"], huggingface_repo)
