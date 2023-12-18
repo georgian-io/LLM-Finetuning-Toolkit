@@ -5,13 +5,14 @@ import json
 from utils import load_json
 from constants import PROCESSED_DIR, RAW_DIR, CONFIG_FILE_PATH
 from validation import validate_benchmark_config
+from validation import ValidationError
 
 def main():
 
     config = load_json(CONFIG_FILE_PATH)
     try:
         validate_benchmark_config(config)
-    except Exception as e:
+    except ValidationError as e:
         print(f"An error occurred: {e}")
     else:
 

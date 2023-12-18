@@ -1,26 +1,18 @@
 #!/bin/bash
 
-json_file="$1"
-
-SERVER=$(jq -r '.server' "$json_file")
-
-if [ "$SERVER" != "ray" ]; then
-    HUGGINGFACE_REPO=$(jq -r '.huggingface_repo' "$json_file")
-fi
+SERVER="$1"
+HUGGINGFACE_REPO="$2"
+HUGGINGFACE_TOKEN="$3"
+VOLUME=${VOLUME:-"$PWD/data"}
 
 if [ "$SERVER" == "vllm" ]; then
     python3 -m vllm.entrypoints.openai.api_server --model $HUGGINGFACE_REPO
 
 elif [ "$SERVER" == "tgi" ]; then    
-    HUGGINGFACE_TOKEN=$(jq -r '.huggingface_token' "$json_file")
-    VOLUME=${VOLUME:-"$PWD/data"}
     docker run --gpus all --shm-size 1g -e HUGGING_FACE_HUB_TOKEN="$TOKEN" -p 8080:80 -v "$VOLUME":/data ghcr.io/huggingface/text-generation-inference:1.0.3 --model-id "$HUGGINGFACE_REPO"
 
 elif [ "$SERVER" == "ray" ]; then
-    MODEL_TYPE=$(jq -r '.model_type' "$json_file")
-    TASK=$(jq -r '.task' "$json_file")
-    PATH_TO_LORA_WEIGHTS=$(jq -r '.path_to_model' "$json_file")
-    serve run servers.ray_serve:app_builder model_type=$MODEL_TYPE task=$TASK path_to_lora_weights=$PATH_TO_LORA_WEIGHTS
+    serve run servers.ray_serve_vllm:app_builder huggingface_repo=$HUGGINGFACE_REPO
 
 elif [ "$SERVER" == "triton_vllm" ]; then
     json_data="{\"model\":\"$HUGGINGFACE_REPO\",\"disable_log_requests\":\"true\",\"gpu_memory_utilization\":0.9}"

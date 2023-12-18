@@ -75,7 +75,7 @@ def create_post_request(server: str, prompt: str, task: str, huggingface_repo: s
     POST_BODY = {
         "tgi": '{{"inputs": "{0}"}}'.format(prompt),
         "vllm": '{{"model": "{0}", "prompt": "{1}", "max_tokens": {2}, "temperature": 0}}'.format(huggingface_repo, prompt, max_tokens),
-        "ray": '{{"text": "{0}"}}'.format(prompt),
+        "ray": '{{"prompt": "{0}"}}'.format(prompt),
         "triton_vllm": '{{"text_input":"{0}", "parameters": {{"stream": false, "temperature": 0}}}}'.format(prompt),
     }
 
@@ -98,9 +98,7 @@ def send_to_vegeta(model_type, task: str, server: str, huggingface_repo: str):
 def inference(task: str, server: str, huggingface_repo: str):
     prompt = typer.prompt("Input: ")
     post_body = create_post_request(server, prompt, task, huggingface_repo)
-    
     json_payload = json.loads(post_body)
-
     headers = {
         'Content-Type': 'application/json'
     }
@@ -111,10 +109,7 @@ if __name__ == "__main__":
 
     request_purpose = sys.argv[1]
     config = load_json(CONFIG_FILE_PATH) 
-    
-    huggingface_repo = ""
-    if config["server"] != "ray":
-        huggingface_repo = config["huggingface_repo"]
+    huggingface_repo = config["huggingface_repo"]
     
     if request_purpose == "benchmark":
         send_to_vegeta(config["model_type"], config["task"], config["server"], huggingface_repo)

@@ -30,8 +30,7 @@ Before running the inference, you will need to fill the <code>config.json</code>
     "huggingface_repo": "NousResearch/Llama-2-7b-hf",
     "huggingface_token": "",
     "model_type": "llama",
-    "task": "classification",
-    "path_to_model": "" (optional, in case of Ray)
+    "task": "classification"
 }
 ```
 

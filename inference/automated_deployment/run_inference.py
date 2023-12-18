@@ -18,7 +18,8 @@ def main():
         print(e)
     else:
         subprocess.run(["chmod", "+x", f"./script_inference.sh"])
-        subprocess.run([f"./script_inference.sh", CONFIG_FILE_PATH])
+        subprocess.run([f"./script_inference.sh", config["server"], config["huggingface_repo"],
+                        config["huggingface_token"]])
     
 if __name__ == '__main__':
     main()
