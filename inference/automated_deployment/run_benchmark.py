@@ -30,6 +30,8 @@ def main():
         subprocess.run([f"./script_benchmark.sh", raw_results_path, processed_results_path, 
                         config['duration'], config['rate']])
         print("Benchmark is finished.")
+        print(f"Raw results are saved at: {raw_results_path}")
+        print(f"Processed results are saved at: {processed_results_path}")
     
 if __name__ == "__main__":
     main()
