@@ -1,35 +1,37 @@
+save_dir: "./experiment/"
+
 # Data Ingestion -------------------
 data:
   # type: 'json'             # one of 'json', 'csv', 'huggingface'
   # path: './examples/example_data.json'
-  type: 'huggingface'             # one of 'json', 'csv', 'huggingface'
-  path: 'yahma/alpaca-cleaned'
-  prompt: >-              # prompt, make sure column inputs are enclosed in {} brackets and that they match your data
+  type: "huggingface" # one of 'json', 'csv', 'huggingface'
+  path: "yahma/alpaca-cleaned"
+  prompt:
+    >- # prompt, make sure column inputs are enclosed in {} brackets and that they match your data
     Below is an instruction that describes a task. 
     Write a response that appropriately completes the request. 
     ### Instruction: {instruction}
     ### Input: {input}
-    ### Output: 
-  prompt_stub: >-         # Stub to add for training at the end of prompt, for test set or inference, this is omitted; make sure only one variable is present
+    ### Output:
+  prompt_stub:
+    >- # Stub to add for training at the end of prompt, for test set or inference, this is omitted; make sure only one variable is present
     {output}
-  test_size: 10          # Proportion of test as % of total; if integer then # of samples
-  train_size: 200          # Proportion of train as % of total; if integer then # of samples
-
+  test_size: 10 # Proportion of test as % of total; if integer then # of samples
+  train_size: 200 # Proportion of train as % of total; if integer then # of samples
 
 # Model Definition -------------------
 model:
-  model_ckpt: 'HuggingFaceH4/zephyr-7b-beta'
-  quant_4bit: true
-
+  model_ckpt: "HuggingFaceH4/zephyr-7b-beta"
+  quantize: true
+  bitsandbytes:
+    load_in_4bit: true
 
 # LoRA Params -------------------
 lora:
   task_type: "CAUSAL_LM"
-  r:  32
-  alpha_factor: 2
+  r: 32
   lora_dropout: 0.1
-  bias: "none"
-  target_modules: 
+  target_modules:
     - q_proj
     - v_proj
     - k_proj
@@ -40,24 +42,23 @@ lora:
 
 # Training -------------------
 training:
-  output_dir: './demo/'
-  num_train_epochs: 5
-  per_device_train_batch_size: 4
-  gradient_accumulation_steps: 4
-  gradient_checkpointing: True
-  optim: "paged_adamw_32bit"
-  logging_steps: 100
-  learning_rate: 2.0e-4
-  bf16: true      # Set to true for mixed precision training on Newer GPUs
-  tf32: true
-  # fp16: false     # Set to true for mixed precision training on Older GPUs
-  max_grad_norm: 0.3
-  warmup_ratio: 0.03
-  lr_scheduler_type: "constant"
-
-sft:
-  max_seq_length: 1024
-  # neftune_noise_alpha: None
+  training_args:
+    num_train_epochs: 5
+    per_device_train_batch_size: 4
+    gradient_accumulation_steps: 4
+    gradient_checkpointing: True
+    optim: "paged_adamw_32bit"
+    logging_steps: 100
+    learning_rate: 2.0e-4
+    bf16: true # Set to true for mixed precision training on Newer GPUs
+    tf32: true
+    # fp16: false     # Set to true for mixed precision training on Older GPUs
+    max_grad_norm: 0.3
+    warmup_ratio: 0.03
+    lr_scheduler_type: "constant"
+  sft_args:
+    max_seq_length: 1024
+    # neftune_noise_alpha: None
 
 inference:
   max_new_tokens: 200

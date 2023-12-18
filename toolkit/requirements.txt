@@ -5,3 +5,9 @@ rich
 
 # formatting
 black
+
+# models
+pydantic
+
+# generate ids
+sqids
