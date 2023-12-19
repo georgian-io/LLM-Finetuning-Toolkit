@@ -16,7 +16,7 @@ from sqids import Sqids
 
 from src.pydantic_models.config_model import Config
 
-NUM_MD5_DIGITS_FOR_SQIDS = 5
+NUM_MD5_DIGITS_FOR_SQIDS = 5  # TODO: maybe move consts to a dedicated folder
 
 
 @dataclass
@@ -25,24 +25,24 @@ class DirectoryList:
     config_hash: str
 
     @property
-    def experiment_path(self) -> str:
+    def experiment(self) -> str:
         return os.path.join(self.save_dir, self.config_hash)
 
     @property
-    def config_path(self) -> str:
-        return os.path.join(self.experiment_path, "/config.yml")
+    def config(self) -> str:
+        return os.path.join(self.experiment, "/config.yml")
 
     @property
-    def dataset_path(self) -> str:
-        return os.path.join(self.experiment_path, "/dataset")
+    def dataset(self) -> str:
+        return os.path.join(self.experiment, "/dataset")
 
     @property
-    def weights_path(self) -> str:
-        return os.path.join(self.experiment_path, "/weights")
+    def weights(self) -> str:
+        return os.path.join(self.experiment, "/weights")
 
     @property
-    def results_path(self) -> str:
-        return os.path.join(self.experiment_path, "/results")
+    def results(self) -> str:
+        return os.path.join(self.experiment, "/results")
 
 
 class DirectoryHelper:
@@ -52,8 +52,8 @@ class DirectoryHelper:
         self.sqids: Sqids = Sqids()
         self.save_paths: DirectoryList = self._get_directory_state()
 
-        os.makedirs(self.save_paths.experiment_path, exist_ok=True)
-        if not exists(self.save_paths.config_path):
+        os.makedirs(self.save_paths.experiment, exist_ok=True)
+        if not exists(self.save_paths.config):
             self.save_config()
 
     @cached_property
@@ -68,5 +68,5 @@ class DirectoryHelper:
         return DirectoryList(self.config.save_dir, self.config_hash)
 
     def save_config(self) -> None:
-        os.makedirs(self.save_paths.config_path, exist_ok=True)
-        shutil.copy(self.config_path, self.save_paths.config_path, "config.yml")
+        os.makedirs(self.save_paths.config, exist_ok=True)
+        shutil.copy(self.config_path, self.save_paths.config, "config.yml")
