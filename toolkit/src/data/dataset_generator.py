@@ -45,6 +45,7 @@ class DatasetGenerator:
         pattern = r"\{([^}]*)\}"
         return re.findall(pattern, self.prompt_stub)[0]
 
+    # TODO: stratify_by_column
     def _train_test_split(self):
         self.dataset = self.dataset.train_test_split(
             test_size=self.test_size, train_size=self.train_size
