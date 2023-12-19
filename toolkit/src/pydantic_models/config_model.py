@@ -6,7 +6,7 @@ from huggingface_hub.utils import validate_repo_id
 import torch
 import peft
 
-
+# TODO: Refactor this into multiple files...
 HfModelPath = str
 
 
@@ -79,8 +79,9 @@ class ModelConfig(BaseModel):
     model_ckpt: str = Field(
         None, description="Path to the model (huggingface repo or local path)"
     )
-    quantize: bool = Field(None, description="Flag to enable quantization")
+    device_map: str = Field("auto", description="device onto which to load the model")
 
+    quantize: bool = Field(None, description="Flag to enable quantization")
     bitsandbytes: Optional[BitsAndBytesConfig] = Field(
         None, description="Bits and Bytes configuration"
     )
@@ -153,7 +154,7 @@ class TrainingArgs(BaseModel):
     learning_rate: Optional[float] = Field(2.0e-4, description="Learning rate")
     bf16: Optional[bool] = Field(False, description="Flag to enable bf16")
     tf32: Optional[bool] = Field(False, description="Flag to enable tf32")
-    tf32: Optional[bool] = Field(False, description="Flag to enable fp16")
+    fp16: Optional[bool] = Field(False, description="Flag to enable fp16")
     max_grad_norm: Optional[float] = Field(0.3, description="Maximum gradient norm")
     warmup_ratio: Optional[float] = Field(0.03, description="Warmup ratio")
     lr_scheduler_type: Optional[str] = Field(
