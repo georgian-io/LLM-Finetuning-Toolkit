@@ -30,9 +30,9 @@ class ModelLoader:
         self, config: Config, console: Console, directory_helper: DirectoryHelper
     ):
         self._model_config = config.model
-        self._training_args = config.training.training_arguments
-        self._sft_args = config.training.sft
-        self._lora_config = LoraConfig(**config.lora)
+        self._training_args = config.training.training_args
+        self._sft_args = config.training.sft_args
+        self._lora_config = LoraConfig(**config.lora.model_dump())
         self._console: Console = console
         self._directory_helper = directory_helper
         self._weights_path = self._directory_helper.save_paths.weights
@@ -41,17 +41,17 @@ class ModelLoader:
         self.tokenizer = None
 
     def load_model_and_tokenizer(self):
-        self._console.print(f"Loading {self._model_config.model_ckpt}...")
+        self._console.print(f"Loading {self._model_config.hf_model_ckpt}...")
         model = self._get_model()
         tokenizer = self._get_tokenizer()
-        self._console.print(f"{self._model_config.model_ckpt} Loaded :smile:")
+        self._console.print(f"{self._model_config.hf_model_ckpt} Loaded :smile:")
 
         self.model = model
         self.tokenizer = tokenizer
 
     def _get_model(self):
         model = AutoModelForCausalLM.from_pretrained(
-            self._model_config.model_ckpt,
+            self._model_config.hf_model_ckpt,
             quantization_config=BitsAndBytesConfig(self._model_config.bitsandbytes),
             use_cache=False,
             device_map=self._model_config.device_map,
@@ -62,9 +62,7 @@ class ModelLoader:
         return model
 
     def _get_tokenizer(self):
-        tokenizer = AutoTokenizer.from_pretrained(
-            self._model_config.model_ckpt, self._model_config.device_map
-        )
+        tokenizer = AutoTokenizer.from_pretrained(self._model_config.hf_model_ckpt)
         tokenizer.pad_token = tokenizer.eos_token
         tokenizer.padding_side = "right"
 
@@ -75,6 +73,7 @@ class ModelLoader:
 
         self.model.gradient_checkpointing_enable()
         self.model = prepare_model_for_kbit_training(self.model)
+
         self.model = get_peft_model(self.model, self._lora_config)
 
         self._console.print(f"LoRA Modules Injected!")
@@ -85,7 +84,7 @@ class ModelLoader:
             output_dir=self._weights_path,
             logging_dir=logging_dir,
             report_to="none",
-            **self._training_args,
+            **self._training_args.model_dump(),
         )
 
         progress_callback = ProgressCallback()
@@ -99,7 +98,7 @@ class ModelLoader:
             args=training_args,
             dataset_text_field="formatted_prompt",  # TODO: maybe move consts to a dedicated folder
             callbacks=[progress_callback],
-            **self._sft_args,
+            **self._sft_args.model_dump(),
         )
 
         with self._console.status("Training...", spinner="runner"):

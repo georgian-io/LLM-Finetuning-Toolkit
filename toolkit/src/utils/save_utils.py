@@ -30,19 +30,19 @@ class DirectoryList:
 
     @property
     def config(self) -> str:
-        return os.path.join(self.experiment, "/config.yml")
+        return os.path.join(self.experiment, "config")
 
     @property
     def dataset(self) -> str:
-        return os.path.join(self.experiment, "/dataset")
+        return os.path.join(self.experiment, "dataset")
 
     @property
     def weights(self) -> str:
-        return os.path.join(self.experiment, "/weights")
+        return os.path.join(self.experiment, "weights")
 
     @property
     def results(self) -> str:
-        return os.path.join(self.experiment, "/results")
+        return os.path.join(self.experiment, "results")
 
 
 class DirectoryHelper:
@@ -69,4 +69,4 @@ class DirectoryHelper:
 
     def save_config(self) -> None:
         os.makedirs(self.save_paths.config, exist_ok=True)
-        shutil.copy(self.config_path, self.save_paths.config, "config.yml")
+        shutil.copy(self.config_path, self.save_paths.config)

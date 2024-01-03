@@ -1,3 +1,4 @@
+import os
 from threading import Thread
 import csv
 
@@ -18,6 +19,7 @@ class InferenceRunner:
         config,
         console,
         save_path,
+        save_dir,
     ):
         self.model = model
         self.tokenizer = tokenizer
@@ -25,6 +27,7 @@ class InferenceRunner:
         self.label_column = label_column_name
         self.config = config
         self.save_path = save_path
+        self.save_dir = save_dir
         self._console = console
 
     def _init_rich_table(self, title: str, prompt: str, label: str) -> Table:
@@ -38,12 +41,12 @@ class InferenceRunner:
     def run_inference(self):
         results = []
         prompts = self.test["formatted_prompt"]
-        labels = self.test[self.label_column_name]
+        labels = self.test[self.label_column]
 
         # inference loop
         for idx, (prompt, label) in enumerate(zip(prompts, labels)):
             table = self._init_rich_table(
-                f"Generating on test set: {idx+1}/{len(prompts)}"
+                f"Generating on test set: {idx+1}/{len(prompts)}", prompt, label
             )
             self._console.print(table)
 
@@ -59,7 +62,7 @@ class InferenceRunner:
             )
 
             generation_kwargs = dict(
-                input_ids=input_ids, streamer=streamer, **self.config.inference
+                input_ids=input_ids, streamer=streamer, **self.config.inference.model_dump()
             )
 
             thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
@@ -79,6 +82,7 @@ class InferenceRunner:
 
         self._console.print("Saving inference results...")
         header = ["Prompt", "Ground Truth", "Predicted"]
+        os.makedirs(self.save_dir, exist_ok=True)
         with open(self.save_path, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(header)

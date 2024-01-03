@@ -11,13 +11,13 @@ from rich.layout import Layout
 from rich.panel import Panel
 
 from src.data.ingestor import Ingestor, get_ingestor
-from toolkit.src.utils.rich_print_utils import inject_example_to_rich_layout
+from src.utils.rich_print_utils import inject_example_to_rich_layout
 
 
 class DatasetGenerator:
     def __init__(
         self,
-        type: str,
+        file_type: str,
         path: str,
         prompt: str,
         prompt_stub: str,
@@ -25,7 +25,7 @@ class DatasetGenerator:
         train_size: float,
         console: Console,
     ):
-        self.ingestor: Ingestor = get_ingestor(type)
+        self.ingestor: Ingestor = get_ingestor(file_type)
         self.ingestor: Ingestor = self.ingestor(path)
 
         self.dataset: Dataset = self.ingestor.to_dataset()
@@ -82,10 +82,8 @@ class DatasetGenerator:
     def save_dataset(self, save_dir: str):
         self.console.print("Saving dataset...")
         os.makedirs(save_dir, exist_ok=True)
-        with open(join(save_dir, "train.pkl"), "wb") as f:
-            pickle.dump(self.dataset["train"], f)
-        with open(join(save_dir, "test.pkl"), "wb") as f:
-            pickle.dump(self.dataset["test"], f)
+        with open(join(save_dir, "dataset.pkl"), "wb") as f:
+            pickle.dump(self.dataset, f)
         self.console.print("Dataset saved!")
 
     def print_one_example(self):
@@ -107,21 +105,15 @@ class DatasetGenerator:
 
         self.console.print(layout)
 
-    def load_dataset_from_pickle(self, save_dir: str, console: Console):
-        console.print(f"Loading formatted dataset from directory {save_dir}")
-        train_path = join(save_dir, "train.pkl")
-        test_path = join(save_dir, "test_pkl")
+    def load_dataset_from_pickle(self, save_dir: str):
+        self.console.print(f"Loading formatted dataset from directory {save_dir}")
+        data_path = join(save_dir, "dataset.pkl")
 
-        if not exists(train_path):
+        if not exists(data_path):
             raise FileNotFoundError(f"Train set pickle not found at {train_path}")
-        if not exists(test_path):
-            raise FileNotFoundError(f"Test set pickle not found at {test_path}")
 
-        with open(train_path, "rb") as f:
-            train = pickle.load(f)
-            self.dataset["train"] = train
-        with open(test_path, "rb") as f:
-            test = pickle.load(f)
-            self.dataset["test"] = test
+        with open(data_path, "rb") as f:
+            data = pickle.load(f)
+            self.dataset = data
 
-        return train, test
+        return self.dataset["train"], self.dataset["test"]

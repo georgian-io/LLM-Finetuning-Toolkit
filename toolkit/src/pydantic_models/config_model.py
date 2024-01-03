@@ -1,5 +1,5 @@
-from typing import Literal, Union, List, Dict
-from pydantic import BaseModel, FilePath, validator, Optional, Field
+from typing import Literal, Union, List, Dict, Optional
+from pydantic import BaseModel, FilePath, validator, Field
 
 from huggingface_hub.utils import validate_repo_id
 
@@ -33,12 +33,12 @@ class DataConfig(BaseModel):
         description="Size of the test set; float for proportion and int for # of examples",
     )
 
-    @validator("path")
-    def validate_path(cls, v, values, **kwargs):
-        if "file_type" in values and values["file_type"] == "huggingface":
-            if not validate_repo_id(v):
-                raise ValueError("Invalid HuggingFace dataset path")
-        return v
+    # @validator("path")
+    # def validate_path(cls, v, values, **kwargs):
+    #     if "file_type" in values and values["file_type"] == "huggingface":
+    #         if not validate_repo_id(v):
+    #             raise ValueError("Invalid HuggingFace dataset path")
+    #     return v
 
 
 class BitsAndBytesConfig(BaseModel):
@@ -63,8 +63,8 @@ class BitsAndBytesConfig(BaseModel):
         True,
         description="Enable 4-bit quantization by replacing the Linear layers with FP4/NF4 layers from bitsandbytes",
     )
-    bnb_4bit_compute_dtype: Optional[Union[torch.dtype, str]] = Field(
-        torch.float16, description="Computational type for 4-bit quantization"
+    bnb_4bit_compute_dtype: Optional[str] = Field(
+        torch.bfloat16, description="Computational type for 4-bit quantization"
     )
     bnb_4bit_quant_type: Optional[str] = Field(
         "nf4", description="Quantization data type in the bnb.nn.Linear4Bit layers"
@@ -76,21 +76,24 @@ class BitsAndBytesConfig(BaseModel):
 
 
 class ModelConfig(BaseModel):
-    model_ckpt: str = Field(
-        None, description="Path to the model (huggingface repo or local path)"
+    hf_model_ckpt: Optional[str] = Field(
+        "NousResearch/Llama-2-7b-hf",
+        description="Path to the model (huggingface repo or local path)",
     )
-    device_map: str = Field("auto", description="device onto which to load the model")
+    device_map: Optional[str] = Field(
+        "auto", description="device onto which to load the model"
+    )
 
-    quantize: bool = Field(None, description="Flag to enable quantization")
+    quantize: Optional[bool] = Field(False, description="Flag to enable quantization")
     bitsandbytes: Optional[BitsAndBytesConfig] = Field(
         None, description="Bits and Bytes configuration"
     )
 
-    @validator("model_ckpt")
-    def validate_model(cls, v, **kwargs):
-        if not validate_repo_id(v):
-            raise ValueError("Invalid HuggingFace dataset path")
-        return v
+    # @validator("hf_model_ckpt")
+    # def validate_model(cls, v, **kwargs):
+    #     if not validate_repo_id(v):
+    #         raise ValueError("Invalid HuggingFace dataset path")
+    #     return v
 
     @validator("quantize")
     def set_bitsandbytes_to_none_if_no_quantization(cls, v, values, **kwargs):
@@ -100,13 +103,13 @@ class ModelConfig(BaseModel):
 
 
 class LoraConfig(BaseModel):
-    r: int = Field(None, description="Lora rank")
-    task_type: Union[str, peft.utils.peft_types.TaskType] = Field(
+    r: Optional[int] = Field(8, description="Lora rank")
+    task_type: Optional[str] = Field(
         "CAUSAL_LM", description="Base Model task type during training"
     )
 
     lora_alpha: Optional[int] = Field(
-        2 * r, description="The alpha parameter for Lora scaling"
+        16, description="The alpha parameter for Lora scaling"
     )
     bias: Optional[str] = Field(
         "none", description="Bias type for Lora. Can be 'none', 'all' or 'lora_only'"
@@ -130,10 +133,10 @@ class LoraConfig(BaseModel):
     )
     layers_pattern: Optional[str] = Field(None, description="The layer pattern name")
     rank_pattern: Optional[Dict[str, int]] = Field(
-        None, description="The mapping from layer names or regexp expression to ranks"
+        {}, description="The mapping from layer names or regexp expression to ranks"
     )
     alpha_pattern: Optional[Dict[str, int]] = Field(
-        None, description="The mapping from layer names or regexp expression to alphas"
+        {}, description="The mapping from layer names or regexp expression to alphas"
     )
 
 
@@ -172,8 +175,8 @@ class SftArgs(BaseModel):
 
 
 class TrainingConfig(BaseModel):
-    training_arguments: Optional[TrainingArgs]
-    sft: Optional[SftArgs]
+    training_args: Optional[TrainingArgs]
+    sft_args: Optional[SftArgs]
 
 
 # TODO: Get comprehensive Args!

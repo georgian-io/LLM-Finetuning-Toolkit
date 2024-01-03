@@ -9,7 +9,8 @@ from pydantic import ValidationError
 
 from src.pydantic_models.config_model import Config
 from src.data.dataset_generator import DatasetGenerator
-from src.model.model_loader import ModelLoader, InferenceRunner
+from src.model.model_loader import ModelLoader
+from src.model.inference_runner import InferenceRunner
 from src.utils.save_utils import DirectoryHelper
 
 logging.set_verbosity_error()
@@ -34,7 +35,7 @@ if __name__ == "__main__":
     # Loading Data -------------------------------
     console.rule("[bold green]Loading Data")
 
-    dataset_generator = DatasetGenerator(console=console, **config.data)
+    dataset_generator = DatasetGenerator(console=console, **config.data.model_dump())
     train_columns = dataset_generator.train_columns
     test_column = dataset_generator.test_column
 
@@ -65,8 +66,6 @@ if __name__ == "__main__":
     if not exists(weights_path):
         model_loader.train(train)
 
-    # TODO: FUTURE BEN - Please refactor this!!!!!!!
-    # TODO: Refactored up to here
     # Inference -------------------------------
     console.rule("[bold pink]:face_with_monocle: Testing")
     results_path = dir_helper.save_paths.results
@@ -77,5 +76,5 @@ if __name__ == "__main__":
 
         # TODO: hmmm... refactor these params into a seperate dataclass
         inference_runner = InferenceRunner(
-            model, tokenizer, test, test_column, config, console, results_file_path
+            model, tokenizer, test, test_column, config, console, results_file_path, results_path
         ).run_inference()

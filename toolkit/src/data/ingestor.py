@@ -14,7 +14,9 @@ def get_ingestor(data_type: str):
     elif data_type == "huggingface":
         return HuggingfaceIngestor
     else:
-        raise ValueError("data 'type' must be one of 'json', 'csv', or 'huggingface'")
+        raise ValueError(
+            f"'type' must be one of 'json', 'csv', or 'huggingface', you have {data_type}"
+        )
 
 
 class Ingestor(ABC):
