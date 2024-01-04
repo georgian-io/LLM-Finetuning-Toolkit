@@ -1,0 +1,13 @@
+# for toolkit
+pyyaml
+ijson
+rich
+
+# formatting
+black
+
+# models
+pydantic
+
+# generate ids
+sqids

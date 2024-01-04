@@ -1,0 +1,68 @@
+save_dir: "./experiment/"
+
+# Data Ingestion -------------------
+data:
+  file_type: "huggingface" # one of 'json', 'csv', 'huggingface'
+  path: "yahma/alpaca-cleaned"
+  prompt:
+    >- # prompt, make sure column inputs are enclosed in {} brackets and that they match your data
+    Below is an instruction that describes a task. 
+    Write a response that appropriately completes the request. 
+    ### Instruction: {instruction}
+    ### Input: {input}
+    ### Output:
+  prompt_stub:
+    >- # Stub to add for training at the end of prompt, for test set or inference, this is omitted; make sure only one variable is present
+    {output}
+  test_size: 10 # Proportion of test as % of total; if integer then # of samples
+  train_size: 100 # Proportion of train as % of total; if integer then # of samples
+
+# Model Definition -------------------
+model:
+  hf_model_ckpt: "NousResearch/Llama-2-7b-hf"
+  quantize: true
+  bitsandbytes:
+    load_in_4bit: true
+    bnb_4bit_compute_dtype: "bf16"
+    bnb_4bit_quant_type: "nf4"
+
+# LoRA Params -------------------
+lora:
+  task_type: "CAUSAL_LM"
+  r: 32
+  lora_dropout: 0.1
+  target_modules:
+    - q_proj
+    - v_proj
+    - k_proj
+    - o_proj
+    - up_proj
+    - down_proj
+    - gate_proj
+
+# Training -------------------
+training:
+  training_args:
+    num_train_epochs: 1
+    per_device_train_batch_size: 4
+    gradient_accumulation_steps: 4
+    gradient_checkpointing: True
+    optim: "paged_adamw_32bit"
+    logging_steps: 100
+    learning_rate: 2.0e-4
+    bf16: true # Set to true for mixed precision training on Newer GPUs
+    tf32: true
+    # fp16: false     # Set to true for mixed precision training on Older GPUs
+    max_grad_norm: 0.3
+    warmup_ratio: 0.03
+    lr_scheduler_type: "constant"
+  sft_args:
+    max_seq_length: 1024
+    # neftune_noise_alpha: None
+
+inference:
+  max_new_tokens: 200
+  use_cache: True
+  do_sample: True
+  top_p: 0.9
+  temperature: 0.1
