@@ -184,8 +184,8 @@ class InferenceConfig(BaseModel):
     max_new_tokens: Optional[int] = Field(None, description="Maximum new tokens")
     use_cache: Optional[bool] = Field(True, description="Flag to enable cache usage")
     do_sample: Optional[bool] = Field(True, description="Flag to enable sampling")
-    top_p: Optional[float] = Field(0.95, description="Top p value")
-    temperature: Optional[float] = Field(0.6, description="Temperature value")
+    top_p: Optional[float] = Field(0.90, description="Top p value")
+    temperature: Optional[float] = Field(0.1, description="Temperature value")
 
 
 class Config(BaseModel):

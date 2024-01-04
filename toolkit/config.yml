@@ -64,5 +64,5 @@ inference:
   max_new_tokens: 200
   use_cache: True
   do_sample: True
-  top_p: 0.6
-  temperature: 0.2
+  top_p: 0.9
+  temperature: 0.1
