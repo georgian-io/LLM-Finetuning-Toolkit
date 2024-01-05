@@ -1,3 +1,4 @@
+from os import listdir
 from os.path import join, exists
 import yaml
 
@@ -54,7 +55,7 @@ if __name__ == "__main__":
     weights_path = dir_helper.save_paths.weights
     # TODO: hmmm... refactor these params into a seperate dataclass
     model_loader = ModelLoader(config, console, dir_helper)
-    if not exists(weights_path):
+    if not exists(weights_path) or not listdir(weights_path):
         model_loader.load_model_and_tokenizer()
         model_loader.inject_lora()
     else:
@@ -63,7 +64,7 @@ if __name__ == "__main__":
     # Training -------------------------------
     console.rule("[bold green]:smiley: Training")
 
-    if not exists(weights_path):
+    if not exists(weights_path) or not listdir(weights_path):
         model_loader.train(train)
 
     # Inference -------------------------------
