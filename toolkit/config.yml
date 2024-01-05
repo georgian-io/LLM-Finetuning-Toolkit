@@ -8,14 +8,39 @@ data:
     >- # prompt, make sure column inputs are enclosed in {} brackets and that they match your data
     Below is an instruction that describes a task. 
     Write a response that appropriately completes the request. 
-    ### Instruction: {instruction}
+    ### Instruction: parse the following pdf text extraction and retrieve candidates for each field. Possible fields include:
+    'amount1',
+    'currency1',
+    'delivery_address1',
+    'gln1',
+    'gtin1',
+    'invoice_date1',
+    'invoice_due_date1',
+    'invoice_due_period1',
+    'invoice_net_amount1',
+    'invoice_number1',
+    'invoice_or_kredit_note1',
+    'invoice_rounding1',
+    'invoice_total_amount1',
+    'invoice_vat_amount1',
+    'line_article_description1',
+    'line_article_number1',
+    'order_number1',
+    'organization_number1',
+    'payment_bankgiro1',
+    'payment_iban1',
+    'price1',
+    'quantity1',
+    'supplier_name1',
+    'vat_number1'
     ### Input: {input}
     ### Output:
   prompt_stub:
     >- # Stub to add for training at the end of prompt, for test set or inference, this is omitted; make sure only one variable is present
     {output}
   test_size: 10 # Proportion of test as % of total; if integer then # of samples
-  train_size: 100 # Proportion of train as % of total; if integer then # of samples
+  train_size: 90 # Proportion of train as % of total; if integer then # of samples
+  train_test_split_seed: 42
 
 # Model Definition -------------------
 model:
@@ -43,7 +68,7 @@ lora:
 # Training -------------------
 training:
   training_args:
-    num_train_epochs: 1
+    num_train_epochs: 5
     per_device_train_batch_size: 4
     gradient_accumulation_steps: 4
     gradient_checkpointing: True
@@ -57,12 +82,12 @@ training:
     warmup_ratio: 0.03
     lr_scheduler_type: "constant"
   sft_args:
-    max_seq_length: 1024
+    max_seq_length: 5000
     # neftune_noise_alpha: None
 
 inference:
-  max_new_tokens: 200
+  max_new_tokens: 1024
   use_cache: True
   do_sample: True
   top_p: 0.9
-  temperature: 0.1
+  temperature: 0.05

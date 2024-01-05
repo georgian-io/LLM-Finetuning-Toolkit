@@ -32,7 +32,11 @@ class DataConfig(BaseModel):
         None,
         description="Size of the test set; float for proportion and int for # of examples",
     )
-
+    train_test_split_seed: int = Field(
+        42,
+        description="Seed used in the train test split. This is used to ensure that the train and test sets are the same across runs",
+    )
+   
     # @validator("path")
     # def validate_path(cls, v, values, **kwargs):
     #     if "file_type" in values and values["file_type"] == "huggingface":
