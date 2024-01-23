@@ -1,7 +1,7 @@
 import os
 from os.path import join, exists
 from functools import partial
-from typing import Tuple
+from typing import Tuple, Union
 import pickle
 
 import re
@@ -21,8 +21,8 @@ class DatasetGenerator:
         path: str,
         prompt: str,
         prompt_stub: str,
-        test_size: float,
-        train_size: float,
+        test_size: Union[float, int],
+        train_size: Union[float, int],
         train_test_split_seed: int,
         console: Console,
     ):
@@ -32,8 +32,8 @@ class DatasetGenerator:
         self.dataset: Dataset = self.ingestor.to_dataset()
         self.prompt: str = prompt
         self.prompt_stub: str = prompt_stub
-        self.test_size: float = test_size
-        self.train_size: float = train_size
+        self.test_size = test_size
+        self.train_size = train_size
         self.train_test_split_seed: int = train_test_split_seed
 
         self.train_columns: list = self._get_train_columns()

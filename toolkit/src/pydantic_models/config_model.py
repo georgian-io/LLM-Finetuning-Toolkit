@@ -4,7 +4,6 @@ from pydantic import BaseModel, FilePath, validator, Field
 from huggingface_hub.utils import validate_repo_id
 
 import torch
-import peft
 
 # TODO: Refactor this into multiple files...
 HfModelPath = str
@@ -24,12 +23,12 @@ class DataConfig(BaseModel):
         None,
         description="Stub for the prompt; this is injected during training. Use {} brackets for column name",
     )
-    train_size: Union[float, int] = Field(
-        None,
+    train_size: Optional[Union[float, int]] = Field(
+        0.9,
         description="Size of the training set; float for proportion and int for # of examples",
     )
-    test_size: Union[float, int] = Field(
-        None,
+    test_size: Optional[Union[float, int]] = Field(
+        0.1,
         description="Size of the test set; float for proportion and int for # of examples",
     )
     train_test_split_seed: int = Field(
@@ -105,6 +104,13 @@ class ModelConfig(BaseModel):
             values["bitsandbytes"] = None
         return v
 
+    @validator("device_map")
+    def set_device_map_to_none(cls, v, values, **kwargs):
+        if v.lower() == "none":
+            return None
+        return v
+
+
 
 class LoraConfig(BaseModel):
     r: Optional[int] = Field(8, description="Lora rank")
@@ -156,7 +162,7 @@ class TrainingArgs(BaseModel):
     gradient_checkpointing: Optional[bool] = Field(
         True, description="Flag to enable gradient checkpointing"
     )
-    optim: Optional[str] = Field("paged_adamw_32bit", description="Optimizer")
+    # optim: Optional[str] = Field("paged_adamw_32bit", description="Optimizer")
     logging_steps: Optional[int] = Field(100, description="Number of logging steps")
     learning_rate: Optional[float] = Field(2.0e-4, description="Learning rate")
     bf16: Optional[bool] = Field(False, description="Flag to enable bf16")
@@ -188,12 +194,17 @@ class InferenceConfig(BaseModel):
     max_new_tokens: Optional[int] = Field(None, description="Maximum new tokens")
     use_cache: Optional[bool] = Field(True, description="Flag to enable cache usage")
     do_sample: Optional[bool] = Field(True, description="Flag to enable sampling")
-    top_p: Optional[float] = Field(0.90, description="Top p value")
+    top_p: Optional[float] = Field(1.0, description="Top p value")
     temperature: Optional[float] = Field(0.1, description="Temperature value")
+    epsilon_cutoff: Optional[float] = Field(0.0, description="epsilon cutoff value")
+    eta_cutoff: Optional[float] = Field(0.0, description="eta cutoff value")
+    top_k: Optional[int] = Field(50, description="top-k sampling")
+
 
 
 class Config(BaseModel):
     save_dir: Optional[str] = Field("./experiments", description="Folder to save to")
+    accelerate: Optional[bool] = Field(False, description="set to True if you want to use multi-gpu training; then launch with `accelerate launch --config_file ./accelerate_config toolkit.py`")
     data: DataConfig
     model: ModelConfig
     lora: Optional[LoraConfig]
