@@ -17,22 +17,9 @@ from src.utils.save_utils import DirectoryHelper
 logging.set_verbosity_error()
 
 
-if __name__ == "__main__":
-    config_path = "./config.yml"  # TODO: parameterize this
-
-    # Load YAML config
-    with open(config_path, "r") as file:
-        try:
-            config = yaml.safe_load(file)
-            config = Config(**config)
-        # validate data with pydantic
-        except ValidationError as e:
-            print(e.json())
-
-    dir_helper = DirectoryHelper(config_path, config)
-
-    console = Console()
-
+def run_one_experiment(
+    console: Console, config: Config, dir_helper: DirectoryHelper
+) -> None:
     # Loading Data -------------------------------
     console.rule("[bold green]Loading Data")
 
@@ -77,5 +64,35 @@ if __name__ == "__main__":
 
         # TODO: hmmm... refactor these params into a seperate dataclass
         inference_runner = InferenceRunner(
-            model, tokenizer, test, test_column, config, console, results_file_path, results_path
+            model,
+            tokenizer,
+            test,
+            test_column,
+            config,
+            console,
+            results_file_path,
+            results_path,
         ).run_inference()
+
+
+if __name__ == "__main__":
+    config_path = "./config.yml"  # TODO: parameterize this
+
+    # Load YAML config
+    with open(config_path, "r") as file:
+        try:
+            config = yaml.safe_load(file)
+            config = Config(**config)
+        # validate data with pydantic
+        except ValidationError as e:
+            print(e.json())
+
+    dir_helper = DirectoryHelper(config_path, config)
+    console = Console()
+
+    # Reload config from saved config
+    with open(join(dir_helper.config_path.config, "config.yml"), "r") as file:
+        config = yaml.safe_load(file)
+        config = Config(**config)
+
+    run_one_experiment(console, config, dir_helper)
