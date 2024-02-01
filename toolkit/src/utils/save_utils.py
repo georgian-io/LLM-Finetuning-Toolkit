@@ -6,6 +6,7 @@ Helper functions to help managing saving and loading of experiments:
 import shutil
 import os
 from os.path import exists
+import yaml
 
 import re
 import hashlib
@@ -58,15 +59,22 @@ class DirectoryHelper:
 
     @cached_property
     def config_hash(self) -> str:
-        with open(self.config_path) as f:
-            config_str = f.read()
+        config_str = self.config.model_dump_json()
         config_str = re.sub(r"\s", "", config_str)
         hash = hashlib.md5(config_str.encode()).digest()
         return self.sqids.encode(hash[:NUM_MD5_DIGITS_FOR_SQIDS])
 
     def _get_directory_state(self) -> DirectoryList:
-        return DirectoryList(self.config.save_dir, self.config_hash)
+        save_dir = (
+            self.config.save_dir
+            if not self.config.ablation.use_ablate
+            else os.path.join(self.config.save_dir, self.config.ablation.study_name)
+        )
+        return DirectoryList(save_dir, self.config_hash)
 
     def save_config(self) -> None:
         os.makedirs(self.save_paths.config, exist_ok=True)
-        shutil.copy(self.config_path, self.save_paths.config)
+        model_dict = self.config.model_dump()
+
+        with open(os.path.join(self.save_paths.config, "config.yaml"), "w") as file:
+            yaml.dump(model_dict, file)

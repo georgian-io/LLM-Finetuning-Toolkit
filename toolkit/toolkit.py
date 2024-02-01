@@ -13,6 +13,7 @@ from src.data.dataset_generator import DatasetGenerator
 from src.model.model_loader import ModelLoader
 from src.model.inference_runner import InferenceRunner
 from src.utils.save_utils import DirectoryHelper
+from src.utils.ablation_utils import generate_permutations
 
 logging.set_verbosity_error()
 
@@ -81,18 +82,25 @@ if __name__ == "__main__":
 
     # Load YAML config
     with open(config_path, "r") as file:
+        config = yaml.safe_load(file)
+        if config.get("ablation"):
+            if config["ablation"].get("use_ablate", False):
+                configs = generate_permutations(config, Config)
+        else:
+            configs = [config]
+
+    for config in configs:
         try:
-            config = yaml.safe_load(file)
             config = Config(**config)
         # validate data with pydantic
         except ValidationError as e:
             print(e.json())
 
-    dir_helper = DirectoryHelper(config_path, config)
+        dir_helper = DirectoryHelper(config_path, config)
 
-    # Reload config from saved config
-    with open(join(dir_helper.config_path.config, "config.yml"), "r") as file:
-        config = yaml.safe_load(file)
-        config = Config(**config)
+        # Reload config from saved config
+        with open(join(dir_helper.config_path.config, "config.yml"), "r") as file:
+            config = yaml.safe_load(file)
+            config = Config(**config)
 
-    run_one_experiment(config)
+        run_one_experiment(config)

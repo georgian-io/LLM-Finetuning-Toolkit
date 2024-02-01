@@ -98,11 +98,10 @@ def patch_with_permutation(old_dict, permutation_dict):
     return updated_dict
 
 
-def generate_permutations(yaml_string, model):
-    data = yaml.safe_load(yaml_string)
-    type_dict = get_types_from_dict(data)
+def generate_permutations(yaml_dict, model):
+    type_dict = get_types_from_dict(yaml_dict)
 
-    ablations = validate_and_get_ablations(type_dict, data, model)
+    ablations = validate_and_get_ablations(type_dict, yaml_dict, model)
 
     # get permutations
     lists = list(ablations.values())
@@ -115,6 +114,6 @@ def generate_permutations(yaml_string, model):
 
     new_dicts = []
     for perm in permutation_dicts:
-        new_dicts.append(patch_with_permutation(data, perm))
+        new_dicts.append(patch_with_permutation(yaml_dict, perm))
 
     return new_dicts
