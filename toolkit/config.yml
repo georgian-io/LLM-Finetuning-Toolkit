@@ -1,6 +1,7 @@
 save_dir: "./experiment/"
 
 ablation:
+  use_ablate: true
   study_name: "ablate_1"
 
 # Data Ingestion -------------------

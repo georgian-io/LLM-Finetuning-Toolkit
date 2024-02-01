@@ -88,7 +88,7 @@ class ModelConfig(BaseModel):
     )
 
     quantize: Optional[bool] = Field(False, description="Flag to enable quantization")
-    bitsandbytes: Optional[BitsAndBytesConfig] = Field(
+    bitsandbytes: BitsAndBytesConfig = Field(
         None, description="Bits and Bytes configuration"
     )
 
@@ -126,7 +126,7 @@ class LoraConfig(BaseModel):
     lora_dropout: Optional[float] = Field(
         0.1, description="The dropout probability for Lora layers"
     )
-    target_modules: Optional[Union[List[str], str]] = Field(
+    target_modules: Optional[List[str]] = Field(
         None, description="The names of the modules to apply Lora to"
     )
     fan_in_fan_out: Optional[bool] = Field(
@@ -141,12 +141,12 @@ class LoraConfig(BaseModel):
         None, description="The layer indexes to transform"
     )
     layers_pattern: Optional[str] = Field(None, description="The layer pattern name")
-    rank_pattern: Optional[Dict[str, int]] = Field(
-        {}, description="The mapping from layer names or regexp expression to ranks"
-    )
-    alpha_pattern: Optional[Dict[str, int]] = Field(
-        {}, description="The mapping from layer names or regexp expression to alphas"
-    )
+    # rank_pattern: Optional[Dict[str, int]] = Field(
+    #     {}, description="The mapping from layer names or regexp expression to ranks"
+    # )
+    # alpha_pattern: Optional[Dict[str, int]] = Field(
+    #     {}, description="The mapping from layer names or regexp expression to alphas"
+    # )
 
 
 # TODO: Get comprehensive Args!
@@ -161,7 +161,7 @@ class TrainingArgs(BaseModel):
     gradient_checkpointing: Optional[bool] = Field(
         True, description="Flag to enable gradient checkpointing"
     )
-    # optim: Optional[str] = Field("paged_adamw_32bit", description="Optimizer")
+    optim: Optional[str] = Field("paged_adamw_32bit", description="Optimizer")
     logging_steps: Optional[int] = Field(100, description="Number of logging steps")
     learning_rate: Optional[float] = Field(2.0e-4, description="Learning rate")
     bf16: Optional[bool] = Field(False, description="Flag to enable bf16")
@@ -184,8 +184,8 @@ class SftArgs(BaseModel):
 
 
 class TrainingConfig(BaseModel):
-    training_args: Optional[TrainingArgs]
-    sft_args: Optional[SftArgs]
+    training_args: TrainingArgs
+    sft_args: SftArgs
 
 
 # TODO: Get comprehensive Args!
@@ -207,13 +207,13 @@ class AblationConfig(BaseModel):
 
 class Config(BaseModel):
     save_dir: Optional[str] = Field("./experiments", description="Folder to save to")
-    ablation: Optional[AblationConfig]
+    ablation: AblationConfig
     accelerate: Optional[bool] = Field(
         False,
         description="set to True if you want to use multi-gpu training; then launch with `accelerate launch --config_file ./accelerate_config toolkit.py`",
     )
     data: DataConfig
     model: ModelConfig
-    lora: Optional[LoraConfig]
-    training: Optional[TrainingConfig]
-    inference: Optional[InferenceConfig]
+    lora: LoraConfig
+    training: TrainingConfig
+    inference: InferenceConfig

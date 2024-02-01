@@ -76,5 +76,5 @@ class DirectoryHelper:
         os.makedirs(self.save_paths.config, exist_ok=True)
         model_dict = self.config.model_dump()
 
-        with open(os.path.join(self.save_paths.config, "config.yaml"), "w") as file:
+        with open(os.path.join(self.save_paths.config, "config.yml"), "w") as file:
             yaml.dump(model_dict, file)

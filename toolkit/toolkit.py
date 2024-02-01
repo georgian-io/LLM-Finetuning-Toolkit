@@ -83,12 +83,11 @@ if __name__ == "__main__":
     # Load YAML config
     with open(config_path, "r") as file:
         config = yaml.safe_load(file)
-        if config.get("ablation"):
-            if config["ablation"].get("use_ablate", False):
-                configs = generate_permutations(config, Config)
-        else:
-            configs = [config]
-
+        configs = (
+            generate_permutations(config, Config)
+            if config.get("ablation", {}).get("use_ablate", False)
+            else [config]
+        )
     for config in configs:
         try:
             config = Config(**config)
@@ -99,7 +98,7 @@ if __name__ == "__main__":
         dir_helper = DirectoryHelper(config_path, config)
 
         # Reload config from saved config
-        with open(join(dir_helper.config_path.config, "config.yml"), "r") as file:
+        with open(join(dir_helper.save_paths.config, "config.yml"), "r") as file:
             config = yaml.safe_load(file)
             config = Config(**config)
 
