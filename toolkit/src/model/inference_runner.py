@@ -60,7 +60,9 @@ class InferenceRunner:
             for row in results:
                 writer.writerow(row)
 
-    def infer_one_example(self, prompt: str, label: str, idx: int, prompts_len: int) -> str:
+    def infer_one_example(
+        self, prompt: str, label: str, idx: int, prompts_len: int
+    ) -> str:
         table = self._init_rich_table(
             f"Generating on test set: {idx+1}/{prompts_len}", prompt, label
         )
@@ -75,7 +77,7 @@ class InferenceRunner:
             self.tokenizer,
             skip_prompt=True,
             decode_kwargs={"skip_special_tokens": True},
-            timeout=60 # 60 sec timeout for generation; to handle OOM errors
+            timeout=60,  # 60 sec timeout for generation; to handle OOM errors
         )
 
         generation_kwargs = dict(
@@ -88,9 +90,7 @@ class InferenceRunner:
         self._console.print("[bold red]Prediction >")
         result = Text()
 
-        with Live(
-            result, refresh_per_second=4, vertical_overflow="visible"
-        ) as live:
+        with Live(result, refresh_per_second=4, vertical_overflow="visible") as live:
             for new_text in streamer:
                 result.append(new_text)
                 live.update(result)

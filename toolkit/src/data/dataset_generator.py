@@ -51,7 +51,9 @@ class DatasetGenerator:
     # TODO: stratify_by_column
     def _train_test_split(self):
         self.dataset = self.dataset.train_test_split(
-            test_size=self.test_size, train_size=self.train_size, seed=self.train_test_split_seed
+            test_size=self.test_size,
+            train_size=self.train_size,
+            seed=self.train_test_split_seed,
         )
         self.console.print(f"Post-Split data size:")
         self.console.print(f"Train: {len(self.dataset['train'])}")

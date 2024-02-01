@@ -45,15 +45,15 @@ class ModelLoader:
 
         if config.accelerate:
             self.accelerator = Accelerator()
-            self.accelerator.state.deepspeed_plugin.deepspeed_config["train_micro_batch_size_per_gpu"] = self.config.training.training_args.per_device_train_batch_size
-
+            self.accelerator.state.deepspeed_plugin.deepspeed_config[
+                "train_micro_batch_size_per_gpu"
+            ] = self.config.training.training_args.per_device_train_batch_size
 
         # if config.accelerate:
         #     # device_index = Accelerator().process_index
         #     self.device_map = None #{"": device_index}
         # else:
         self.device_map = self._model_config.device_map
-
 
     def load_model_and_tokenizer(self):
         self._console.print(f"Loading {self._model_config.hf_model_ckpt}...")
@@ -67,7 +67,9 @@ class ModelLoader:
     def _get_model(self):
         model = AutoModelForCausalLM.from_pretrained(
             self._model_config.hf_model_ckpt,
-            quantization_config=BitsAndBytesConfig(self._model_config.bitsandbytes) if not self.config.accelerate else None,
+            quantization_config=BitsAndBytesConfig(self._model_config.bitsandbytes)
+            if not self.config.accelerate
+            else None,
             use_cache=False,
             device_map=self.device_map,
         )
@@ -92,10 +94,14 @@ class ModelLoader:
         self.model = get_peft_model(self.model, self._lora_config)
 
         if not self.config.accelerate:
-            self.optimizer = bnb.optim.Adam8bit(self.model.parameters(), lr=self._training_args.learning_rate)
+            self.optimizer = bnb.optim.Adam8bit(
+                self.model.parameters(), lr=self._training_args.learning_rate
+            )
             self.lr_scheduler = torch.optim.lr_scheduler.ConstantLR(self.optimizer)
         if self.config.accelerate:
-            self.model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(self.model, self.optimizer, self.lr_scheduler)
+            self.model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
+                self.model, self.optimizer, self.lr_scheduler
+            )
 
         self._console.print(f"LoRA Modules Injected!")
 
