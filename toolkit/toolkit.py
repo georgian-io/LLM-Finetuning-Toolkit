@@ -17,10 +17,11 @@ from src.utils.save_utils import DirectoryHelper
 logging.set_verbosity_error()
 
 
-def run_one_experiment(
-    console: Console, config: Config, dir_helper: DirectoryHelper
-) -> None:
+def run_one_experiment(config: Config) -> None:
+    dir_helper = DirectoryHelper(config_path, config)
+
     # Loading Data -------------------------------
+    console = Console()
     console.rule("[bold green]Loading Data")
 
     dataset_generator = DatasetGenerator(console=console, **config.data.model_dump())
@@ -88,11 +89,10 @@ if __name__ == "__main__":
             print(e.json())
 
     dir_helper = DirectoryHelper(config_path, config)
-    console = Console()
 
     # Reload config from saved config
     with open(join(dir_helper.config_path.config, "config.yml"), "r") as file:
         config = yaml.safe_load(file)
         config = Config(**config)
 
-    run_one_experiment(console, config, dir_helper)
+    run_one_experiment(config)
