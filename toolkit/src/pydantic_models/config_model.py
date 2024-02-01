@@ -35,7 +35,7 @@ class DataConfig(BaseModel):
         42,
         description="Seed used in the train test split. This is used to ensure that the train and test sets are the same across runs",
     )
-   
+
     # @validator("path")
     # def validate_path(cls, v, values, **kwargs):
     #     if "file_type" in values and values["file_type"] == "huggingface":
@@ -109,7 +109,6 @@ class ModelConfig(BaseModel):
         if v.lower() == "none":
             return None
         return v
-
 
 
 class LoraConfig(BaseModel):
@@ -201,10 +200,17 @@ class InferenceConfig(BaseModel):
     top_k: Optional[int] = Field(50, description="top-k sampling")
 
 
+class AblationConfig(BaseModel):
+    use_ablate: Optional[bool] = Field(False, description="Flag to enable ablation")
+    study_name: Optional[str] = Field("ablation", description="Name of the study")
+
 
 class Config(BaseModel):
     save_dir: Optional[str] = Field("./experiments", description="Folder to save to")
-    accelerate: Optional[bool] = Field(False, description="set to True if you want to use multi-gpu training; then launch with `accelerate launch --config_file ./accelerate_config toolkit.py`")
+    accelerate: Optional[bool] = Field(
+        False,
+        description="set to True if you want to use multi-gpu training; then launch with `accelerate launch --config_file ./accelerate_config toolkit.py`",
+    )
     data: DataConfig
     model: ModelConfig
     lora: Optional[LoraConfig]

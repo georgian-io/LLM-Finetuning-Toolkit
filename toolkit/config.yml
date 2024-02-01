@@ -1,5 +1,8 @@
 save_dir: "./experiment/"
 
+ablation:
+  study_name: "ablate_1"
+
 # Data Ingestion -------------------
 data:
   file_type: "huggingface" # one of 'json', 'csv', 'huggingface'
