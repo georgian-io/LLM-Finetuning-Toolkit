@@ -6,7 +6,7 @@ fastapi==0.104.1
 numpy==1.24.3
 pydantic==1.10.13
 ray==2.8.0
-starlette==0.27.0
+starlette==0.36.2
 tokenizers==0.14.1
 torch==2.0.1
 transformers==4.35.0
