@@ -2,7 +2,7 @@ accelerate==0.21.0
 bitsandbytes==0.39.0
 datasets==2.12.0
 evaluate==0.4.0
-fastapi==0.104.1
+fastapi==0.109.1
 numpy==1.24.3
 pydantic==1.10.13
 ray==2.8.0
