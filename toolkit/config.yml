@@ -1,5 +1,9 @@
 save_dir: "./experiment/"
 
+ablation:
+  use_ablate: true
+  study_name: "ablate_1"
+
 # Data Ingestion -------------------
 data:
   file_type: "huggingface" # one of 'json', 'csv', 'huggingface'
@@ -14,8 +18,9 @@ data:
   prompt_stub:
     >- # Stub to add for training at the end of prompt, for test set or inference, this is omitted; make sure only one variable is present
     {output}
-  test_size: 10 # Proportion of test as % of total; if integer then # of samples
-  train_size: 100 # Proportion of train as % of total; if integer then # of samples
+  test_size: 0.1 # Proportion of test as % of total; if integer then # of samples
+  train_size: 0.9 # Proportion of train as % of total; if integer then # of samples
+  train_test_split_seed: 42
 
 # Model Definition -------------------
 model:
@@ -43,7 +48,7 @@ lora:
 # Training -------------------
 training:
   training_args:
-    num_train_epochs: 1
+    num_train_epochs: 5
     per_device_train_batch_size: 4
     gradient_accumulation_steps: 4
     gradient_checkpointing: True
@@ -57,12 +62,12 @@ training:
     warmup_ratio: 0.03
     lr_scheduler_type: "constant"
   sft_args:
-    max_seq_length: 1024
+    max_seq_length: 5000
     # neftune_noise_alpha: None
 
 inference:
-  max_new_tokens: 200
+  max_new_tokens: 1024
   use_cache: True
   do_sample: True
   top_p: 0.9
-  temperature: 0.1
+  temperature: 0.8

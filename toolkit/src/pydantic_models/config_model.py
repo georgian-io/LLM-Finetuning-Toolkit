@@ -4,7 +4,6 @@ from pydantic import BaseModel, FilePath, validator, Field
 from huggingface_hub.utils import validate_repo_id
 
 import torch
-import peft
 
 # TODO: Refactor this into multiple files...
 HfModelPath = str
@@ -24,13 +23,17 @@ class DataConfig(BaseModel):
         None,
         description="Stub for the prompt; this is injected during training. Use {} brackets for column name",
     )
-    train_size: Union[float, int] = Field(
-        None,
+    train_size: Optional[Union[float, int]] = Field(
+        0.9,
         description="Size of the training set; float for proportion and int for # of examples",
     )
-    test_size: Union[float, int] = Field(
-        None,
+    test_size: Optional[Union[float, int]] = Field(
+        0.1,
         description="Size of the test set; float for proportion and int for # of examples",
+    )
+    train_test_split_seed: int = Field(
+        42,
+        description="Seed used in the train test split. This is used to ensure that the train and test sets are the same across runs",
     )
 
     # @validator("path")
@@ -85,7 +88,7 @@ class ModelConfig(BaseModel):
     )
 
     quantize: Optional[bool] = Field(False, description="Flag to enable quantization")
-    bitsandbytes: Optional[BitsAndBytesConfig] = Field(
+    bitsandbytes: BitsAndBytesConfig = Field(
         None, description="Bits and Bytes configuration"
     )
 
@@ -99,6 +102,12 @@ class ModelConfig(BaseModel):
     def set_bitsandbytes_to_none_if_no_quantization(cls, v, values, **kwargs):
         if v is False:
             values["bitsandbytes"] = None
+        return v
+
+    @validator("device_map")
+    def set_device_map_to_none(cls, v, values, **kwargs):
+        if v.lower() == "none":
+            return None
         return v
 
 
@@ -117,7 +126,7 @@ class LoraConfig(BaseModel):
     lora_dropout: Optional[float] = Field(
         0.1, description="The dropout probability for Lora layers"
     )
-    target_modules: Optional[Union[List[str], str]] = Field(
+    target_modules: Optional[List[str]] = Field(
         None, description="The names of the modules to apply Lora to"
     )
     fan_in_fan_out: Optional[bool] = Field(
@@ -132,12 +141,12 @@ class LoraConfig(BaseModel):
         None, description="The layer indexes to transform"
     )
     layers_pattern: Optional[str] = Field(None, description="The layer pattern name")
-    rank_pattern: Optional[Dict[str, int]] = Field(
-        {}, description="The mapping from layer names or regexp expression to ranks"
-    )
-    alpha_pattern: Optional[Dict[str, int]] = Field(
-        {}, description="The mapping from layer names or regexp expression to alphas"
-    )
+    # rank_pattern: Optional[Dict[str, int]] = Field(
+    #     {}, description="The mapping from layer names or regexp expression to ranks"
+    # )
+    # alpha_pattern: Optional[Dict[str, int]] = Field(
+    #     {}, description="The mapping from layer names or regexp expression to alphas"
+    # )
 
 
 # TODO: Get comprehensive Args!
@@ -175,8 +184,8 @@ class SftArgs(BaseModel):
 
 
 class TrainingConfig(BaseModel):
-    training_args: Optional[TrainingArgs]
-    sft_args: Optional[SftArgs]
+    training_args: TrainingArgs
+    sft_args: SftArgs
 
 
 # TODO: Get comprehensive Args!
@@ -184,14 +193,27 @@ class InferenceConfig(BaseModel):
     max_new_tokens: Optional[int] = Field(None, description="Maximum new tokens")
     use_cache: Optional[bool] = Field(True, description="Flag to enable cache usage")
     do_sample: Optional[bool] = Field(True, description="Flag to enable sampling")
-    top_p: Optional[float] = Field(0.90, description="Top p value")
+    top_p: Optional[float] = Field(1.0, description="Top p value")
     temperature: Optional[float] = Field(0.1, description="Temperature value")
+    epsilon_cutoff: Optional[float] = Field(0.0, description="epsilon cutoff value")
+    eta_cutoff: Optional[float] = Field(0.0, description="eta cutoff value")
+    top_k: Optional[int] = Field(50, description="top-k sampling")
+
+
+class AblationConfig(BaseModel):
+    use_ablate: Optional[bool] = Field(False, description="Flag to enable ablation")
+    study_name: Optional[str] = Field("ablation", description="Name of the study")
 
 
 class Config(BaseModel):
     save_dir: Optional[str] = Field("./experiments", description="Folder to save to")
+    ablation: AblationConfig
+    accelerate: Optional[bool] = Field(
+        False,
+        description="set to True if you want to use multi-gpu training; then launch with `accelerate launch --config_file ./accelerate_config toolkit.py`",
+    )
     data: DataConfig
     model: ModelConfig
-    lora: Optional[LoraConfig]
-    training: Optional[TrainingConfig]
-    inference: Optional[InferenceConfig]
+    lora: LoraConfig
+    training: TrainingConfig
+    inference: InferenceConfig

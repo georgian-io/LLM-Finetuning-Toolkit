@@ -2,7 +2,9 @@ from os.path import join, exists
 
 import torch
 
+import bitsandbytes as bnb
 from datasets import Dataset
+from accelerate import Accelerator
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
@@ -29,6 +31,7 @@ class ModelLoader:
     def __init__(
         self, config: Config, console: Console, directory_helper: DirectoryHelper
     ):
+        self.config = config
         self._model_config = config.model
         self._training_args = config.training.training_args
         self._sft_args = config.training.sft_args
@@ -39,6 +42,18 @@ class ModelLoader:
 
         self.model = None
         self.tokenizer = None
+
+        if config.accelerate:
+            self.accelerator = Accelerator()
+            self.accelerator.state.deepspeed_plugin.deepspeed_config[
+                "train_micro_batch_size_per_gpu"
+            ] = self.config.training.training_args.per_device_train_batch_size
+
+        # if config.accelerate:
+        #     # device_index = Accelerator().process_index
+        #     self.device_map = None #{"": device_index}
+        # else:
+        self.device_map = self._model_config.device_map
 
     def load_model_and_tokenizer(self):
         self._console.print(f"Loading {self._model_config.hf_model_ckpt}...")
@@ -52,9 +67,11 @@ class ModelLoader:
     def _get_model(self):
         model = AutoModelForCausalLM.from_pretrained(
             self._model_config.hf_model_ckpt,
-            quantization_config=BitsAndBytesConfig(self._model_config.bitsandbytes),
+            quantization_config=BitsAndBytesConfig(self._model_config.bitsandbytes)
+            if not self.config.accelerate
+            else None,
             use_cache=False,
-            device_map=self._model_config.device_map,
+            device_map=self.device_map,
         )
 
         model.config.pretraining_tp = 1
@@ -71,10 +88,20 @@ class ModelLoader:
     def inject_lora(self):
         self._console.print(f"Injecting Lora Modules")
 
-        self.model.gradient_checkpointing_enable()
-        self.model = prepare_model_for_kbit_training(self.model)
-
+        if not self.config.accelerate:
+            self.model.gradient_checkpointing_enable()
+            self.model = prepare_model_for_kbit_training(self.model)
         self.model = get_peft_model(self.model, self._lora_config)
+
+        if not self.config.accelerate:
+            self.optimizer = bnb.optim.Adam8bit(
+                self.model.parameters(), lr=self._training_args.learning_rate
+            )
+            self.lr_scheduler = torch.optim.lr_scheduler.ConstantLR(self.optimizer)
+        if self.config.accelerate:
+            self.model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
+                self.model, self.optimizer, self.lr_scheduler
+            )
 
         self._console.print(f"LoRA Modules Injected!")
 
@@ -98,6 +125,7 @@ class ModelLoader:
             args=training_args,
             dataset_text_field="formatted_prompt",  # TODO: maybe move consts to a dedicated folder
             callbacks=[progress_callback],
+            # optimizers=[self.optimizer, self.lr_scheduler],
             **self._sft_args.model_dump(),
         )
 
@@ -129,14 +157,16 @@ class ModelLoader:
 
         self.model = AutoPeftModelForCausalLM.from_pretrained(
             self._weights_path,
-            low_cpu_mem_usage=True,
             torch_dtype=dtype,
-            device_map=self._model_config.device_map,
+            device_map=self.device_map,
         )
+
+        if self.config.accelerate:
+            self.model = self.accelerator.prepare(self.model)
 
         self.model = self.model.merge_and_unload()
         self._console.print("Done Merging")
 
         self.tokenizer = AutoTokenizer.from_pretrained(
-            self._weights_path, device_map=self._model_config.device_map
+            self._weights_path, device_map=self.device_map
         )

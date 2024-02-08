@@ -1,7 +1,7 @@
 import os
 from os.path import join, exists
 from functools import partial
-from typing import Tuple
+from typing import Tuple, Union
 import pickle
 
 import re
@@ -21,8 +21,9 @@ class DatasetGenerator:
         path: str,
         prompt: str,
         prompt_stub: str,
-        test_size: float,
-        train_size: float,
+        test_size: Union[float, int],
+        train_size: Union[float, int],
+        train_test_split_seed: int,
         console: Console,
     ):
         self.ingestor: Ingestor = get_ingestor(file_type)
@@ -31,8 +32,10 @@ class DatasetGenerator:
         self.dataset: Dataset = self.ingestor.to_dataset()
         self.prompt: str = prompt
         self.prompt_stub: str = prompt_stub
-        self.test_size: float = test_size
-        self.train_size: float = train_size
+        self.test_size = test_size
+        self.train_size = train_size
+        self.train_test_split_seed: int = train_test_split_seed
+
         self.train_columns: list = self._get_train_columns()
         self.test_column: str = self._get_test_column()
         self.console: Console = console
@@ -48,7 +51,9 @@ class DatasetGenerator:
     # TODO: stratify_by_column
     def _train_test_split(self):
         self.dataset = self.dataset.train_test_split(
-            test_size=self.test_size, train_size=self.train_size
+            test_size=self.test_size,
+            train_size=self.train_size,
+            seed=self.train_test_split_seed,
         )
         self.console.print(f"Post-Split data size:")
         self.console.print(f"Train: {len(self.dataset['train'])}")
@@ -110,7 +115,7 @@ class DatasetGenerator:
         data_path = join(save_dir, "dataset.pkl")
 
         if not exists(data_path):
-            raise FileNotFoundError(f"Train set pickle not found at {train_path}")
+            raise FileNotFoundError(f"Train set pickle not found at {save_dir}")
 
         with open(data_path, "rb") as f:
             data = pickle.load(f)

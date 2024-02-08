@@ -45,40 +45,11 @@ class InferenceRunner:
 
         # inference loop
         for idx, (prompt, label) in enumerate(zip(prompts, labels)):
-            table = self._init_rich_table(
-                f"Generating on test set: {idx+1}/{len(prompts)}", prompt, label
-            )
-            self._console.print(table)
-
-            input_ids = self.tokenizer(
-                prompt, return_tensors="pt", truncation=True
-            ).input_ids.cuda()
-
-            # stream processor
-            streamer = TextIteratorStreamer(
-                self.tokenizer,
-                skip_prompt=True,
-                decode_kwargs={"skip_special_tokens": True},
-            )
-
-            generation_kwargs = dict(
-                input_ids=input_ids, streamer=streamer, **self.config.inference.model_dump()
-            )
-
-            thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
-            thread.start()
-
-            self._console.print("[bold red]Prediction >")
-            result = Text()
-
-            with Live(
-                result, refresh_per_second=4, vertical_overflow="visible"
-            ) as live:
-                for new_text in streamer:
-                    result.append(new_text)
-                    live.update(result)
-
-            results.append((prompt, label, str(result)))
+            try:
+                result = self.infer_one_example(prompt, label, idx, len(prompts))
+            except:
+                continue
+            results.append((prompt, label, result))
 
         self._console.print("Saving inference results...")
         header = ["Prompt", "Ground Truth", "Predicted"]
@@ -88,3 +59,40 @@ class InferenceRunner:
             writer.writerow(header)
             for row in results:
                 writer.writerow(row)
+
+    def infer_one_example(
+        self, prompt: str, label: str, idx: int, prompts_len: int
+    ) -> str:
+        table = self._init_rich_table(
+            f"Generating on test set: {idx+1}/{prompts_len}", prompt, label
+        )
+        self._console.print(table)
+
+        input_ids = self.tokenizer(
+            prompt, return_tensors="pt", truncation=True
+        ).input_ids.cuda()
+
+        # stream processor
+        streamer = TextIteratorStreamer(
+            self.tokenizer,
+            skip_prompt=True,
+            decode_kwargs={"skip_special_tokens": True},
+            timeout=60,  # 60 sec timeout for generation; to handle OOM errors
+        )
+
+        generation_kwargs = dict(
+            input_ids=input_ids, streamer=streamer, **self.config.inference.model_dump()
+        )
+
+        thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
+        thread.start()
+
+        self._console.print("[bold red]Prediction >")
+        result = Text()
+
+        with Live(result, refresh_per_second=4, vertical_overflow="visible") as live:
+            for new_text in streamer:
+                result.append(new_text)
+                live.update(result)
+
+        return str(result)
