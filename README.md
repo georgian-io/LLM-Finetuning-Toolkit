@@ -158,7 +158,7 @@ We use the Newsgroup dataset which is a 20-way classification problem. Each docu
 |Llama2 13B            |:white_check_mark: |0.00                       |:x:                      |77.93                       |
 |Mosaic MPT 7B         |:white_check_mark: |0.00                       |:x:                      |0.00                        |
 |Mistral 7B            |:white_check_mark: |0.00                       |:x:                      |74.36                       |
-|Zephyr-7B-β .         |:white_check_mark: |:x:                        |:x:                      |74.90                       |
+|Zephyr-7B-β           |:white_check_mark: |:x:                        |:x:                      |74.90                       |
 |Palmyra 30B           |:x:                |15.23                      |:x:                      |:x:                         |
 |Jurassic J2-Light     |:x:                |1.82                       |:x:                      |:x:                         |
 |Jurassic J2-Mid       |:x:                |22.93                      |:x:                      |:x:                         |
