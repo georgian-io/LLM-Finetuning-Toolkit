@@ -6,5 +6,15 @@ class DummyLLMQaTest(LLMQaTest):
     def test_name(self) -> str:
         return "DummyLLMQaTest"
 
-    def get_metric(self, prompt: str, grount_truth: str, model_pred: str, *args, **kwargs) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, grount_truth: str, model_pred: str) -> Union[float, int, bool]:
         return 0.5
+    
+
+class AccuracyTest(LLMQaTest):
+    @property
+    def test_name(self) -> str:
+        return "Accuracy"
+
+    def get_metric(self, prompt: str, grount_truth: str, model_pred: str) -> Union[float, int, bool]:
+        #TODO: Compute!
+        pass

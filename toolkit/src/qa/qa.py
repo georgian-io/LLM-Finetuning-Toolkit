@@ -10,14 +10,13 @@ class LLMQaTest(ABC):
         pass
 
     @abstractmethod
-    def get_metric(self, prompt:str, grount_truth:str, model_pred: str, *args, **kwargs) -> Union[float, int, bool]:
+    def get_metric(self, prompt:str, grount_truth:str, model_pred: str) -> Union[float, int, bool]:
         pass
 
 
 class LLMTestSuite():
     def __init__(self, 
                  tests:List[LLMQaTest],
-                 test_params: List[Tuple],
                  prompts:List[str],
                  ground_truths:List[str],
                  model_preds:List[str]) -> None:
@@ -31,11 +30,13 @@ class LLMTestSuite():
 
     def run_tests(self) -> Dict[str, List[Union[float, int, bool]]]:
         test_results = {}
-        for test, params in zip(self.tests, self.test_params):
+        for test in zip(self.tests):
             metrics = []
             for prompt, ground_truth, model_pred in zip(self.prompts, self.ground_truths, self.model_preds):
-                metrics.append(test.get_metric(prompt, ground_truth, model_pred, **params))
+                metrics.append(test.get_metric(prompt, ground_truth, model_pred))
             test_results[test.test_name] = metrics
+        
+        self.test_results = test_results
 
         return test_results
     
