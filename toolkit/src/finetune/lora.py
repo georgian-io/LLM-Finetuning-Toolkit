@@ -1,4 +1,5 @@
 from os.path import join, exists
+from typing import Tuple
 
 import torch
 
@@ -16,7 +17,6 @@ from transformers import (
 from peft import (
     prepare_model_for_kbit_training,
     get_peft_model,
-    AutoPeftModelForCausalLM,
     LoraConfig,
 )
 from trl import SFTTrainer
@@ -25,13 +25,15 @@ from rich.console import Console
 
 from src.pydantic_models.config_model import Config
 from src.utils.save_utils import DirectoryHelper
+from src.finetune.finetune import Finetune
 
 
-class ModelLoader:
+class LoRAFinetune(Finetune):
     def __init__(
         self, config: Config, console: Console, directory_helper: DirectoryHelper
     ):
         self.config = config
+
         self._model_config = config.model
         self._training_args = config.training.training_args
         self._sft_args = config.training.sft_args
@@ -39,23 +41,28 @@ class ModelLoader:
         self._console: Console = console
         self._directory_helper = directory_helper
         self._weights_path = self._directory_helper.save_paths.weights
+        self._trainer = None
 
         self.model = None
         self.tokenizer = None
 
+        """ TODO: Figure out how to handle multi-gpu
         if config.accelerate:
             self.accelerator = Accelerator()
             self.accelerator.state.deepspeed_plugin.deepspeed_config[
                 "train_micro_batch_size_per_gpu"
             ] = self.config.training.training_args.per_device_train_batch_size
 
-        # if config.accelerate:
-        #     # device_index = Accelerator().process_index
-        #     self.device_map = None #{"": device_index}
-        # else:
+        if config.accelerate:
+            # device_index = Accelerator().process_index
+            self.device_map = None #{"": device_index}
+        else:
+        """
         self.device_map = self._model_config.device_map
 
-    def load_model_and_tokenizer(self):
+        self._load_model_and_tokenizer()
+
+    def _load_model_and_tokenizer(self):
         self._console.print(f"Loading {self._model_config.hf_model_ckpt}...")
         model = self._get_model()
         tokenizer = self._get_tokenizer()
@@ -67,9 +74,11 @@ class ModelLoader:
     def _get_model(self):
         model = AutoModelForCausalLM.from_pretrained(
             self._model_config.hf_model_ckpt,
-            quantization_config=BitsAndBytesConfig(self._model_config.bitsandbytes)
-            if not self.config.accelerate
-            else None,
+            quantization_config=(
+                BitsAndBytesConfig(self._model_config.bitsandbytes)
+                if not self.config.accelerate
+                else None
+            ),
             use_cache=False,
             device_map=self.device_map,
         )
@@ -85,7 +94,7 @@ class ModelLoader:
 
         return tokenizer
 
-    def inject_lora(self):
+    def _inject_lora(self):
         self._console.print(f"Injecting Lora Modules")
 
         if not self.config.accelerate:
@@ -105,7 +114,7 @@ class ModelLoader:
 
         self._console.print(f"LoRA Modules Injected!")
 
-    def train(self, train_dataset: Dataset):
+    def finetune(self, train_dataset: Dataset):
         logging_dir = join(self._weights_path, "/logs")
         training_args = TrainingArguments(
             output_dir=self._weights_path,
@@ -116,7 +125,7 @@ class ModelLoader:
 
         progress_callback = ProgressCallback()
 
-        trainer = SFTTrainer(
+        self._trainer = SFTTrainer(
             model=self.model,
             train_dataset=train_dataset,
             peft_config=self._lora_config,
@@ -130,43 +139,11 @@ class ModelLoader:
         )
 
         with self._console.status("Training...", spinner="runner"):
-            trainer_stats = trainer.train()
+            trainer_stats = self._trainer.train()
         self._console.print(f"Training Complete")
 
-        trainer.model.save_pretrained(self._weights_path)
+    def save_model(self) -> None:
+        self._trainer.model.save_pretrained(self._weights_path)
         self.tokenizer.save_pretrained(self._weights_path)
 
         self._console.print(f"Run saved at {self._weights_path}")
-
-    def load_and_merge_from_saved(self):
-        # purge VRAM
-        del self.model
-        del self.tokenizer
-        torch.cuda.empty_cache()
-
-        # Load from path
-        self._console.print("Merging Adapter Weights...")
-
-        dtype = (
-            torch.float16
-            if self._training_args.fp16
-            else torch.bfloat16
-            if self._training_args.bf16
-            else torch.float32
-        )
-
-        self.model = AutoPeftModelForCausalLM.from_pretrained(
-            self._weights_path,
-            torch_dtype=dtype,
-            device_map=self.device_map,
-        )
-
-        if self.config.accelerate:
-            self.model = self.accelerator.prepare(self.model)
-
-        self.model = self.model.merge_and_unload()
-        self._console.print("Done Merging")
-
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            self._weights_path, device_map=self.device_map
-        )
