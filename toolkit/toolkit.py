@@ -56,10 +56,19 @@ def run_one_experiment(config: Config) -> None:
     results_path = dir_helper.save_paths.results
     results_file_path = join(dir_helper.save_paths.results, "results.csv")
     if not exists(results_path) or exists(results_file_path):
-        # TODO: hmmm... refactor these params into a seperate dataclass
         inference_runner = LoRAInference(
             test, test_column, config, console, dir_helper
         ).infer_all()
+
+    # QA -------------------------------
+    console.rule("[bold blue]:thinking_face: Running LLM Unit Tests")
+    qa_path = dir_helper.save_paths.qa
+    if not exists(qa_path) or not listdir(qa_path):
+        # TODO: Instantiate unit test classes
+        # TODO: Load results.csv
+        # TODO: Run Unit Tests
+        # TODO: Save Unit Test Results
+        pass
 
 
 if __name__ == "__main__":

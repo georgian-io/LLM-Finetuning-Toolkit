@@ -3,6 +3,7 @@ Helper functions to help managing saving and loading of experiments:
     1. Generate save directory name
     2. Check if files are present at various experiment stages
 """
+
 import shutil
 import os
 from os.path import exists
@@ -44,6 +45,10 @@ class DirectoryList:
     @property
     def results(self) -> str:
         return os.path.join(self.experiment, "results")
+
+    @property
+    def qa(self) -> str:
+        return os.path.join(self.experiment, "qa")
 
 
 class DirectoryHelper:
