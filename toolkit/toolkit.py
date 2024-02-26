@@ -10,10 +10,10 @@ from pydantic import ValidationError
 
 from src.pydantic_models.config_model import Config
 from src.data.dataset_generator import DatasetGenerator
-from src.model.model_loader import ModelLoader
-from src.model.inference_runner import InferenceRunner
 from src.utils.save_utils import DirectoryHelper
 from src.utils.ablation_utils import generate_permutations
+from src.finetune.lora import LoraFinetune
+from src.inference.lora import LoraInference
 
 logging.set_verbosity_error()
 
@@ -39,41 +39,26 @@ def run_one_experiment(config: Config) -> None:
     dataset_generator.print_one_example()
 
     # Loading Model -------------------------------
-    console.rule("[bold yellow]Loading Model and Prepare for LoRA")
+    console.rule("[bold yellow]:smiley: Finetuning")
 
     weights_path = dir_helper.save_paths.weights
-    # TODO: hmmm... refactor these params into a seperate dataclass
-    model_loader = ModelLoader(config, console, dir_helper)
+
+    # model_loader = ModelLoader(config, console, dir_helper)
+    model_loader = LoraFinetune(config, console, dir_helper)
     if not exists(weights_path) or not listdir(weights_path):
-        model_loader.load_model_and_tokenizer()
-        model_loader.inject_lora()
+        model_loader.finetune(train)
+        model_loader.save_model()
     else:
         console.print(f"Fine-Tuned Model Found at {weights_path}... skipping training")
-
-    # Training -------------------------------
-    console.rule("[bold green]:smiley: Training")
-
-    if not exists(weights_path) or not listdir(weights_path):
-        model_loader.train(train)
 
     # Inference -------------------------------
     console.rule("[bold pink]:face_with_monocle: Testing")
     results_path = dir_helper.save_paths.results
     results_file_path = join(dir_helper.save_paths.results, "results.csv")
     if not exists(results_path) or exists(results_file_path):
-        model_loader.load_and_merge_from_saved()
-        model, tokenizer = model_loader.model, model_loader.tokenizer
-
         # TODO: hmmm... refactor these params into a seperate dataclass
-        inference_runner = InferenceRunner(
-            model,
-            tokenizer,
-            test,
-            test_column,
-            config,
-            console,
-            results_file_path,
-            results_path,
+        inference_runner = LoraInference(
+            test, test_column, config, console, dir_helper
         ).run_inference()
 
 

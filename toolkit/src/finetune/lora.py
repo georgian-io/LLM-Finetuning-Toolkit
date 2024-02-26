@@ -17,7 +17,6 @@ from transformers import (
 from peft import (
     prepare_model_for_kbit_training,
     get_peft_model,
-    AutoPeftModelForCausalLM,
     LoraConfig,
 )
 from trl import SFTTrainer
@@ -61,7 +60,9 @@ class LoraFinetune(Finetune):
         """
         self.device_map = self._model_config.device_map
 
-    def load_model_and_tokenizer(self):
+        self._load_model_and_tokenizer()
+
+    def _load_model_and_tokenizer(self):
         self._console.print(f"Loading {self._model_config.hf_model_ckpt}...")
         model = self._get_model()
         tokenizer = self._get_tokenizer()
