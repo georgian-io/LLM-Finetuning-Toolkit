@@ -14,6 +14,7 @@ from src.utils.save_utils import DirectoryHelper
 from src.utils.ablation_utils import generate_permutations
 from src.finetune.lora import LoRAFinetune
 from src.inference.lora import LoRAInference
+from toolkit.src.ui.rich_ui import RichUI
 
 logging.set_verbosity_error()
 
@@ -22,10 +23,11 @@ def run_one_experiment(config: Config) -> None:
     dir_helper = DirectoryHelper(config_path, config)
 
     # Loading Data -------------------------------
-    console = Console()
-    console.rule("[bold green]Loading Data")
+    RichUI.before_dataset_creation()
 
-    dataset_generator = DatasetGenerator(console=console, **config.data.model_dump())
+    with RichUI.during_dataset_creation("Injecting Values into Prompt", "monkey"):
+        dataset_generator = DatasetGenerator(**config.data.model_dump())
+
     train_columns = dataset_generator.train_columns
     test_column = dataset_generator.test_column
 
@@ -34,32 +36,39 @@ def run_one_experiment(config: Config) -> None:
         train, test = dataset_generator.get_dataset()
         dataset_generator.save_dataset(dataset_path)
     else:
+        RichUI.dataset_found(dataset_path)
         train, test = dataset_generator.load_dataset_from_pickle(dataset_path)
 
-    dataset_generator.print_one_example()
+    RichUI.dataset_display_one_example(train[0], test[0])
+    RichUI.after_dataset_creation(dataset_path, train, test)
 
     # Loading Model -------------------------------
-    console.rule("[bold yellow]:smiley: Finetuning")
+    RichUI.before_finetune()
 
     weights_path = dir_helper.save_paths.weights
 
     # model_loader = ModelLoader(config, console, dir_helper)
     if not exists(weights_path) or not listdir(weights_path):
-        finetuner = LoRAFinetune(config, console, dir_helper)
-        finetuner.finetune(train)
+        finetuner = LoRAFinetune(config, dir_helper)
+        with RichUI.during_finetune():
+            finetuner.finetune(train)
         finetuner.save_model()
+        RichUI.after_finetune()
     else:
-        console.print(f"Fine-Tuned Model Found at {weights_path}... skipping training")
+        RichUI.finetune_found(weights_path)
 
     # Inference -------------------------------
-    console.rule("[bold pink]:face_with_monocle: Testing")
+    RichUI.before_inference()
     results_path = dir_helper.save_paths.results
     results_file_path = join(dir_helper.save_paths.results, "results.csv")
     if not exists(results_path) or exists(results_file_path):
         # TODO: hmmm... refactor these params into a seperate dataclass
         inference_runner = LoRAInference(
-            test, test_column, config, console, dir_helper
+            test, test_column, config, dir_helper
         ).infer_all()
+        RichUI.after_inference(results_path)
+    else:
+        RichUI.inference_found(results_path)
 
 
 if __name__ == "__main__":
