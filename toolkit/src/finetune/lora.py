@@ -28,7 +28,7 @@ from src.utils.save_utils import DirectoryHelper
 from src.finetune.finetune import Finetune
 
 
-class LoraFinetune(Finetune):
+class LoRAFinetune(Finetune):
     def __init__(
         self, config: Config, console: Console, directory_helper: DirectoryHelper
     ):
@@ -143,7 +143,7 @@ class LoraFinetune(Finetune):
         self._console.print(f"Training Complete")
 
     def save_model(self) -> None:
-        self.trainer.model.save_pretrained(self._weights_path)
+        self._trainer.model.save_pretrained(self._weights_path)
         self.tokenizer.save_pretrained(self._weights_path)
 
         self._console.print(f"Run saved at {self._weights_path}")

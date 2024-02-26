@@ -4,7 +4,7 @@ from threading import Thread
 import csv
 
 from transformers import TextIteratorStreamer
-from rich import Console
+from rich.console import Console
 from rich.table import Table
 from rich.live import Live
 from rich.text import Text
@@ -35,6 +35,8 @@ class LoRAInference(Inference):
 
         self.save_path = dir_helper.save_paths.results
         self.save_dir = join(self.save_path, "results.csv")
+        self.device_map = self.config.model.device_map
+        self._weights_path = dir_helper.save_paths.weights
 
         self.model, self.tokenizer = self._get_merged_model(
             dir_helper.save_paths.weights
@@ -87,8 +89,8 @@ class LoRAInference(Inference):
 
     def infer_all(self):
         results = []
-        prompts = self.test["formatted_prompt"]
-        labels = self.test[self.label_column]
+        prompts = self.test_dataset["formatted_prompt"]
+        labels = self.test_dataset[self.label_column]
 
         # inference loop
         for idx, (prompt, label) in enumerate(zip(prompts, labels)):

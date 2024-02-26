@@ -12,8 +12,8 @@ from src.pydantic_models.config_model import Config
 from src.data.dataset_generator import DatasetGenerator
 from src.utils.save_utils import DirectoryHelper
 from src.utils.ablation_utils import generate_permutations
-from src.finetune.lora import LoraFinetune
-from src.inference.lora import LoraInference
+from src.finetune.lora import LoRAFinetune
+from src.inference.lora import LoRAInference
 
 logging.set_verbosity_error()
 
@@ -44,10 +44,10 @@ def run_one_experiment(config: Config) -> None:
     weights_path = dir_helper.save_paths.weights
 
     # model_loader = ModelLoader(config, console, dir_helper)
-    model_loader = LoraFinetune(config, console, dir_helper)
     if not exists(weights_path) or not listdir(weights_path):
-        model_loader.finetune(train)
-        model_loader.save_model()
+        finetuner = LoRAFinetune(config, console, dir_helper)
+        finetuner.finetune(train)
+        finetuner.save_model()
     else:
         console.print(f"Fine-Tuned Model Found at {weights_path}... skipping training")
 
@@ -57,9 +57,9 @@ def run_one_experiment(config: Config) -> None:
     results_file_path = join(dir_helper.save_paths.results, "results.csv")
     if not exists(results_path) or exists(results_file_path):
         # TODO: hmmm... refactor these params into a seperate dataclass
-        inference_runner = LoraInference(
+        inference_runner = LoRAInference(
             test, test_column, config, console, dir_helper
-        ).run_inference()
+        ).infer_all()
 
 
 if __name__ == "__main__":
