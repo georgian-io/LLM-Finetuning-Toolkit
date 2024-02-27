@@ -26,11 +26,12 @@ from rich.console import Console
 from src.pydantic_models.config_model import Config
 from src.utils.save_utils import DirectoryHelper
 from src.finetune.finetune import Finetune
+from src.ui.rich_ui import RichUI
 
 
 class LoRAFinetune(Finetune):
     def __init__(
-        self, config: Config, console: Console, directory_helper: DirectoryHelper
+        self, config: Config, directory_helper: DirectoryHelper
     ):
         self.config = config
 
@@ -38,7 +39,6 @@ class LoRAFinetune(Finetune):
         self._training_args = config.training.training_args
         self._sft_args = config.training.sft_args
         self._lora_config = LoraConfig(**config.lora.model_dump())
-        self._console: Console = console
         self._directory_helper = directory_helper
         self._weights_path = self._directory_helper.save_paths.weights
         self._trainer = None
@@ -63,10 +63,11 @@ class LoRAFinetune(Finetune):
         self._load_model_and_tokenizer()
 
     def _load_model_and_tokenizer(self):
-        self._console.print(f"Loading {self._model_config.hf_model_ckpt}...")
+        ckpt = self._model_config.hf_model_ckpt
+        RichUI.on_basemodel_load(ckpt)
         model = self._get_model()
         tokenizer = self._get_tokenizer()
-        self._console.print(f"{self._model_config.hf_model_ckpt} Loaded :smile:")
+        RichUI.after_basemodel_load(ckpt)
 
         self.model = model
         self.tokenizer = tokenizer
@@ -95,8 +96,6 @@ class LoRAFinetune(Finetune):
         return tokenizer
 
     def _inject_lora(self):
-        self._console.print(f"Injecting Lora Modules")
-
         if not self.config.accelerate:
             self.model.gradient_checkpointing_enable()
             self.model = prepare_model_for_kbit_training(self.model)
@@ -111,8 +110,6 @@ class LoRAFinetune(Finetune):
             self.model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
                 self.model, self.optimizer, self.lr_scheduler
             )
-
-        self._console.print(f"LoRA Modules Injected!")
 
     def finetune(self, train_dataset: Dataset):
         logging_dir = join(self._weights_path, "/logs")
@@ -138,9 +135,7 @@ class LoRAFinetune(Finetune):
             **self._sft_args.model_dump(),
         )
 
-        with self._console.status("Training...", spinner="runner"):
-            trainer_stats = self._trainer.train()
-        self._console.print(f"Training Complete")
+        trainer_stats = self._trainer.train()
 
     def save_model(self) -> None:
         self._trainer.model.save_pretrained(self._weights_path)

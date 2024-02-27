@@ -16,6 +16,7 @@ import torch
 from src.pydantic_models.config_model import Config
 from src.utils.save_utils import DirectoryHelper
 from src.inference.inference import Inference
+from src.ui.rich_ui import RichUI
 
 
 # TODO: Add type hints please!
@@ -25,16 +26,14 @@ class LoRAInference(Inference):
         test_dataset: Dataset,
         label_column_name: str,
         config: Config,
-        console: Console,
         dir_helper: DirectoryHelper,
     ):
         self.test_dataset = test_dataset
         self.label_column = label_column_name
         self.config = config
-        self._console = console
 
-        self.save_path = dir_helper.save_paths.results
-        self.save_dir = join(self.save_path, "results.csv")
+        self.save_dir = dir_helper.save_paths.results
+        self.save_path = join(self.save_dir, "results.csv")
         self.device_map = self.config.model.device_map
         self._weights_path = dir_helper.save_paths.weights
 
@@ -42,21 +41,11 @@ class LoRAInference(Inference):
             dir_helper.save_paths.weights
         )
 
-    def _init_rich_table(self, title: str, prompt: str, label: str) -> Table:
-        table = Table(title=title, show_lines=True)
-        table.add_column("prompt")
-        table.add_column("ground truth")
-        table.add_row(prompt, label)
-
-        return table
-
     def _get_merged_model(self, weights_path: str):
         # purge VRAM
         torch.cuda.empty_cache()
 
         # Load from path
-        self._console.print("Merging Adapter Weights...")
-
         dtype = (
             torch.float16
             if self.config.training.training_args.fp16
@@ -79,7 +68,6 @@ class LoRAInference(Inference):
         """
 
         model = self.model.merge_and_unload()
-        self._console.print("Done Merging")
 
         tokenizer = AutoTokenizer.from_pretrained(
             self._weights_path, device_map=self.device_map
@@ -94,10 +82,9 @@ class LoRAInference(Inference):
 
         # inference loop
         for idx, (prompt, label) in enumerate(zip(prompts, labels)):
-            table = self._init_rich_table(
+            RichUI.inference_ground_truth_display(
                 f"Generating on test set: {idx+1}/{len(prompts)}", prompt, label
             )
-            self._console.print(table)
 
             try:
                 result = self.infer_one(prompt)
@@ -105,7 +92,7 @@ class LoRAInference(Inference):
                 continue
             results.append((prompt, label, result))
 
-        self._console.print("Saving inference results...")
+        # TODO: seperate this into another method
         header = ["Prompt", "Ground Truth", "Predicted"]
         os.makedirs(self.save_dir, exist_ok=True)
         with open(self.save_path, "w", newline="") as f:
@@ -134,10 +121,8 @@ class LoRAInference(Inference):
         thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
         thread.start()
 
-        self._console.print("[bold red]Prediction >")
         result = Text()
-
-        with Live(result, refresh_per_second=4, vertical_overflow="visible") as live:
+        with RichUI.inference_stream_display(result) as live:
             for new_text in streamer:
                 result.append(new_text)
                 live.update(result)
