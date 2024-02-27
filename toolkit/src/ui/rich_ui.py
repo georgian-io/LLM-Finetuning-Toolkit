@@ -138,6 +138,10 @@ class RichUI(UI):
         console.rule("[bold pink]:face_with_monocle: Testing")
 
     @staticmethod
+    def during_finetune():
+        pass
+
+    @staticmethod
     def after_inference(results_path: str):
         console.print(f"Inference Results Saved at {results_path}")
 
@@ -169,9 +173,13 @@ class RichUI(UI):
         pass
 
     @staticmethod
-    def qa_found():
+    def during_qa():
         pass
 
     @staticmethod
     def after_qa():
+        pass
+
+    @staticmethod
+    def qa_found():
         pass

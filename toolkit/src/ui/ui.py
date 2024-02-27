@@ -70,6 +70,10 @@ class UI(ABC):
         pass
 
     @abstractstaticmethod
+    def during_inference():
+        pass
+
+    @abstractstaticmethod
     def after_inference(results_path: str):
         pass
 
@@ -96,9 +100,13 @@ class UI(ABC):
         pass
 
     @abstractstaticmethod
-    def qa_found(cls):
+    def during_qa(cls):
         pass
 
     @abstractstaticmethod
     def after_qa(cls):
+        pass
+
+    @abstractstaticmethod
+    def qa_found(cls):
         pass
