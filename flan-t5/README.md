@@ -210,7 +210,7 @@ Following are the results of our ablation studies:
 |Epochs | Rank (R) | Dropout Rate | Accuracy |
 |:-----:|:--------:|:------------:|:--------:|
 |2      |2         |0.1           |65.72     |
-|2      |2         |0.2           |7.280     |
+|2      |2         |0.2           |72.80     |
 |2      |4         |0.1           |74.93     |
 |2      |4         |0.2           |72.81     |
 |2      |8         |0.1           |74.54     |
