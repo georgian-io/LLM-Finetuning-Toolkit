@@ -51,6 +51,9 @@ class LiveContext:
             exc_type, exc_val, exc_tb
         )  # Cleanly exit the console status context
 
+    def update(self, new_text: Text):
+        self.task.update(new_text)
+
 
 class RichUI(UI):
     """
@@ -153,6 +156,7 @@ class RichUI(UI):
 
     @staticmethod
     def inference_stream_display(text: Text):
+        console.print("[bold red]Prediction >")
         return LiveContext(text)
 
     """

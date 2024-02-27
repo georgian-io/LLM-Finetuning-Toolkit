@@ -1,12 +1,11 @@
 from os import listdir
 from os.path import join, exists
 import yaml
+import logging
 
-from rich.console import Console
-
-from transformers.utils import logging
-
+from transformers import utils as hf_utils
 from pydantic import ValidationError
+import torch
 
 from src.pydantic_models.config_model import Config
 from src.data.dataset_generator import DatasetGenerator
@@ -14,9 +13,10 @@ from src.utils.save_utils import DirectoryHelper
 from src.utils.ablation_utils import generate_permutations
 from src.finetune.lora import LoRAFinetune
 from src.inference.lora import LoRAInference
-from toolkit.src.ui.rich_ui import RichUI
+from src.ui.rich_ui import RichUI
 
-logging.set_verbosity_error()
+hf_utils.logging.set_verbosity_error()
+torch._logging.set_logs(all=logging.CRITICAL)
 
 
 def run_one_experiment(config: Config) -> None:

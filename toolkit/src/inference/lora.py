@@ -32,8 +32,8 @@ class LoRAInference(Inference):
         self.label_column = label_column_name
         self.config = config
 
-        self.save_path = dir_helper.save_paths.results
-        self.save_dir = join(self.save_path, "results.csv")
+        self.save_dir = dir_helper.save_paths.results
+        self.save_path = join(self.save_dir, "results.csv")
         self.device_map = self.config.model.device_map
         self._weights_path = dir_helper.save_paths.weights
 
@@ -92,6 +92,7 @@ class LoRAInference(Inference):
                 continue
             results.append((prompt, label, result))
 
+        # TODO: seperate this into another method
         header = ["Prompt", "Ground Truth", "Predicted"]
         os.makedirs(self.save_dir, exist_ok=True)
         with open(self.save_path, "w", newline="") as f:
@@ -120,9 +121,7 @@ class LoRAInference(Inference):
         thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
         thread.start()
 
-        self._console.print("[bold red]Prediction >")
         result = Text()
-
         with RichUI.inference_stream_display(result) as live:
             for new_text in streamer:
                 result.append(new_text)

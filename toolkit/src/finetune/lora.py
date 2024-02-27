@@ -31,7 +31,7 @@ from src.ui.rich_ui import RichUI
 
 class LoRAFinetune(Finetune):
     def __init__(
-        self, config: Config, console: Console, directory_helper: DirectoryHelper
+        self, config: Config, directory_helper: DirectoryHelper
     ):
         self.config = config
 
@@ -39,7 +39,6 @@ class LoRAFinetune(Finetune):
         self._training_args = config.training.training_args
         self._sft_args = config.training.sft_args
         self._lora_config = LoraConfig(**config.lora.model_dump())
-        self._console: Console = console
         self._directory_helper = directory_helper
         self._weights_path = self._directory_helper.save_paths.weights
         self._trainer = None
