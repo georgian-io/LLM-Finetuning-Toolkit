@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Union, List, Tuple, Dict
-
+import pandas as pd
+from rich.console import Console
+from rich.table import Table
+import statistics
 
 
 class LLMQaTest(ABC):
@@ -37,7 +40,6 @@ class LLMTestSuite():
             test_results[test.test_name] = metrics
         
         self.test_results = test_results
-
         return test_results
     
     @property
@@ -47,8 +49,35 @@ class LLMTestSuite():
 
     def print_test_results(self):
         # TODO: format these!
+        # get the average similarity, or something similar for sentence length
+        result_dictionary = self.test_results()
+        column_data = {key: [value for value in result_dictionary[key]] for key in result_dictionary}
+        mean_values = {key: statistics.mean(column_data[key]) for key in column_data}
+        median_values = {key: statistics.median(column_data[key]) for key in column_data}
+
+        # Create a Console instance
+        console = Console()
+
+        # Create a table
+        table = Table(show_header=True, header_style="bold", title="Test Results")
+
+        # Add columns to the table
+        table.add_column("Metric", style="cyan")
+        table.add_column("Mean", style="magenta")
+        table.add_column("Median", style="green")
+
+        # Add data rows to the table
+        for key in result_dictionary:
+            table.add_row(key, f"{mean_values[key]:.4f}", f"{median_values[key]:.4f}")
+
+        # Print the table
+        console.print(table)
+
+
         print(self.test_results)
 
     def save_test_results(self, path:str):
         # TODO: save these!
-        pass
+        resultant_dataframe = pd.DataFrame(self.test_results())
+        resultant_dataframe.to_csv(path, index = False)
+        
