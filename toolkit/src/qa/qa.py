@@ -54,6 +54,7 @@ class LLMTestSuite():
         column_data = {key: [value for value in result_dictionary[key]] for key in result_dictionary}
         mean_values = {key: statistics.mean(column_data[key]) for key in column_data}
         median_values = {key: statistics.median(column_data[key]) for key in column_data}
+        stdev_values = {key: statistics.stdev(column_data[key]) for key in column_data}
 
         # Create a Console instance
         console = Console()
@@ -65,10 +66,16 @@ class LLMTestSuite():
         table.add_column("Metric", style="cyan")
         table.add_column("Mean", style="magenta")
         table.add_column("Median", style="green")
+        table.add_column("Standard Deviation", style="yellow")
 
         # Add data rows to the table
         for key in result_dictionary:
-            table.add_row(key, f"{mean_values[key]:.4f}", f"{median_values[key]:.4f}")
+            table.add_row(
+                key,
+                f"{mean_values[key]:.4f}",
+                f"{median_values[key]:.4f}",
+                f"{stdev_values[key]:.4f}"
+            )
 
         # Print the table
         console.print(table)
