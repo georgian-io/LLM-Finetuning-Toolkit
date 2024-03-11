@@ -110,3 +110,7 @@ class UI(ABC):
     @abstractstaticmethod
     def qa_found(cls):
         pass
+    
+    @abstractstaticmethod
+    def qa_display_table(cls):
+        pass

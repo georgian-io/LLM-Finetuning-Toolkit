@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Union, List, Tuple, Dict
-
-
+import pandas as pd
+from toolkit.src.ui.rich_ui import RichUI
+import statistics
 
 class LLMQaTest(ABC):
     @property
@@ -37,7 +38,6 @@ class LLMTestSuite():
             test_results[test.test_name] = metrics
         
         self.test_results = test_results
-
         return test_results
     
     @property
@@ -46,9 +46,16 @@ class LLMTestSuite():
     
 
     def print_test_results(self):
-        # TODO: format these!
-        print(self.test_results)
-
+        result_dictionary = self.test_results()
+        column_data = {key: [value for value in result_dictionary[key]] for key in result_dictionary}
+        mean_values = {key: statistics.mean(column_data[key]) for key in column_data}
+        median_values = {key: statistics.median(column_data[key]) for key in column_data}
+        stdev_values = {key: statistics.stdev(column_data[key]) for key in column_data}
+        # Use the RichUI class to display the table
+        RichUI.display_table(result_dictionary, mean_values, median_values, stdev_values)
+        
     def save_test_results(self, path:str):
         # TODO: save these!
-        pass
+        resultant_dataframe = pd.DataFrame(self.test_results())
+        resultant_dataframe.to_csv(path, index = False)
+        
