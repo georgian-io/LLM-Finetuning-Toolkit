@@ -4,7 +4,6 @@ import pandas as pd
 from toolkit.src.ui.rich_ui import RichUI
 import statistics
 
-
 class LLMQaTest(ABC):
     @property
     @abstractmethod
