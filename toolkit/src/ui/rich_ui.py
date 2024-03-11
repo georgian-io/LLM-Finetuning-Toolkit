@@ -183,3 +183,28 @@ class RichUI(UI):
     @staticmethod
     def qa_found():
         pass
+    
+    def display_table(self, result_dictionary, mean_values, median_values, stdev_values):
+        # Create a Console instance
+        console = Console()
+
+        # Create a table
+        table = Table(show_header=True, header_style="bold", title="Test Results")
+
+        # Add columns to the table
+        table.add_column("Metric", style="cyan")
+        table.add_column("Mean", style="magenta")
+        table.add_column("Median", style="green")
+        table.add_column("Standard Deviation", style="yellow")
+
+        # Add data rows to the table
+        for key in result_dictionary:
+            table.add_row(
+                key,
+                f"{mean_values[key]:.4f}",
+                f"{median_values[key]:.4f}",
+                f"{stdev_values[key]:.4f}"
+            )
+
+        # Print the table
+        console.print(table)
