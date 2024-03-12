@@ -1,8 +1,7 @@
 save_dir: "./experiment/"
 
 ablation:
-  use_ablate: true
-  study_name: "ablate_1"
+  use_ablate: false
 
 # Data Ingestion -------------------
 data:
@@ -35,6 +34,7 @@ model:
 lora:
   task_type: "CAUSAL_LM"
   r: 32
+  lora_alpha: 16
   lora_dropout: 0.1
   target_modules:
     - q_proj
@@ -50,24 +50,15 @@ training:
   training_args:
     num_train_epochs: 5
     per_device_train_batch_size: 4
-    gradient_accumulation_steps: 4
-    gradient_checkpointing: True
     optim: "paged_adamw_32bit"
-    logging_steps: 100
     learning_rate: 2.0e-4
     bf16: true # Set to true for mixed precision training on Newer GPUs
     tf32: true
-    # fp16: false     # Set to true for mixed precision training on Older GPUs
-    max_grad_norm: 0.3
-    warmup_ratio: 0.03
-    lr_scheduler_type: "constant"
   sft_args:
-    max_seq_length: 5000
-    # neftune_noise_alpha: None
+    max_seq_length: 1024
 
 inference:
   max_new_tokens: 1024
-  use_cache: True
   do_sample: True
   top_p: 0.9
   temperature: 0.8
