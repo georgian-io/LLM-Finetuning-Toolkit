@@ -1,0 +1,8 @@
+{
+  "label": "Configuration",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "The configuration file is the central piece that defines the behavior of the toolkit. It is written in YAML format and consists of several sections that control different aspects of the process, such as data ingestion, model definition, training, inference, and quality assurance."
+  }
+}

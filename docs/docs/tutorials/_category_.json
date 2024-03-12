@@ -1,0 +1,8 @@
+{
+  "label": "Tutorials",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "This tutorial will guide you through using individual components of the toolkit without running it via the CLI directly. We will cover data formatting, finetuning, inference, and model testing."
+  }
+}
