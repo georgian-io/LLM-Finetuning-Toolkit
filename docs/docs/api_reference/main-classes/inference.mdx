@@ -1,0 +1,67 @@
+---
+sidebar_label: Inference
+sidebar_position: 3
+---
+
+import { ClassComponent, MethodComponent } from "@site/src/components/Class";
+
+# Inference
+
+## Inference Classes
+
+### Inference
+
+<ClassComponent
+  className="src.inference.inference.Inference"
+  sourceUrl="github.com"
+>
+    The Inference class is an abstract base class for performing inference.
+
+<MethodComponent methodName="infer_one(prompt: str) -> str" methodSignature="prompt: str">
+  An abstract method to be implemented by subclasses. Performs inference on a single prompt.
+
+#### Parameters
+
+- `prompt: str` - The input prompt.
+
+</MethodComponent>
+
+<MethodComponent methodName="infer_all() -> None" methodSignature="">
+  An abstract method to be implemented by subclasses. Performs inference on all test examples.
+
+</MethodComponent>
+</ClassComponent>
+
+### LoRAInference
+
+<ClassComponent
+  className="src.inference.lora.LoRAInference"
+  initParams="(test_dataset: Dataset, label_column_name: str, config: Config, dir_helper: DirectoryHelper)"
+  sourceUrl="github.com"
+>
+    The LoRAInference class is a subclass of Inference for performing inference using LoRA models.
+
+    #### Parameters
+    - `test_dataset: Dataset` - The test dataset.
+    - `label_column_name: str` - The name of the label column in the test dataset.
+    - `config: Config` - The configuration object.
+    - `dir_helper: DirectoryHelper` - The directory helper object.
+
+<MethodComponent methodName="infer_one(prompt: str) -> str" methodSignature="prompt: str">
+  Performs inference on a single prompt and returns the generated text.
+
+#### Parameters
+
+- `prompt: str` - The input prompt.
+
+#### Returns
+
+`str` - The generated text.
+
+</MethodComponent>
+
+<MethodComponent methodName="infer_all() -> None" methodSignature="">
+  Performs inference on all test examples in `test_dataset` and saves the results in a `csv`.
+
+</MethodComponent>
+</ClassComponent>

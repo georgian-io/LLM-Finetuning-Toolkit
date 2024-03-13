@@ -1,0 +1,57 @@
+---
+sidebar_label: Finetuning
+sidebar_position: 2
+---
+
+import { ClassComponent, MethodComponent } from "@site/src/components/Class";
+
+# Finetuning
+
+## Finetuning Classes
+
+### Finetune
+
+<ClassComponent
+className="src.finetune.finetune.Finetune"
+sourceUrl="github.com">
+
+    The Finetune class is an abstract base class for finetuning models.
+
+<MethodComponent methodName="finetune() -> None" methodSignature="">
+  An abstract method to be implemented by subclasses. Finetunes the model.
+
+</MethodComponent>
+
+<MethodComponent methodName="save_model() -> None" methodSignature="">
+  An abstract method to be implemented by subclasses. Saves the finetuned model.
+
+</MethodComponent>
+</ClassComponent>
+
+### LoRAFinetune
+
+<ClassComponent
+  className="src.finetune.lora.LoRAFinetune"
+  initParams="(config: Config, directory_helper: DirectoryHelper)"
+  sourceUrl="github.com"
+>
+    The LoRAFinetune class is a subclass of Finetune for finetuning models using LoRA (Low-Rank Adaptation).
+
+    #### Parameters
+    - `config: Config` - The configuration object.
+    - `directory_helper: DirectoryHelper` - The directory helper object.
+
+<MethodComponent methodName="finetune(train_dataset: Dataset) -> None" methodSignature="train_dataset: Dataset">
+  Finetunes the model using the provided training dataset.
+
+#### Parameters
+
+- `train_dataset: Dataset` - The training dataset.
+
+</MethodComponent>
+
+<MethodComponent methodName="save_model() -> None" methodSignature="">
+  Saves the finetuned model.
+
+</MethodComponent>
+</ClassComponent>

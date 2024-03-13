@@ -1,0 +1,218 @@
+---
+sidebar_position: 2
+---
+
+import { ClassComponent, MethodComponent } from "@site/src/components/Class";
+
+# Pydantic Models
+
+## Main Config
+
+### Config
+
+<ClassComponent
+  className="src.pydantic_models.config_model.Config"
+  initParams="(save_dir: Optional[str], ablation: AblationConfig, accelerate: Optional[bool], data: DataConfig, model: ModelConfig, lora: LoraConfig, training: TrainingConfig, inference: InferenceConfig)"
+  sourceUrl="github.com"
+>
+    Represents the overall configuration for the toolkit, including all necessary settings and parameters required for its operation. This configuration encapsulates everything from data handling and model specification to training and inference settings, as well as ablation studies and optimization flags.
+
+    #### Attributes
+    - `save_dir`: Directory for saving outputs.
+    - `ablation`: Configuration for ablation studies.
+    - `accelerate`: Enables multi-GPU training if set to True.
+    - `data`: Data ingestion configuration.
+    - `model`: Model configuration, including specifics for handling and optimization.
+    - `lora`: Configuration for LoRA (Low-Rank Adaptation) adjustments.
+    - `training`: Training configurations, including batch sizes, learning rates, and more.
+    - `inference`: Inference settings, such as token limits and sampling strategies.
+
+</ClassComponent>
+
+## Data Config
+
+### DataConfig
+
+<ClassComponent
+  className="src.pydantic_models.config_model.DataConfig"
+  initParams="(file_type: Literal['json', 'csv', 'huggingface'], path: Union[FilePath, HfModelPath], prompt: str, prompt_stub: str, train_size: Optional[Union[float, int]], test_size: Optional[Union[float, int]], train_test_split_seed: int)"
+  sourceUrl="github.com"
+>
+    Represents the configuration for data ingestion, specifying how data is loaded, prepared, and split for training and testing. This component is crucial for ensuring that the data feeding into the model is correctly formatted and segmented.
+
+    #### Attributes
+    - `file_type`: The format of the dataset file (JSON, CSV, or a HuggingFace dataset).
+    - `path`: Path to the dataset or HuggingFace model.
+    - `prompt`: Template for generating model inputs.
+    - `prompt_stub`: Template fragment used during training.
+    - `train_size`: Specifies the size of the training dataset.
+    - `test_size`: Specifies the size of the test dataset.
+    - `train_test_split_seed`: Seed for reproducible train/test splits.
+
+</ClassComponent>
+
+> Represents the configuration for data ingestion.
+
+## Model Config
+
+### ModelConfig
+
+<ClassComponent
+  className="src.pydantic_models.config_model.ModelConfig"
+  initParams="(hf_model_ckpt: Optional[str], device_map: Optional[str], quantize: Optional[bool], bitsandbytes: BitsAndBytesConfig)"
+  sourceUrl="github.com"
+>
+    Details the configuration for the model, including paths to pre-trained models, device mapping for training, and options for quantization to optimize model performance and resource usage.
+
+    #### Attributes
+    - `hf_model_ckpt`: Path or identifier for a HuggingFace model checkpoint.
+    - `device_map`: Specifies how the model should be distributed across available devices.
+    - `quantize`: Enables model quantization for performance optimization.
+    - `bitsandbytes`: Settings for BitsAndBytes quantization strategies.
+
+</ClassComponent>
+
+### BitsAndBytesConfig
+
+<ClassComponent
+  className="src.pydantic_models.config_model.BitsAndBytesConfig"
+  initParams="(load_in_8bit: Optional[bool], llm_int8_threshold: Optional[float], llm_int8_skip_modules: Optional[List[str]], llm_int8_enable_fp32_cpu_offload: Optional[bool], llm_int8_has_fp16_weight: Optional[bool], load_in_4bit: Optional[bool], bnb_4bit_compute_dtype: Optional[str], bnb_4bit_quant_type: Optional[str], bnb_4bit_use_double_quant: Optional[bool])"
+  sourceUrl="github.com"
+>
+    Represents the configuration for BitsAndBytes quantization, offering detailed control over how models are quantized to improve performance and reduce memory footprint. These settings allow for advanced optimization techniques, including 8-bit and 4-bit quantization, with options for handling outliers and mixed precision.
+
+    #### Attributes
+    - `load_in_8bit`: Enable 8-bit quantization with specifics on handling outliers and module exceptions.
+    - `llm_int8_threshold`: Threshold for outlier detection in 8-bit quantization.
+    - `llm_int8_skip_modules`: Modules to exclude from 8-bit quantization.
+    - `llm_int8_enable_fp32_cpu_offload`: Offloads part of the model to CPU in fp32 to save memory.
+    - `llm_int8_has_fp16_weight`: Allows 16-bit weights in conjunction with 8-bit quantization.
+    - `load_in_4bit`: Enable 4-bit quantization for further size and speed optimization.
+    - `bnb_4bit_compute_dtype`: Defines the computational datatype in 4-bit quantization.
+    - `bnb_4bit_quant_type`: Specifies the quantization datatype in 4-bit layers.
+    - `bnb_4bit_use_double_quant`: Enables nested quantization for potentially higher efficiency.
+
+</ClassComponent>
+
+## LoRA Config
+
+### LoraConfig
+
+<ClassComponent
+  className="src.pydantic_models.config_model.LoraConfig"
+  initParams="(r: Optional[int], task_type: Optional[str], lora_alpha: Optional[int], bias: Optional[str], lora_dropout: Optional[float], target_modules: Optional[List[str]], fan_in_fan_out: Optional[bool], modules_to_save: Optional[List[str]], layers_to_transform: Optional[Union[List[int], int]], layers_pattern: Optional[str])"
+  sourceUrl="github.com"
+>
+    Details the configuration for applying LoRA (Low-Rank Adaptation) to a model, enhancing its ability to adapt to new tasks without extensive retraining. LoRA settings determine how and where these adaptations are applied within the model architecture.
+
+    #### Attributes
+    - `r`: Rank for the LoRA adaptation, affecting the number of trainable parameters.
+    - `task_type`: Indicates the model's task type during training to guide LoRA adjustments.
+    - `lora_alpha`: Scaling factor for LoRA parameters.
+    - `bias`: Specifies how biases are handled in LoRA-adapted layers.
+    - `lora_dropout`: Dropout rate for LoRA layers, helping prevent overfitting.
+    - `target_modules`: Model components targeted for LoRA adaptation.
+    - `fan_in_fan_out`: Adjusts weight shape assumptions for compatibility with LoRA.
+    - `modules_to_save`: Explicitly marks non-LoRA modules for retention and training.
+    - `layers_to_transform`: Identifies specific layers for LoRA transformation.
+    - `layers_pattern`: Pattern matching for selecting layers for adaptation.
+
+</ClassComponent>
+
+## Training Config
+
+### TrainingConfig
+
+<ClassComponent
+  className="src.pydantic_models.config_model.TrainingConfig"
+  initParams="(training_args: TrainingArgs, sft_args: SftArgs)"
+  sourceUrl="github.com"
+>
+    Encapsulates the configuration for the training process, including both general training parameters and settings specific to Supervised Fine-Tuning (SFT). This dual configuration approach allows for fine-grained control over the training regimen.
+
+    #### Attributes
+    - `training_args`: Core training arguments, covering epochs, batch sizes, and optimization strategies.
+    - `sft_args`: Supervised Fine-Tuning arguments, providing additional options for fine-tuning performance.
+
+</ClassComponent>
+
+### TrainingArgs
+
+<ClassComponent
+  className="src.pydantic_models.config_model.TrainingArgs"
+  initParams="(num_train_epochs: Optional[int], per_device_train_batch_size: Optional[int], gradient_accumulation_steps: Optional[int], gradient_checkpointing: Optional[bool], optim: Optional[str], logging_steps: Optional[int], learning_rate: Optional[float], bf16: Optional[bool], tf32: Optional[bool], fp16: Optional[bool], max_grad_norm: Optional[float], warmup_ratio: Optional[float], lr_scheduler_type: Optional[str])"
+  sourceUrl="github.com"
+>
+    Defines the core training parameters for the model, covering every aspect from epoch counts to specific hardware optimizations. These arguments provide a comprehensive toolkit for customizing the training process to suit different models, datasets, and hardware configurations.
+
+    #### Attributes
+    - `num_train_epochs`: Specifies the total number of epochs for training.
+    - `per_device_train_batch_size`: Sets the batch size for each training device.
+    - `gradient_accumulation_steps`: Determines the number of steps to accumulate gradients before updating model parameters.
+    - `gradient_checkpointing`: Enables memory-efficient gradient checkpointing.
+    - `optim`: Chooses the optimizer for training.
+    - `logging_steps`: Configures the frequency of logging for training metrics.
+    - `learning_rate`: Sets the initial learning rate.
+    - `bf16`: Activates BF16 training for compatible hardware.
+    - `tf32`: Enables TF32 precision on NVIDIA Ampere GPUs.
+    - `fp16`: Engages FP16 precision for faster computation and reduced memory usage.
+    - `max_grad_norm`: Caps the norm of the gradients to prevent explosion.
+    - `warmup_ratio`: Adjusts the learning rate as a proportion of the total training steps for a gradual start.
+    - `lr_scheduler_type`: Specifies the learning rate scheduler to be used.
+
+</ClassComponent>
+
+### SftArgs
+
+<ClassComponent
+  className="src.pydantic_models.config_model.SftArgs"
+  initParams="(max_seq_length: Optional[int], neftune_noise_alpha: Optional[float])"
+  sourceUrl="github.com"
+>
+    Captures the specific configurations for Supervised Fine-Tuning (SFT), including parameters that affect how models process input sequences and apply NEFTune noise embeddings. These settings help tailor the fine-tuning process to the instructional nuances of the dataset.
+
+    #### Attributes
+    - `max_seq_length`: Limits the length of input sequences to the model.
+    - `neftune_noise_alpha`: Activates NEFTune noise embeddings, which can significantly enhance model performance for instruction-based fine-tuning by introducing a controlled amount of noise into the embeddings.
+
+</ClassComponent>
+
+## Inference Config
+
+### InferenceConfig
+
+<ClassComponent
+  className="src.pydantic_models.config_model.InferenceConfig"
+  initParams="(max_new_tokens: Optional[int], use_cache: Optional[bool], do_sample: Optional[bool], top_p: Optional[float], temperature: Optional[float], epsilon_cutoff: Optional[float], eta_cutoff: Optional[float], top_k: Optional[int])"
+  sourceUrl="github.com"
+>
+    Defines the parameters governing the inference phase, focusing on output generation and sampling behavior. These settings allow users to balance between creativity, diversity, and fidelity to the input prompt.
+
+    #### Attributes
+    - `max_new_tokens`: Limits the number of new tokens generated.
+    - `use_cache`: Enables caching for efficiency during generation.
+    - `do_sample`: Activates stochastic sampling for output generation.
+    - `top_p`: Controls the nucleus sampling threshold.
+    - `temperature`: Adjusts the sharpness of the probability distribution.
+    - `epsilon_cutoff`: Introduces cutoffs to refine sampling strategies.
+    - `eta_cutoff`: Further refines sampling cutoffs for nuanced control.
+    - `top_k`: Limits the sampling pool to the top-k most likely tokens.
+
+</ClassComponent>
+
+## Ablation Config
+
+### AblationConfig
+
+<ClassComponent
+  className="src.pydantic_models.config_model.AblationConfig"
+  initParams="(use_ablate: Optional[bool], study_name: Optional[str])"
+  sourceUrl="github.com"
+>
+    Specifies whether ablation studies are to be conducted and, if so, under what overarching study name. This configuration is crucial for systematically exploring the impact of various model components and settings on performance.
+
+    #### Attributes
+    - `use_ablate`: Enables the execution of ablation studies.
+    - `study_name`: Provides a label for grouping related ablation experiments.
+
+</ClassComponent>
