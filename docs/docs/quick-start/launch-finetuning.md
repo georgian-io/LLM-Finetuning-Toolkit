@@ -8,7 +8,7 @@ sidebar_position: 1
 
 The toolkit has everything you need to get started. This guide will walk you through the initial setup, explain the key components of the configuration, and offer advice on customizing your fine-tuning job. Let's dive in!
 
-First, make sure you have read the installation guide [LINK] and installed all the dependencies. Then, To launch a LoRA fine-tuning job, run the following command in your terminal:
+First, make sure you have read the [installation guide](getting-started.md#installation) and installed all the dependencies. Then, To launch a LoRA fine-tuning job, run the following command in your terminal:
 
 ```bash
 python3 toolkit.py

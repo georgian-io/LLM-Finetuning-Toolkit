@@ -8,10 +8,9 @@ const FeatureList = [
     Svg: require("@site/static/img/undraw_scientist.svg").default,
     description: (
       <>
-        This toolkit is designed specifically for data scientists and
-        researchers, providing a streamlined and intuitive workflow for running
-        experiments efficiently. It abstracts away technical complexities,
-        allowing users to focus on their research and quickly iterate on ideas.
+        This toolkit provides data scientists with an intuitive workflow for
+        running experiments efficiently, abstracting away technical complexities
+        and allowing users to focus on their research.
       </>
     ),
   },
@@ -20,10 +19,10 @@ const FeatureList = [
     Svg: require("@site/static/img/undraw_design_components.svg").default,
     description: (
       <>
-        The toolkit's modular architecture enables easy customization and
-        extension of functionality. Users can incorporate custom data formats,
-        experiment with different finetuning techniques, and define their own
-        evaluation metrics, adapting the toolkit to their specific needs.
+        The modular architecture enables easy customization and extension of
+        functionality, allowing users to incorporate custom data formats,
+        experiment with different techniques, and define their own evaluation
+        metrics.
       </>
     ),
   },
@@ -32,10 +31,10 @@ const FeatureList = [
     Svg: require("@site/static/img/undraw_qa.svg").default,
     description: (
       <>
-        The toolkit emphasizes quality assurance, providing a comprehensive
-        suite of QA tests to assess model performance. Users can evaluate
-        accuracy, fluency, diversity, and consistency, and extend the tests to
-        define custom evaluation criteria specific to their domain or task.
+        The toolkit emphasizes quality assurance, providing a suite of tests to
+        assess model performance across accuracy, fluency, diversity, and
+        consistency. Users can extend the tests to define custom evaluation
+        criteria.
       </>
     ),
   },
@@ -44,11 +43,10 @@ const FeatureList = [
     Svg: require("@site/static/img/undraw_notes.svg").default,
     description: (
       <>
-        Designed with reproducibility in mind, the toolkit includes built-in
-        mechanisms for tracking and managing experiments. It generates unique
-        experiment IDs and maintains a structured directory hierarchy, ensuring
-        proper recording and storage of configurations, hyperparameters, and
-        results for easy reproduction and comparison.
+        Designed for reproducibility, the toolkit includes mechanisms for
+        tracking experiments, generating unique IDs, and maintaining a
+        structured directory hierarchy for easy reproduction and comparison of
+        results.
       </>
     ),
   },

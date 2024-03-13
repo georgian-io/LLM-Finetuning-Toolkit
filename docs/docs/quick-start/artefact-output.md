@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Artefact Outputs
 
-This config will run finetuning and save the results under directory `./experiment/[unique_hash]`. Each unique configuration will generate a unique hash, so that our tool can automatically pick up where it left off. For example, if you need to exit in the middle of the training, by relaunching the script, the program will automatically load the existing dataset that has been generated under the directory, instead of doing it all over again.
+This config will run finetuning and save the artefacts under directory `./experiment/[unique_hash]`. Each unique configuration will generate a unique hash, so that our tool can automatically pick up where it left off. For example, if you need to stop the training before it finishes, you can relaunch the script and the program will automatically load the existing dataset that was generated in the directory, allowing you to resume where you left off instead of starting over from the beginning.
 
 After the script finishes running you will see these distinct artifacts:
 

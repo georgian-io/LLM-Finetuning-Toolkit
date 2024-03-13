@@ -35,12 +35,12 @@ LLM Finetuning toolkit is a config-based CLI tool for launching a series of fine
 
 This documentation page is organized in the following sections:
 
-- **Quick Start** provides a quick overview of the toolkit and helps you get started running your own experiments
-- **Configuration** walks you through all the changes that can be made to customize your experiments
-- **Tutorials** guides you through each component of this toolkit, what they are doing, and artifacts that you may expect it to produce
-- **Developer Guides** goes over how to extend each component for custom use-cases and for contributing to this toolkit
-- **API Reference** details the underlying modules of this toolkit
-- **Research** details our findings / tables thus far & blog posts
+- **[Quick Start](category/quick-start)** provides a quick overview of the toolkit and helps you get started running your own experiments
+- **[Configuration](category/configuration)** walks you through all the changes that can be made to customize your experiments
+- **[Tutorials](category/tutorials)** guides you through each component of this toolkit, what they are doing, and artifacts that you may expect it to produce
+- **[Developer Guides](category/developer-guides)** goes over how to extend each component for custom use-cases and for contributing to this toolkit
+- **[API Reference](category/api-reference)** details the underlying modules of this toolkit
+- **[Research](category/research)** details our findings / tables thus far & blog posts
 
 ## Installation
 
