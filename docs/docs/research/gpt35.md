@@ -49,10 +49,11 @@ We evaluated GPT-3.5-turbo under the following conditions:
 | :-------------: | :-------: | :------: |
 | Accuracy (in %) |   60.22   |   :x:    |
 
-NOTE:
+:::note
 
 - `prompts.py` contains the prompts used for zero-shot prompting, and few-shot prompting.
 - We used GPT-3.5-turbo version.
+  :::
 
 :::tip
 <u> Insight: </u>

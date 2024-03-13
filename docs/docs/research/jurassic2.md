@@ -70,11 +70,14 @@ We track accuracy to evaluate model's performance on classification task.
 |  J2-Mid  |      22.93      |
 | J2-Ultra |      43.62      |
 
+:::tip
 <u> Insight: </u>
 
 - Jurassic-2 models show consistent improvement in zero-shot prompting setting as the model size increases.
 - J2-Ultra achieves the highest accuracy, followed by J2-Mid and J2-Light.
 - In our opinion, these numbers are very high considering these models are used out-of-the-box.
+
+:::
 
 #### Summarization
 
@@ -104,8 +107,11 @@ We track ROUGE-1 and ROUGE-2 metrics to evaluate model's performance on summariz
 | J2-Grande |     48.385     |     23.901     |
 | J2-Jumbo  |     DNF\*      |     DNF\*      |
 
+:::note
 Note: All models for fine-tuned for 1 epoch.
+:::
 
+:::tip
 <u> Insight: </u>
 
 - For out-of-the-box performance, Jurassic-2's biggest model J2-Ultra achieves the best ROUGE-1 and ROUGE-2 when compared to the other models.
@@ -113,6 +119,8 @@ Note: All models for fine-tuned for 1 epoch.
 - Few-shot prompting consistently performs better than zero-shot prompting across all model variations.
 - As expected, J2-Light and J2-Grande fine tuned (custom) models achieve better performance than their out-of-the-box counterparts, i.e., zero-shot and few-shot.
 - Despite debugging efforts, the custom version of J2-Jumbo (the biggest model) does not generate anything (DNF) for the exact same inputs.
+
+:::
 
 ### <img src={time} width="32" height="32"/><img src={money} width="32" height="32"/>Time & Cost to Train<img src={money} width="32" height="32"/><img src={time} width="32" height="32"/>
 

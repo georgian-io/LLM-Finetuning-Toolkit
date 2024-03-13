@@ -58,11 +58,13 @@ We evaluated InstructPalmyra-30B under the following conditions:
 | :-------------: | :-------: | :------: |
 | Accuracy (in %) |  15.236   |   :x:    |
 
-NOTE:
+:::note
 
 - `prompts.py` contains the prompts used for zero-shot prompting, and few-shot prompting.
 - We used InstructPalmyra-30B version.
 - The Palmyra API has a moderation tool built-in, thus some prompts failed to return a response due to the moderation tool being triggered. In such cases, we count it as an incorrect response.
+
+:::
 
 :::tip
 <u> Insight: </u>
@@ -79,11 +81,13 @@ The Few-Shot prompting approach failed due to the prompt surpassing the token li
 | ROUGE-1 (in %) |  33.680   |  39.285  |
 | ROUGE-2 (in %) |  12.184   |  16.199  |
 
-NOTE:
+:::note
 
 - `prompts.py` contains the prompts used for zero-shot prompting, and few-shot prompting.
 - We used InstructPalmyra-30B version.
 - The Palmyra API has a moderation tool built-in, thus some prompts failed to return a response due to the moderation tool being triggered. In such cases, we count it as an incorrect response.
+
+:::
 
 :::tip
 <u> Insight: </u>
@@ -104,4 +108,6 @@ In terms of costs, Palmyra has two different [plans](https://writer.com/plans/).
 | Classification | ~1s       | ~2.5 hours |
 | Summarization  | ~2s       | ~1 hour    |
 
-Note: We observed no significant difference in the time taken for zero-shot vs few-shot for summarization. For classification, few-shot experiments were faster since they failed due to hitting the maximum token length. We ignore this speed up due to the failure to generate a response.
+:::note
+We observed no significant difference in the time taken for zero-shot vs few-shot for summarization. For classification, few-shot experiments were faster since they failed due to hitting the maximum token length. We ignore this speed up due to the failure to generate a response.
+:::

@@ -57,7 +57,9 @@ We evaluated MPT under the following conditions:
 | :-------------------------: | :----: |
 |        10664 (100%)         |  0.0   |
 
+:::tip
 MPT-7B does not produce the right labels. It tends to also generate a lot of additional text, which causes accuracy to suffer. Since MPT-7B is unable to learn despite being trained on the entire training set, we do not perform the ablation study on sample complexity vs performance.
+:::
 
 #### Summarization
 
@@ -68,7 +70,9 @@ MPT-7B does not produce the right labels. It tends to also generate a lot of add
 | ROUGE-1 (in %) |      32.86       |      34.71      |        23.5         |
 | ROUGE-2 (in %) |      10.41       |      12.26      |        9.67         |
 
+:::tip
 Looking at the ROUGE-1 and ROUGE-2 scores, we see that MPT-7B’s performance increases from zero-shot to few-shot. However, the performance drops when MPT-7B is fine-tuned on the Samsum dataset. This finding is aligned with what we see on the classification task. After being fine-tuned, MPT-7B's performance drops across both tasks, which is a peculiar behaviour.
+:::
 
 <u> Table 3: MPT vs Other LLMs </u>
 
@@ -77,4 +81,6 @@ Looking at the ROUGE-1 and ROUGE-2 scores, we see that MPT-7B’s performance in
 | ROUGE-1 (in %) |            47.23            |     49.21     |   52.18   | 47.75 | 49.96 |   51.71   |   52.97    |   53.61    |  23.5  |
 | ROUGE-2 (in %) |            21.01            |     23.39     |   27.84   | 23.53 | 25.94 |   26.86   |   28.32    |   29.28    |  9.67  |
 
+:::tip
 MPT-7B gets the lowest results, even when compared with models that are smaller than itself, i.e., Flan-T5-Large and RP-3B. In our opinion, other 7B models are better choices to consider for fine-tuning purposes.
+:::

@@ -2,9 +2,15 @@
 sidebar_position: 1
 ---
 
+import arch from "./img/arch.png"
+
 # Extending Modules
 
 The toolkit provides a modular and extensible architecture that allows developers to customize and enhance its functionality to suit their specific needs. Each component of the toolkit, such as data ingestion, finetuning, inference, and quality assurance testing, is designed to be easily extendable.
+
+## General Guidelines
+
+<img src={arch} width="1000"/>
 
 There are various scenarios where you might want to extend a particular module of the toolkit. For example:
 

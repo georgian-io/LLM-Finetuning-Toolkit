@@ -108,4 +108,6 @@ model:
 
 In the new config snippet for changing the model, we've updated the hf_model_ckpt to use the "EleutherAI/gpt-neo-1.3B" model instead of "NousResearch/Llama-2-7b-hf". We've also adjusted the target_modules to match the module names specific to the GPT-Neo architecture.
 
+:::warning
 Remember to carefully review the documentation and requirements of the new model you choose to ensure compatibility with your task and the toolkit.
+:::
