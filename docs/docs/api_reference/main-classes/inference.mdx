@@ -13,11 +13,11 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.inference.inference.Inference"
-  sourceUrl="github.com"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/inference/inference.py"
 >
     The Inference class is an abstract base class for performing inference.
 
-<MethodComponent methodName="infer_one(prompt: str) -> str" methodSignature="prompt: str">
+<MethodComponent methodName="infer_one" methodSignature="( prompt: str )">
   An abstract method to be implemented by subclasses. Performs inference on a single prompt.
 
 #### Parameters
@@ -26,7 +26,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 </MethodComponent>
 
-<MethodComponent methodName="infer_all() -> None" methodSignature="">
+<MethodComponent methodName="infer_all" methodSignature="( )">
   An abstract method to be implemented by subclasses. Performs inference on all test examples.
 
 </MethodComponent>
@@ -37,7 +37,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 <ClassComponent
   className="src.inference.lora.LoRAInference"
   initParams="(test_dataset: Dataset, label_column_name: str, config: Config, dir_helper: DirectoryHelper)"
-  sourceUrl="github.com"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/inference/lora.py"
 >
     The LoRAInference class is a subclass of Inference for performing inference using LoRA models.
 
@@ -47,7 +47,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
     - `config: Config` - The configuration object.
     - `dir_helper: DirectoryHelper` - The directory helper object.
 
-<MethodComponent methodName="infer_one(prompt: str) -> str" methodSignature="prompt: str">
+<MethodComponent methodName="infer_one" methodSignature="( prompt: str )">
   Performs inference on a single prompt and returns the generated text.
 
 #### Parameters
@@ -60,7 +60,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 </MethodComponent>
 
-<MethodComponent methodName="infer_all() -> None" methodSignature="">
+<MethodComponent methodName="infer_all" methodSignature="( )">
   Performs inference on all test examples in `test_dataset` and saves the results in a `csv`.
 
 </MethodComponent>

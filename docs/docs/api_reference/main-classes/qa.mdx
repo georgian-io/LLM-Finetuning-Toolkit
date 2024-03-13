@@ -13,17 +13,17 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.qa.qa.LLMQaTest"
-  sourceUrl="github.com"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/qa/qa.py"
 >
 The LLMQaTest class is an abstract base class for defining quality assurance tests for language models.
 
-<MethodComponent methodName="test_name() -> str" methodSignature="">
+<MethodComponent methodName="test_name" methodSignature="( )">
   An abstract property to be implemented by subclasses. Returns the name of the
   test.
 </MethodComponent>
 
 <MethodComponent 
-    methodName="get_metric(prompt: str, ground_truth: str, model_pred: str) -> Union[float, int, bool]" methodSignature="prompt: str, ground_truth: str, model_pred: str"
+    methodName="get_metric" methodSignature="( prompt: str, ground_truth: str, model_pred: str )"
 >
   Computes the metric for the test based on the input prompt, the ground truth output, and the model's predicted output.
 
@@ -46,8 +46,8 @@ The computed metric, which can be a float, an int, or a bool.
 
 <ClassComponent
   className="src.qa.qa.LLMTestSuite"
-  initParams="(tests: List[LLMQaTest], prompts: List[str], ground_truths: List[str], model_preds: List[str])"
-  sourceUrl="github.com"
+  initParams="( tests: List[LLMQaTest], prompts: List[str], ground_truths: List[str], model_preds: List[str] )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/qa/qa.py"
 >
     The LLMTestSuite class represents a suite of quality assurance tests for language models.
 
@@ -57,7 +57,7 @@ The computed metric, which can be a float, an int, or a bool.
     - `ground_truths: List[str]` - A list of ground truth outputs.
     - `model_preds: List[str]` - A list of model's predicted outputs.
 
-<MethodComponent methodName="run_tests() -> Dict[str, List[Union[float, int, bool]]]" methodSignature="">
+<MethodComponent methodName="run_tests" methodSignature="( )">
   Runs all the tests in the suite and returns the results as a dictionary mapping test names to their corresponding metrics.
 
 #### Returns
@@ -66,12 +66,12 @@ A dictionary mapping test names to their corresponding metrics, which can be flo
 
 </MethodComponent>
 
-<MethodComponent methodName="print_test_results() -> None" methodSignature="">
+<MethodComponent methodName="print_test_results" methodSignature="( )">
   Prints the test results in a tabular format.
 
 </MethodComponent>
 
-<MethodComponent methodName="save_test_results(path: str) -> None" methodSignature="path: str">
+<MethodComponent methodName="save_test_results" methodSignature="( path: str )">
   Saves the test results to a CSV file.
 
 #### Parameters

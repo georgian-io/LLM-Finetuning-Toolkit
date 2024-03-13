@@ -13,16 +13,16 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
 className="src.finetune.finetune.Finetune"
-sourceUrl="github.com">
+sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/finetune/finetune.py">
 
     The Finetune class is an abstract base class for finetuning models.
 
-<MethodComponent methodName="finetune() -> None" methodSignature="">
+<MethodComponent methodName="finetune" methodSignature="( )">
   An abstract method to be implemented by subclasses. Finetunes the model.
 
 </MethodComponent>
 
-<MethodComponent methodName="save_model() -> None" methodSignature="">
+<MethodComponent methodName="save_model" methodSignature="( )">
   An abstract method to be implemented by subclasses. Saves the finetuned model.
 
 </MethodComponent>
@@ -32,8 +32,8 @@ sourceUrl="github.com">
 
 <ClassComponent
   className="src.finetune.lora.LoRAFinetune"
-  initParams="(config: Config, directory_helper: DirectoryHelper)"
-  sourceUrl="github.com"
+  initParams="( config: Config, directory_helper: DirectoryHelper )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/finetune/lora.py"
 >
     The LoRAFinetune class is a subclass of Finetune for finetuning models using LoRA (Low-Rank Adaptation).
 
@@ -41,7 +41,7 @@ sourceUrl="github.com">
     - `config: Config` - The configuration object.
     - `directory_helper: DirectoryHelper` - The directory helper object.
 
-<MethodComponent methodName="finetune(train_dataset: Dataset) -> None" methodSignature="train_dataset: Dataset">
+<MethodComponent methodName="finetune" methodSignature="( train_dataset: Dataset )">
   Finetunes the model using the provided training dataset.
 
 #### Parameters
@@ -50,7 +50,7 @@ sourceUrl="github.com">
 
 </MethodComponent>
 
-<MethodComponent methodName="save_model() -> None" methodSignature="">
+<MethodComponent methodName="save_model" methodSignature="( )">
   Saves the finetuned model.
 
 </MethodComponent>

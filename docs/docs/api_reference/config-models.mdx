@@ -12,7 +12,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.pydantic_models.config_model.Config"
-  initParams="(save_dir: Optional[str], ablation: AblationConfig, accelerate: Optional[bool], data: DataConfig, model: ModelConfig, lora: LoraConfig, training: TrainingConfig, inference: InferenceConfig)"
+  initParams="( save_dir: Optional[str], ablation: AblationConfig, accelerate: Optional[bool], data: DataConfig, model: ModelConfig, lora: LoraConfig, training: TrainingConfig, inference: InferenceConfig )"
   sourceUrl="github.com"
 >
     Represents the overall configuration for the toolkit, including all necessary settings and parameters required for its operation. This configuration encapsulates everything from data handling and model specification to training and inference settings, as well as ablation studies and optimization flags.
@@ -35,7 +35,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.pydantic_models.config_model.DataConfig"
-  initParams="(file_type: Literal['json', 'csv', 'huggingface'], path: Union[FilePath, HfModelPath], prompt: str, prompt_stub: str, train_size: Optional[Union[float, int]], test_size: Optional[Union[float, int]], train_test_split_seed: int)"
+  initParams="( file_type: Literal['json', 'csv', 'huggingface'], path: Union[FilePath, HfModelPath], prompt: str, prompt_stub: str, train_size: Optional[Union[float, int]], test_size: Optional[Union[float, int]], train_test_split_seed: int) "
   sourceUrl="github.com"
 >
     Represents the configuration for data ingestion, specifying how data is loaded, prepared, and split for training and testing. This component is crucial for ensuring that the data feeding into the model is correctly formatted and segmented.
@@ -59,7 +59,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.pydantic_models.config_model.ModelConfig"
-  initParams="(hf_model_ckpt: Optional[str], device_map: Optional[str], quantize: Optional[bool], bitsandbytes: BitsAndBytesConfig)"
+  initParams="( hf_model_ckpt: Optional[str], device_map: Optional[str], quantize: Optional[bool], bitsandbytes: BitsAndBytesConfig )"
   sourceUrl="github.com"
 >
     Details the configuration for the model, including paths to pre-trained models, device mapping for training, and options for quantization to optimize model performance and resource usage.
@@ -76,7 +76,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.pydantic_models.config_model.BitsAndBytesConfig"
-  initParams="(load_in_8bit: Optional[bool], llm_int8_threshold: Optional[float], llm_int8_skip_modules: Optional[List[str]], llm_int8_enable_fp32_cpu_offload: Optional[bool], llm_int8_has_fp16_weight: Optional[bool], load_in_4bit: Optional[bool], bnb_4bit_compute_dtype: Optional[str], bnb_4bit_quant_type: Optional[str], bnb_4bit_use_double_quant: Optional[bool])"
+  initParams="( load_in_8bit: Optional[bool], llm_int8_threshold: Optional[float], llm_int8_skip_modules: Optional[List[str]], llm_int8_enable_fp32_cpu_offload: Optional[bool], llm_int8_has_fp16_weight: Optional[bool], load_in_4bit: Optional[bool], bnb_4bit_compute_dtype: Optional[str], bnb_4bit_quant_type: Optional[str], bnb_4bit_use_double_quant: Optional[bool] )"
   sourceUrl="github.com"
 >
     Represents the configuration for BitsAndBytes quantization, offering detailed control over how models are quantized to improve performance and reduce memory footprint. These settings allow for advanced optimization techniques, including 8-bit and 4-bit quantization, with options for handling outliers and mixed precision.
@@ -100,7 +100,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.pydantic_models.config_model.LoraConfig"
-  initParams="(r: Optional[int], task_type: Optional[str], lora_alpha: Optional[int], bias: Optional[str], lora_dropout: Optional[float], target_modules: Optional[List[str]], fan_in_fan_out: Optional[bool], modules_to_save: Optional[List[str]], layers_to_transform: Optional[Union[List[int], int]], layers_pattern: Optional[str])"
+  initParams="( r: Optional[int], task_type: Optional[str], lora_alpha: Optional[int], bias: Optional[str], lora_dropout: Optional[float], target_modules: Optional[List[str]], fan_in_fan_out: Optional[bool], modules_to_save: Optional[List[str]], layers_to_transform: Optional[Union[List[int], int]], layers_pattern: Optional[str] )"
   sourceUrl="github.com"
 >
     Details the configuration for applying LoRA (Low-Rank Adaptation) to a model, enhancing its ability to adapt to new tasks without extensive retraining. LoRA settings determine how and where these adaptations are applied within the model architecture.
@@ -125,7 +125,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.pydantic_models.config_model.TrainingConfig"
-  initParams="(training_args: TrainingArgs, sft_args: SftArgs)"
+  initParams="( training_args: TrainingArgs, sft_args: SftArgs )"
   sourceUrl="github.com"
 >
     Encapsulates the configuration for the training process, including both general training parameters and settings specific to Supervised Fine-Tuning (SFT). This dual configuration approach allows for fine-grained control over the training regimen.
@@ -140,7 +140,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.pydantic_models.config_model.TrainingArgs"
-  initParams="(num_train_epochs: Optional[int], per_device_train_batch_size: Optional[int], gradient_accumulation_steps: Optional[int], gradient_checkpointing: Optional[bool], optim: Optional[str], logging_steps: Optional[int], learning_rate: Optional[float], bf16: Optional[bool], tf32: Optional[bool], fp16: Optional[bool], max_grad_norm: Optional[float], warmup_ratio: Optional[float], lr_scheduler_type: Optional[str])"
+  initParams="( num_train_epochs: Optional[int], per_device_train_batch_size: Optional[int], gradient_accumulation_steps: Optional[int], gradient_checkpointing: Optional[bool], optim: Optional[str], logging_steps: Optional[int], learning_rate: Optional[float], bf16: Optional[bool], tf32: Optional[bool], fp16: Optional[bool], max_grad_norm: Optional[float], warmup_ratio: Optional[float], lr_scheduler_type: Optional[str] )"
   sourceUrl="github.com"
 >
     Defines the core training parameters for the model, covering every aspect from epoch counts to specific hardware optimizations. These arguments provide a comprehensive toolkit for customizing the training process to suit different models, datasets, and hardware configurations.
@@ -166,7 +166,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.pydantic_models.config_model.SftArgs"
-  initParams="(max_seq_length: Optional[int], neftune_noise_alpha: Optional[float])"
+  initParams="( max_seq_length: Optional[int], neftune_noise_alpha: Optional[float] )"
   sourceUrl="github.com"
 >
     Captures the specific configurations for Supervised Fine-Tuning (SFT), including parameters that affect how models process input sequences and apply NEFTune noise embeddings. These settings help tailor the fine-tuning process to the instructional nuances of the dataset.
@@ -183,7 +183,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.pydantic_models.config_model.InferenceConfig"
-  initParams="(max_new_tokens: Optional[int], use_cache: Optional[bool], do_sample: Optional[bool], top_p: Optional[float], temperature: Optional[float], epsilon_cutoff: Optional[float], eta_cutoff: Optional[float], top_k: Optional[int])"
+  initParams="( max_new_tokens: Optional[int], use_cache: Optional[bool], do_sample: Optional[bool], top_p: Optional[float], temperature: Optional[float], epsilon_cutoff: Optional[float], eta_cutoff: Optional[float], top_k: Optional[int] )"
   sourceUrl="github.com"
 >
     Defines the parameters governing the inference phase, focusing on output generation and sampling behavior. These settings allow users to balance between creativity, diversity, and fidelity to the input prompt.
@@ -206,7 +206,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.pydantic_models.config_model.AblationConfig"
-  initParams="(use_ablate: Optional[bool], study_name: Optional[str])"
+  initParams="( use_ablate: Optional[bool], study_name: Optional[str] )"
   sourceUrl="github.com"
 >
     Specifies whether ablation studies are to be conducted and, if so, under what overarching study name. This configuration is crucial for systematically exploring the impact of various model components and settings on performance.

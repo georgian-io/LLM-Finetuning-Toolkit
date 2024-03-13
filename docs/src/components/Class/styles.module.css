@@ -12,7 +12,7 @@ html[data-theme="dark"] .classContainer {
   background-color: #f6f8fa;
   padding: 0.1rem 0.8rem;
   border-radius: 15px;
-  margin-bottom: 1rem;
+  /* margin-bottom: 0.5rem; */
 }
 
 html[data-theme="dark"] .classHeader {
@@ -40,6 +40,7 @@ html[data-theme="dark"] .classHeader {
 .initParams {
   font-family: monospace;
   margin-bottom: 2rem;
+  margin-left: 0.8rem;
 }
 
 .classDoc,
@@ -73,11 +74,11 @@ html[data-theme="dark"] .sourceLink {
   font-family: monospace;
   font-size: 1rem;
   font-weight: 600;
+  margin-bottom: 0;
 }
 
 .methodSignature {
   font-family: monospace;
   margin-bottom: 2rem;
-  margin-top: 8px;
 }
 /* Add additional styles based on the screenshot provided */

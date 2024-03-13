@@ -13,15 +13,15 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.data.ingestor.Ingestor"
-  initParams="(path: str)"
-  sourceUrl="github.com"
+  initParams="( path: str )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/data/ingestor.py"
 >
     The Ingestor class is an abstract base class for data ingestors.
 
     #### Parameters
     - `path: str` - The path of the dataset.
 
-<MethodComponent methodName="to_dataset() -> Dataset" methodSignature="">
+<MethodComponent methodName="to_dataset() -> Dataset" methodSignature="( )">
   An abstract method to be implemented by subclasses. Converts the input data to
   a Dataset object.
 
@@ -37,15 +37,15 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.data.ingestor.JsonIngestor"
-  initParams="(path: str)"
-  sourceUrl="github.com"
+  initParams="( path: str )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/data/ingestor.py"
 >
     The JsonIngestor class is a subclass of Ingestor for ingesting JSON data.
 
     #### Parameters
     - `path: str` - The path of the JSON dataset.
 
-<MethodComponent methodName="to_dataset() -> Dataset" methodSignature="">
+<MethodComponent methodName="to_dataset() -> Dataset" methodSignature="( )">
   Converts the JSON data to a Dataset object.
 
 #### Returns
@@ -59,15 +59,15 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.data.ingestor.CsvIngestor"
-  initParams="(path: str)"
-  sourceUrl="github.com"
+  initParams="( path: str )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/data/ingestor.py"
 >
     The CsvIngestor class is a subclass of Ingestor for ingesting CSV data.
 
     #### Parameters
     - `path: str` - The path of the CSV dataset.
 
-<MethodComponent methodName="to_dataset() -> Dataset" methodSignature="">
+<MethodComponent methodName="to_dataset() -> Dataset" methodSignature="( )">
   Converts the CSV data to a Dataset object.
 
 #### Returns
@@ -81,15 +81,15 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.data.ingestor.HuggingfaceIngestor"
-  initParams="(path: str)"
-  sourceUrl="github.com"
+  initParams="( path: str )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/data/ingestor.py"
 >
     The HuggingfaceIngestor class is a subclass of Ingestor for ingesting data from a HuggingFace dataset.
 
     #### Parameters
     - `path: str` - The path or name of the HuggingFace dataset.
 
-<MethodComponent methodName="to_dataset() -> Dataset" methodSignature="">
+<MethodComponent methodName="to_dataset() -> Dataset" methodSignature="( )">
   Converts the HuggingFace data to a Dataset object.
 
 #### Returns
@@ -103,8 +103,8 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="get_ingestor"
-  initParams="(data_type: str)"
-  sourceUrl="github.com"
+  initParams="( data_type: str )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/data/ingestor.py"
   isClass={false}
 >
     A function to get the appropriate ingestor class based on the data type.
@@ -124,8 +124,8 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.data.dataset_generator.DatasetGenerator"
-  initParams="(file_type: str, path: str, prompt: str, prompt_stub: str, test_size: Union[float, int], train_size: Union[float, int], train_test_split_seed: int)"
-  sourceUrl="github.com"
+  initParams="( file_type: str, path: str, prompt: str, prompt_stub: str, test_size: Union[float, int], train_size: Union[float, int], train_test_split_seed: int )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/data/dataset_generator.py"
 >
     The DatasetGenerator class is responsible for generating and formatting datasets for training and testing.
 
@@ -138,7 +138,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
     - `train_size: Union[float, int]` - The size of the training set.
     - `train_test_split_seed: int` - The random seed for splitting the dataset.
 
-<MethodComponent methodName="get_dataset() -> Tuple[Dataset, Dataset]" methodSignature="">
+<MethodComponent methodName="get_dataset" methodSignature="( )">
   Generates and returns the formatted train and test datasets.
 
 #### Returns
@@ -147,7 +147,7 @@ A tuple containing the train and test datasets.
 
 </MethodComponent>
 
-<MethodComponent methodName="save_dataset(save_dir: str) -> None" methodSignature="save_dir: str">
+<MethodComponent methodName="save_dataset" methodSignature="( save_dir: str )">
   Saves the generated dataset to the specified directory.
 
 #### Parameters
@@ -156,7 +156,7 @@ A tuple containing the train and test datasets.
 
 </MethodComponent>
 
-<MethodComponent methodName="load_dataset_from_pickle(save_dir: str) -> Tuple[Dataset, Dataset]" methodSignature="save_dir: str">
+<MethodComponent methodName="load_dataset_from_pickle" methodSignature="( save_dir: str )">
   Loads the dataset from a pickle file in the specified directory.
 
 #### Parameters

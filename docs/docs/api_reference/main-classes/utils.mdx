@@ -13,8 +13,8 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.utils.save_utils.DirectoryList"
-  initParams="(save_dir:str, config_hash:str)"
-  sourceUrl="github.com"
+  initParams="( save_dir:str, config_hash:str )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/utils/save_utils.py"
 >
     The `DirectoryList` class represents a structured approach to managing directories for saving various components of experiment results, ensuring organized storage and easy access to different types of data generated during the experiment's lifecycle.
 
@@ -38,8 +38,8 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.utils.save_utils.DirectoryHelper"
-  initParams="(config_path: str, config: Config)"
-  sourceUrl="github.com"
+  initParams="( config_path: str, config: Config )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/utils/save_utils.py"
 >
     The DirectoryHelper class provides helper methods for managing directories and saving configurations, facilitating the organization and preservation of experiment settings and outcomes.
 
@@ -53,7 +53,7 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
     - `sqids: Sqids` - An instance of the `Sqids` class, which is used for managing unique config IDs to track experiments.
     - `save_paths: DirectoryList` - Represents the structured list of directory paths associated with the current experiment.
 
-<MethodComponent methodName="save_config() -> None" methodSignature="">
+<MethodComponent methodName="save_config() -> None" methodSignature="( )">
   Saves the configuration to a file, ensuring that experiment parameters are documented and reproducible.
 
 </MethodComponent>
@@ -63,9 +63,9 @@ import { ClassComponent, MethodComponent } from "@site/src/components/Class";
 
 <ClassComponent
   className="src.utils.ablation_utils.generate_permutations"
-  initParams="(yaml_dict: dict, model: BaseModel)"
+  initParams="( yaml_dict: dict, model: BaseModel )"
   isClass={false}
-  sourceUrl="github.com"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/utils/ablation_utils.py"
 >
     Generates permutations of a YAML dictionary based on specified ablations. This function is pivotal for creating variations in configurations or datasets, enabling thorough testing and exploration of different scenarios.
 
