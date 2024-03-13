@@ -32,25 +32,6 @@ RedPajama models come in two sizes, and can be leveraged depending on the task a
 
 In this repository, we have experimented with all of the above variations.
 
-## What does this folder contain?
-
-This folder contains ready-to-use scripts, using which you can do the following:
-
-- Finetuning RedPajama using PeFT methodology QLoRA:
-  - `redpajama_classification.py`: Finetune on News Group classification dataset
-  - `redpajama_summarization.py`: Finetune on Samsum summarization dataset
-- Prompts used:
-  - `prompts.py`: Zero-shot, Few-shot and instruction tuning for classification and summarization
-- Perform hyperparameter optimization over a well-constrained search space:
-  - `run_lora.sh`: Ablation study on LoRA's parameters
-  - `sample_ablate.sh`: Ablation study over sample complexities
-- Infer RedPajama using trained checkpoints:
-  - `redpajama_baseline_inference.py`: Infer in zero-shot and few-shot settings using RedPajama-3B or 7B Instruct versions
-  - `redpajama_classification_inference.py`: Infer on News Group classification dataset
-  - `redpajama_summarization_inference.py`: Infer on Samsum summarization dataset
-- Infer across a different settings:
-  - `baseline_inference.sh`: Loop over all settings to perform zero-shot and few-shot prompting across classification and summarization tasks
-
 ## Evaluation Framework
 
 In this section, we bring to you our insights after extensively experimenting with RedPajama-3B and 7B across different tasks. For a thorough evaluation, we need to evaluate the **four pillars**:
@@ -120,9 +101,11 @@ NOTE:
 |         5332 (50%)          |   72.00    | 72.46 |        75.43         |       72.42       |     70.58     |     70.96     |
 |        10664 (100%)         |   71.91    | 74.15 |        72.31         |       76.37       |     72.34     |     75.52     |
 
+:::tip
 <u> Insight: </u>
 
 We can see that RedPajama-7B does a better job when compared to RedPajam-3B across all sample sizes!
+:::
 
 #### Summarization
 
@@ -138,9 +121,11 @@ We can see that RedPajama-7B does a better job when compared to RedPajam-3B acro
 | ROUGE-1 (in %) |      30.85      |     23.22      |        49.96        |
 | ROUGE-2 (in %) |      11.30      |      8.24      |        25.94        |
 
+:::tip
 <u> Insight: </u>
 
 RedPajama does a much better job at summarizing dialogues than classifying news documents in zero-shot and few-shot settings. But Fine-Tuning is still most effective as it helps RedPajama learn the summarization style specific to the dataset as opposed to creating a generic summary. It is, however, surprising that Few-Shot prompting yields lower ROUGE scores than zero-shot prompting.
+:::
 
 <u> Table 4: RedPajama vs Other LLMs </u>
 
@@ -149,9 +134,11 @@ RedPajama does a much better job at summarizing dialogues than classifying news 
 | ROUGE-1 (in %) |            47.23            |        49.21         |       52.18       |     47.75     |     49.96     |
 | ROUGE-2 (in %) |            21.01            |        23.39         |       27.84       |     23.53     |     25.94     |
 
+:::tip
 <u> Insight: </u>
 
 RedPajama-7B outperforms Flan-T5-Large and Flan-T5-Base versions, showcasing its superiority for summarization tasks. Furthermore, these results prove the merits of fine-tuning RedPajama-7B on target datasets as opposed to just using it out-of-the-box.
+:::
 
 ### <img src={time} width="32" height="32"/><img src={money} width="32" height="32"/>Time & Cost to Train<img src={money} width="32" height="32"/><img src={time} width="32" height="32"/>
 

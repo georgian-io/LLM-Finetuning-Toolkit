@@ -32,22 +32,6 @@ Flan-T5 models come in different sizes, and can be leveraged depending on the ta
 
 In this repository, we have used Flan-T5-Large for our experiments.
 
-## What does this folder contain?
-
-This folder contains ready-to-use scripts, using which you can do the following:
-
-- Finetuning Flan-T5-Large using PeFT methodologies such as LoRA & Prefix Tuning:
-  - `flan_classification.py`: Finetune on News Group classification dataset
-  - `flan_summarization.py`: Finetune on Samsum summarization dataset
-- Perform hyperparameter optimization over a well-constrained search space:
-  - `run_lora.sh`: Ablation study on LoRA's parameters
-  - `run_prefix.sh`: Ablation studu on Prefix Tuning's parameters
-- Infer Flan-T5-Large using trained checkpoints:
-  - `flan_classification_inference.py`: Infer on News Group classification dataset
-  - `flan_summarization_inference.py`: Infer on Samsum summarization dataset
-- Infer across a bunch of checkpoints:
-  - `inference.sh`: Loop over all experiments in the relevant folder, and save metrics corresponding to each experiment in its folder
-
 ## Evaluation Framework
 
 In this section, we bring to you our insights after extensively experimenting with Flan-T5-Large across different tasks. For a thorough evaluation, we need to evaluate the **four pillars**:
@@ -91,9 +75,11 @@ We evaluated Flan-T5-Large under the following conditions:
 |         5332 (50%)          |   72.00    | 72.46 |        75.43         |
 |        10664 (100%)         |   71.91    | 74.15 |        72.31         |
 
+:::tip
 <u> Insight: </u>
 
 We can see that Flan-T5-Large does a significantly better job when compared to Distilbert and Bert on a sample size as low as ~250! As we steadily increase the number of samples, Distilbert and Bert finally catch-up to Flan-T5-Large, making Flan-T5-Large a great candidate to consider in low-data situations.
+:::
 
 ### <img src={time} width="32" height="32"/><img src={money} width="32" height="32"/>Time & Cost to Train<img src={money} width="32" height="32"/><img src={time} width="32" height="32"/>
 
@@ -115,9 +101,11 @@ Conditions:
 |         5332 (50%)          |    1 hour     |    $1.212     |
 |        10664 (100%)         |    2 hours    |    $2.424     |
 
+:::tip
 <u> Insight: </u>
 
 Since we are performing PeFT, the number of trainable parameters in a Flan-T5-Large is significantly lower. As a result, the model converges faster, leading to insignificant cost figures.
+:::
 
 ### <img src={progress} width="32" height="32"/>Inference<img src={progress} width="32" height="32"/>
 
@@ -240,12 +228,14 @@ Since there are a total of 36 experiments, we choose a subset to demonstrate the
 |   10   |      50       |         0         |  70.85   |
 |   10   |      100      |         0         |  72.23   |
 
+:::tip
 <u> Classification Insights: </u>
 
 - From Table 3, we can see that lower epochs i.e., 2 and 5, seem to achieve better performance. It is likely that training for 10 epochs is causing the model to overfit.
 - Furthermore, from Table 3, it can be noted that higher values of the Rank (R) tend to give better results.
 - From Table 4, it can be seen that, keeping everything else the same, disabling Prefix Projection helps achieve better performance. Higher Prefix Tokens and training for more epochs tends to lift model performance.
 - Across Tables 3 and 4, LoRA outperforms Prefix Tuning under several hyperparameter settings.
+  :::
 
 ### Summarization Studies
 
@@ -295,7 +285,9 @@ Following are the results of our experiments:
 |   10   |      50       |         0         |  47.85  |  21.89  |  38.33  |
 |   10   |      100      |         0         |  48.14  |  22.09  |  39.08  |
 
+:::tip
 <u> Summarization Insights</u>
 
 - Based on Table 5 and Table 6, we do not find any one method to outperform the other when considering ROUGE-1.
 - When considering ROUGE-2, LoRA experiments achieve higher scores when compared with Prefix Tuning experiments.
+  :::

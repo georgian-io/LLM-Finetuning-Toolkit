@@ -29,25 +29,6 @@ Falcon models come in two sizes, and can be leveraged depending on the task at h
 
 In this repository, we have used Falcon-7B for our experiments.
 
-## What does this folder contain?
-
-This folder contains ready-to-use scripts, using which you can do the following:
-
-- Finetuning Falcon-7B using PeFT methodology QLoRA:
-  - `falcon_classification.py`: Finetune on News Group classification dataset
-  - `falcon_summarization.py`: Finetune on Samsum summarization dataset
-- Prompts used:
-  - `prompts.py`: Zero-shot, Few-shot and instruction tuning for classification and summarization
-- Perform hyperparameter optimization over a well-constrained search space:
-  - `run_lora.sh`: Ablation study on LoRA's parameters
-  - `sample_ablate.sh`: Ablation study over sample complexities
-- Infer Falcon-7B using trained checkpoints:
-  - `falcon_baseline_inference.py`: Infer in zero-shot and few-shot settings using Falcon-7B Instruct version
-  - `falcon_classification_inference.py`: Infer on News Group classification dataset
-  - `falcon_summarization_inference.py`: Infer on Samsum summarization dataset
-- Infer across a different settings:
-  - `baseline_inference.sh`: Loop over all settings to perform zero-shot and few-shot prompting across classification and summarization tasks
-
 ## Evaluation Framework
 
 In this section, we bring to you our insights after extensively experimenting with Falcon-7B across different tasks. For a thorough evaluation, we need to evaluate the **four pillars**:
@@ -93,10 +74,11 @@ We evaluated Falcon-7B under the following conditions:
 | :-------------: | :-------: | :------: | :-----------------: |
 | Accuracy (in %) |   1.08    |   :x:    |        76.37        |
 
-NOTE:
+:::note
 
 - `prompts.py` contains the prompts used for zero-shot prompting, few-shot prompting and instruction tuning.
 - For zero-shot and few-shot experiments, we used Falcon-7B-Instruct version. For instruction tuning, we used Faclon-7B-Base as per recommendations.
+  :::
 
 <u> Table 2: Sample Efficiency vs Accuracy </u>
 
@@ -109,9 +91,11 @@ NOTE:
 |         5332 (50%)          |   72.00    | 72.46 |        75.43         |       72.42       |
 |        10664 (100%)         |   71.91    | 74.15 |        72.31         |       76.37       |
 
+:::tip
 <u> Insight: </u>
 
 We can see that Falcon-7B does a better job when compared to other models on a sample size as low as ~250! At roughly 50% of training samples, Distilbert and Bert finally catch-up to Falcon-7B, making Falcon-7B a great candidate to consider in low-data situations.
+:::
 
 #### Summarization
 
@@ -122,9 +106,11 @@ We can see that Falcon-7B does a better job when compared to other models on a s
 | ROUGE-1 (in %) |   32.21   |  34.12   |        52.18        |
 | ROUGE-2 (in %) |   10.08   |   11.9   |        27.84        |
 
+:::tip
 <u> Insight: </u>
 
 Falcon-7B does a much better job at summarizing dialogues than classifying news documents in zero-shot and few-shot settings. But Fine-Tuning is still most effective as it helps Falcon-7B learn the summarization style specific to the dataset as opposed to creating a generic summary. It is, however, surprising that Few-Shot prompting yields lower ROUGE scores than zero-shot prompting.
+:::
 
 <u> Table 4: Falcon-7B vs Other LLMs </u>
 
@@ -133,9 +119,11 @@ Falcon-7B does a much better job at summarizing dialogues than classifying news 
 | ROUGE-1 (in %) |            47.23            |        49.21         |       52.18       |
 | ROUGE-2 (in %) |            21.01            |        23.39         |       27.84       |
 
+:::tip
 <u> Insight: </u>
 
 Falcon-7B outperforms Flan-T5-Large and Flan-T5-Base versions, showcasing its superiority for summarization tasks. Furthermore, these results prove the merits of fine-tuning Falcon-7B on target datasets as opposed to just using it out-of-the-box.
+:::
 
 ### <img src={time} width="32" height="32"/><img src={money} width="32" height="32"/>Time & Cost to Train<img src={money} width="32" height="32"/><img src={time} width="32" height="32"/>
 
