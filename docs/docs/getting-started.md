@@ -83,7 +83,7 @@ pip install -r requirements.txt
 </TabItem>
 </Tabs>
 
-## Quick Start
+## Running the Toolkit
 
 The toolkit has everything you need to get started. This guide will walk you through the initial setup, explain the key components of the configuration, and offer advice on customizing your fine-tuning job. Let's dive in!
 
