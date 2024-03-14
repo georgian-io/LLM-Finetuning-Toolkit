@@ -138,7 +138,7 @@ We use the samsum dataset which contains chat conversations and their summarized
 |      Llama2-13B      |   11.02    |    3.38    |   22.50    |    9.25    |   52.97    |   28.32    |
 |    Mosaic MPT-7B     |   32.86    |   10.41    |   34.71    |   12.26    |    23.5    |    9.67    |
 |   Mistral Base-7B    |   32.77    |   10.64    |   38.87    |   16.71    |   53.61    |   29.28    |
-|    Zephyr-7B-β .     |   33.93    |   11.21    |   35.99    |   12.97    |   52.84    |   27.75    |
+|     Zephyr-7B-β      |   33.93    |   11.21    |   35.99    |   12.97    |   52.84    |   27.75    |
 |  Writer Palmyra 30B  |   33.68    |   12.18    |   39.28    |   16.19    |    :x:     |    :x:     |
 |  Jurassic J2-Light   |   38.21    |   14.78    |   40.73    |   17.09    |   44.69    |   20.15    |
 |   Jurassic J2-Mid    |   39.11    |   15.59    |   43.39    |   18.34    |   48.38    |   23.90    |
