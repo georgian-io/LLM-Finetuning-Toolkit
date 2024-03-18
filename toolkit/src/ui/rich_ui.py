@@ -152,6 +152,9 @@ class RichUI(UI):
     # Display functions
     @staticmethod
     def inference_ground_truth_display(title: str, prompt: str, label: str):
+        prompt = prompt.replace("[INST]", "").replace("[/INST]", "")
+        label = label.replace("[INST]", "").replace("[/INST]", "")
+
         table = Table(title=title, show_lines=True)
         table.add_column("prompt")
         table.add_column("ground truth")
