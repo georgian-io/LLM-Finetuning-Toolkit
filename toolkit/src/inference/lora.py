@@ -9,9 +9,10 @@ from rich.table import Table
 from rich.live import Live
 from rich.text import Text
 from datasets import Dataset
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, BitsAndBytesConfig
 from peft import AutoPeftModelForCausalLM
 import torch
+
 
 from src.pydantic_models.config_model import Config
 from src.utils.save_utils import DirectoryHelper
@@ -60,6 +61,10 @@ class LoRAInference(Inference):
             weights_path,
             torch_dtype=dtype,
             device_map=self.device_map,
+            quantization_config=(
+                BitsAndBytesConfig(self.config.model.bitsandbytes)
+            ),
+ 
         )
 
         """TODO: figure out multi-gpu

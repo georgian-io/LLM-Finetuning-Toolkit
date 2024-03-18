@@ -70,14 +70,14 @@ def run_one_experiment(config: Config) -> None:
         RichUI.inference_found(results_path)
 
     # QA -------------------------------
-    console.rule("[bold blue]:thinking_face: Running LLM Unit Tests")
-    qa_path = dir_helper.save_paths.qa
-    if not exists(qa_path) or not listdir(qa_path):
-        # TODO: Instantiate unit test classes
-        # TODO: Load results.csv
-        # TODO: Run Unit Tests
-        # TODO: Save Unit Test Results
-        pass
+    # console.rule("[bold blue]:thinking_face: Running LLM Unit Tests")
+    # qa_path = dir_helper.save_paths.qa
+    # if not exists(qa_path) or not listdir(qa_path):
+    #     # TODO: Instantiate unit test classes
+    #     # TODO: Load results.csv
+    #     # TODO: Run Unit Tests
+    #     # TODO: Save Unit Test Results
+    #     pass
 
 
 if __name__ == "__main__":
