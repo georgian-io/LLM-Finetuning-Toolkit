@@ -140,5 +140,3 @@ class LoRAFinetune(Finetune):
     def save_model(self) -> None:
         self._trainer.model.save_pretrained(self._weights_path)
         self.tokenizer.save_pretrained(self._weights_path)
-
-        self._console.print(f"Run saved at {self._weights_path}")
