@@ -138,7 +138,7 @@ class RichUI(UI):
         console.rule("[bold pink]:face_with_monocle: Testing")
 
     @staticmethod
-    def during_finetune():
+    def during_inference():
         pass
 
     @staticmethod
