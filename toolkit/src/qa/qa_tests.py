@@ -1,9 +1,9 @@
 from src.qa.qa import LLMQaTest
 from typing import Union, List, Tuple, Dict
-import torch 
+import torch
 from transformers import DistilBertModel, DistilBertTokenizer
-import nltk 
-import numpy as np 
+import nltk
+import numpy as np
 from rouge_score import rouge_scorer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -13,9 +13,9 @@ model_name = "distilbert-base-uncased"
 tokenizer = DistilBertTokenizer.from_pretrained(model_name)
 model = DistilBertModel.from_pretrained(model_name)
 
-nltk.download('stopwords')
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
+nltk.download("stopwords")
+nltk.download("punkt")
+nltk.download("averaged_perceptron_tagger")
 
 
 class LengthTest(LLMQaTest):
@@ -23,7 +23,9 @@ class LengthTest(LLMQaTest):
     def test_name(self) -> str:
         return "Summary Length Test"
 
-    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
+    def get_metric(
+        self, prompt: str, ground_truth: str, model_prediction: str
+    ) -> Union[float, int, bool]:
         return abs(len(ground_truth) - len(model_prediction))
 
 
@@ -32,7 +34,9 @@ class JaccardSimilarityTest(LLMQaTest):
     def test_name(self) -> str:
         return "Jaccard Similarity"
 
-    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
+    def get_metric(
+        self, prompt: str, ground_truth: str, model_prediction: str
+    ) -> Union[float, int, bool]:
         set_ground_truth = set(ground_truth.lower())
         set_model_prediction = set(model_prediction.lower())
 
@@ -41,6 +45,7 @@ class JaccardSimilarityTest(LLMQaTest):
 
         similarity = intersection_size / union_size if union_size != 0 else 0
         return similarity
+
 
 class DotProductSimilarityTest(LLMQaTest):
     @property
@@ -53,34 +58,44 @@ class DotProductSimilarityTest(LLMQaTest):
             outputs = model(**tokens)
         return outputs.last_hidden_state.mean(dim=1).squeeze().numpy()
 
-    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
+    def get_metric(
+        self, prompt: str, ground_truth: str, model_prediction: str
+    ) -> Union[float, int, bool]:
         embedding_ground_truth = self._encode_sentence(ground_truth)
         embedding_model_prediction = self._encode_sentence(model_prediction)
-        dot_product_similarity = np.dot(embedding_ground_truth, embedding_model_prediction)
+        dot_product_similarity = np.dot(
+            embedding_ground_truth, embedding_model_prediction
+        )
         return dot_product_similarity
+
 
 class RougeScoreTest(LLMQaTest):
     @property
     def test_name(self) -> str:
         return "Rouge Score"
 
-    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
-        scorer = rouge_scorer.RougeScorer(['rouge1'], use_stemmer=True)
+    def get_metric(
+        self, prompt: str, ground_truth: str, model_prediction: str
+    ) -> Union[float, int, bool]:
+        scorer = rouge_scorer.RougeScorer(["rouge1"], use_stemmer=True)
         scores = scorer.score(model_prediction, ground_truth)
-        return float(scores['rouge1'].precision)
+        return float(scores["rouge1"].precision)
+
 
 class WordOverlapTest(LLMQaTest):
     @property
     def test_name(self) -> str:
         return "Word Overlap Test"
-    
+
     def _remove_stopwords(self, text: str) -> str:
-        stop_words = set(stopwords.words('english'))
+        stop_words = set(stopwords.words("english"))
         word_tokens = word_tokenize(text)
         filtered_text = [word for word in word_tokens if word.lower() not in stop_words]
-        return ' '.join(filtered_text)
+        return " ".join(filtered_text)
 
-    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
+    def get_metric(
+        self, prompt: str, ground_truth: str, model_prediction: str
+    ) -> Union[float, int, bool]:
         cleaned_model_prediction = self._remove_stopwords(model_prediction)
         cleaned_ground_truth = self._remove_stopwords(ground_truth)
 
@@ -91,6 +106,7 @@ class WordOverlapTest(LLMQaTest):
         overlap_percentage = (len(common_words) / len(words_ground_truth)) * 100
         return overlap_percentage
 
+
 class PosCompositionTest(LLMQaTest):
     def _get_pos_percent(self, text: str, pos_tags: List[str]) -> float:
         words = word_tokenize(text)
@@ -99,29 +115,41 @@ class PosCompositionTest(LLMQaTest):
         total_words = len(text.split(" "))
         return round(len(pos_words) / total_words, 2)
 
+
 class VerbPercent(PosCompositionTest):
     @property
     def test_name(self) -> str:
         return "Verb Composition"
 
-    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> float:
-        return self._get_pos_percent(model_prediction, ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'])
+    def get_metric(
+        self, prompt: str, ground_truth: str, model_prediction: str
+    ) -> float:
+        return self._get_pos_percent(
+            model_prediction, ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
+        )
+
 
 class AdjectivePercent(PosCompositionTest):
     @property
     def test_name(self) -> str:
         return "Adjective Composition"
 
-    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> float:
-        return self._get_pos_percent(model_prediction, ['JJ', "JJR", "JJS"])
+    def get_metric(
+        self, prompt: str, ground_truth: str, model_prediction: str
+    ) -> float:
+        return self._get_pos_percent(model_prediction, ["JJ", "JJR", "JJS"])
+
 
 class NounPercent(PosCompositionTest):
     @property
     def test_name(self) -> str:
         return "Noun Composition"
 
-    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> float:
-        return self._get_pos_percent(model_prediction, ['NN', 'NNS', 'NNP', 'NNPS'])
+    def get_metric(
+        self, prompt: str, ground_truth: str, model_prediction: str
+    ) -> float:
+        return self._get_pos_percent(model_prediction, ["NN", "NNS", "NNP", "NNPS"])
+
 
 # Instantiate tests
 # length_test = LengthTest()
