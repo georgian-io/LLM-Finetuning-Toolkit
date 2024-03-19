@@ -62,9 +62,8 @@ class LoRAInference(Inference):
             torch_dtype=dtype,
             device_map=self.device_map,
             quantization_config=(
-                BitsAndBytesConfig(self.config.model.bitsandbytes)
+                BitsAndBytesConfig(**self.config.model.bitsandbytes.model_dump())
             ),
- 
         )
 
         """TODO: figure out multi-gpu
