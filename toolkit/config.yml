@@ -1,8 +1,7 @@
 save_dir: "./experiment/"
 
 ablation:
-  use_ablate: true
-  study_name: "ablate_1"
+  use_ablate: false
 
 # Data Ingestion -------------------
 data:
@@ -28,7 +27,7 @@ model:
   quantize: true
   bitsandbytes:
     load_in_4bit: true
-    bnb_4bit_compute_dtype: "bf16"
+    bnb_4bit_compute_dtype: "bfloat16"
     bnb_4bit_quant_type: "nf4"
 
 # LoRA Params -------------------

@@ -30,9 +30,7 @@ from src.ui.rich_ui import RichUI
 
 
 class LoRAFinetune(Finetune):
-    def __init__(
-        self, config: Config, directory_helper: DirectoryHelper
-    ):
+    def __init__(self, config: Config, directory_helper: DirectoryHelper):
         self.config = config
 
         self._model_config = config.model
@@ -76,7 +74,7 @@ class LoRAFinetune(Finetune):
         model = AutoModelForCausalLM.from_pretrained(
             self._model_config.hf_model_ckpt,
             quantization_config=(
-                BitsAndBytesConfig(self._model_config.bitsandbytes)
+                BitsAndBytesConfig(**self._model_config.bitsandbytes.model_dump())
                 if not self.config.accelerate
                 else None
             ),

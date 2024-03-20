@@ -186,10 +186,12 @@ class RichUI(UI):
     @staticmethod
     def qa_found():
         pass
-    
+
     @staticmethod
-    def qa_display_table(self, result_dictionary, mean_values, median_values, stdev_values):
-        
+    def qa_display_table(
+        self, result_dictionary, mean_values, median_values, stdev_values
+    ):
+
         # Create a table
         table = Table(show_header=True, header_style="bold", title="Test Results")
 
@@ -205,7 +207,7 @@ class RichUI(UI):
                 key,
                 f"{mean_values[key]:.4f}",
                 f"{median_values[key]:.4f}",
-                f"{stdev_values[key]:.4f}"
+                f"{stdev_values[key]:.4f}",
             )
 
         # Print the table
