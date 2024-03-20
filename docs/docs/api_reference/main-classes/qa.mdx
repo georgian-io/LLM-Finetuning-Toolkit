@@ -40,6 +40,257 @@ The computed metric, which can be a float, an int, or a bool.
 </MethodComponent>
 </ClassComponent>
 
+### Length Test
+
+<ClassComponent
+  className="src.qa.qa_tests.LengthTest"
+  initParams="( )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/qa/qa_tests.py"
+>
+    A quality assurance test that measures the absolute difference in length between the ground truth text and the model's prediction. This test aims to evaluate the summary length consistency, providing a straightforward metric for assessing how closely the model's output matches the expected length of the ground truth.
+
+<MethodComponent methodName="test_name" methodSignature="(  ) -> str">
+
+#### Returns
+
+`str` - "Summary Length Test"
+
+</MethodComponent>
+
+<MethodComponent methodName="get_metric" methodSignature="(  prompt:str, ground_truth: str, model_pred: str ) -> int">
+#### Parameters
+
+- `prompt: str` - The input prompt.
+- `ground_truth: str` - The ground truth output.
+- `model_pred: str` - The model's predicted output.
+
+#### Returns
+
+`int` - the absolute difference in character length between the ground truth and model prediction
+
+</MethodComponent>
+</ClassComponent>
+
+### Jaccard Similarity
+
+<ClassComponent
+  className="src.qa.qa_tests.JaccardSimilarityTest"
+  initParams="( )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/qa/qa_tests.py"
+>
+    Evaluates the similarity between the ground truth text and the model's prediction using the Jaccard Similarity measure. This metric calculates the size of the intersection divided by the size of the union of the sample sets, providing insight into how similar the predicted text is to the ground truth in terms of unique words.
+
+<MethodComponent methodName="test_name" methodSignature="( ) -> str">
+
+#### Returns
+
+`str` - "Jaccard Similarity"
+
+</MethodComponent>
+
+<MethodComponent methodName="get_metric" methodSignature="(prompt: str, ground_truth: str, model_prediction: str) -> float">
+
+#### Parameters
+
+    - `prompt: str` - The input prompt.
+    - `ground_truth: str` - The ground truth output.
+    - `model_prediction: str` - The model's predicted output.
+
+#### Returns
+
+    `float` - the Jaccard Similarity score between the ground truth and model prediction.
+
+</MethodComponent>
+</ClassComponent>
+
+### Dot Product Similarity
+
+<ClassComponent
+  className="src.qa.qa_tests.DotProductSimilarityTest"
+  initParams="( )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/qa/qa_tests.py"
+>
+    Evaluates the semantic similarity between the ground truth and the model's prediction by computing the dot product between their sentence embeddings. This test aims to capture the closeness of the meanings of the two texts, providing a more nuanced understanding of the model's performance in preserving semantic content.
+
+<MethodComponent methodName="test_name" methodSignature="(  ) -> str">
+
+#### Returns
+
+`str` - "Semantic Similarity"
+
+</MethodComponent>
+
+<MethodComponent methodName="get_metric" methodSignature="(  prompt: str, ground_truth: str, model_pred: str ) -> float">
+
+#### Parameters
+
+- `prompt: str` - The input prompt.
+- `ground_truth: str` - The ground truth output.
+- `model_pred: str` - The model's predicted output.
+
+#### Returns
+
+`float` - the dot product similarity score, indicating the degree of semantic similarity between the ground truth and model prediction.
+
+</MethodComponent>
+</ClassComponent>
+
+### ROUGE Score
+
+<ClassComponent
+  className="src.qa.qa_tests.RougeScoreTest"
+  initParams="( )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/qa/qa_tests.py"
+>
+    Measures the Rouge score, specifically the precision of Rouge-1, between the model's prediction and the ground truth. This test focuses on the overlap of unigrams, providing a metric for assessing the model's ability to reproduce key words and phrases from the ground truth.
+
+<MethodComponent methodName="test_name" methodSignature="(  ) -> str">
+
+#### Returns
+
+`str` - "Rouge Score"
+
+</MethodComponent>
+
+<MethodComponent methodName="get_metric" methodSignature="(  prompt: str, ground_truth: str, model_pred: str ) -> float">
+
+#### Parameters
+
+- `prompt: str` - The input prompt.
+- `ground_truth: str` - The ground truth output.
+- `model_pred: str` - The model's predicted output.
+
+#### Returns
+
+`float` - the precision component of the Rouge-1 score, reflecting the proportion of the model's unigrams found in the ground truth.
+
+</MethodComponent>
+</ClassComponent>
+
+### Word Overlap
+
+<ClassComponent
+  className="src.qa.qa_tests.WordOverlapTest"
+  initParams="( )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/qa/qa_tests.py"
+>
+    A test that calculates the percentage of word overlap between the ground truth and the model's prediction, after removing common stop words. This metric provides a straightforward measure of content similarity, emphasizing the shared vocabulary while ignoring frequent but less meaningful words.
+
+<MethodComponent methodName="test_name" methodSignature="(  ) -> str">
+
+#### Returns
+
+`str` - "Word Overlap Test"
+
+</MethodComponent>
+
+<MethodComponent methodName="get_metric" methodSignature="(  prompt: str, ground_truth: str, model_pred: str ) -> float">
+
+#### Parameters
+
+- `prompt: str` - The input prompt.
+- `ground_truth: str` - The ground truth output.
+- `model_pred: str` - The model's predicted output.
+
+#### Returns
+
+`float` - the percentage of overlap in significant words between the ground truth and model prediction, indicating content overlap.
+
+</MethodComponent>
+</ClassComponent>
+
+### Verb Composition
+
+<ClassComponent
+  className="src.qa.qa_tests.VerbPercent"
+  initParams="( )"
+  sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/qa/qa_tests.py"
+>
+    Assesses the composition of the model's prediction by calculating the percentage of verbs within the text. This test provides insights into the dynamic versus static nature of the content generated by the model, with a higher proportion of verbs potentially indicating more active and vivid descriptions.
+
+<MethodComponent methodName="test_name" methodSignature="(  ) -> str">
+
+#### Returns
+
+`str` - "Verb Composition"
+
+</MethodComponent>
+<MethodComponent methodName="get_metric" methodSignature="(  prompt: str, ground_truth: str, model_pred: str ) -> float">
+
+#### Parameters
+
+- `prompt: str` - The input prompt.
+- `ground_truth: str` - The ground truth output.
+- `model_pred: str` - The model's predicted output.
+
+#### Returns
+
+float - the percentage of words classified as verbs in the model prediction, shedding light on the action-oriented nature of the generated text.
+
+</MethodComponent>
+</ClassComponent>
+
+### Adjective Composition
+
+<ClassComponent
+className="src.qa.qa_tests.AdjectivePercent"
+initParams="( )"
+sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/qa/qa_tests.py"
+>
+Focuses on the proportion of adjectives in the model's prediction to evaluate the descriptiveness and detail within the generated text. This test helps gauge how well the model captures and conveys detailed attributes and qualities of subjects in its outputs.
+<MethodComponent methodName="test_name" methodSignature="(  ) -> str">
+#### Returns
+
+`str` - "Adjective Composition"
+
+</MethodComponent>
+<MethodComponent methodName="get_metric" methodSignature="(  prompt: str, ground_truth: str, model_pred: str ) -> float">
+
+#### Parameters
+
+- `prompt: str` - The input prompt.
+- `ground_truth: str` - The ground truth output.
+- `model_pred: str` - The model's predicted output.
+
+#### Returns
+
+`float` - the proportion of adjectives, offering insight into the richness and descriptiveness of the model's language.
+
+</MethodComponent>
+
+</ClassComponent>
+
+### Noun Composition
+
+<ClassComponent
+className="src.qa.qa_tests.NounPercent"
+initParams="( )"
+sourceUrl="https://github.com/georgian-io/LLM-Finetuning-Hub/blob/main/toolkit/src/qa/qa_tests.py"
+>
+Evaluates the model's prediction by calculating the percentage of nouns, providing a measure of how substantially the model generates content with tangible subjects and entities. This test can indicate the model's ability to maintain focus on key topics and to populate its narratives with relevant nouns.
+
+<MethodComponent methodName="test_name" methodSignature="(  ) -> str">
+
+#### Returns
+
+`str` - "Noun Composition"
+
+</MethodComponent>
+<MethodComponent methodName="get_metric" methodSignature="(  prompt: str, ground_truth: str, model_pred: str ) -> float">
+
+#### Parameters
+
+- `prompt: str` - The input prompt.
+- `ground_truth: str` - The ground truth output.
+- `model_pred: str` - The model's predicted output.
+
+#### Returns
+
+`float` - the percentage of nouns in the text, reflecting on the subject matter density and relevance in the generated content.
+
+</MethodComponent>
+</ClassComponent>
+
 ## Test Runner
 
 ### LLMTestSuite

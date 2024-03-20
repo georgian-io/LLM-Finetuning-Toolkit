@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# Model Testing
+# Quality Assurance
 
 :::warning
 We are still in the process of finalizing the interface for QA. Please check back for updates.
