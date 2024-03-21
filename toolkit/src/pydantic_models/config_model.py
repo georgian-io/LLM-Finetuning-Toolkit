@@ -199,7 +199,9 @@ class InferenceConfig(BaseModel):
     eta_cutoff: Optional[float] = Field(0.0, description="eta cutoff value")
     top_k: Optional[int] = Field(50, description="top-k sampling")
 
-
+class QaConfig(BaseModel):
+    llm_tests: Optional[List[str]] = Field([], description = "list of tests that needs to be connected")
+    
 class AblationConfig(BaseModel):
     use_ablate: Optional[bool] = Field(False, description="Flag to enable ablation")
     study_name: Optional[str] = Field("ablation", description="Name of the study")

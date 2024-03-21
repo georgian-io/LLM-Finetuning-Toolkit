@@ -3,6 +3,7 @@ from typing import Union, List, Tuple, Dict
 import pandas as pd
 from toolkit.src.ui.rich_ui import RichUI
 import statistics
+from toolkit.src.qa.qa_tests import *
 
 
 class LLMQaTest(ABC):
@@ -17,15 +18,39 @@ class LLMQaTest(ABC):
     ) -> Union[float, int, bool]:
         pass
 
+class LLMQaTestFactory:
+    @classmethod
+    def from_string_list(cls, string_list: List[str]) -> List[LLMQaTest]:
+        tests = []
+        for test_name in string_list:
+            tests.append(cls.create_test(test_name))
+        return tests
 
-class LLMTestSuite:
-    def __init__(
-        self,
-        tests: List[LLMQaTest],
-        prompts: List[str],
-        ground_truths: List[str],
-        model_preds: List[str],
-    ) -> None:
+    @classmethod 
+    def create_test(cls, test_name: str) -> LLMQaTest:
+        if test_name == "Summary Length Test":
+            return LengthTest()
+        elif test_name == "Jaccard Similarity":
+            return JaccardSimilarityTest()
+        elif test_name == "Semantic Similarity":
+            return DotProductSimilarityTest()
+        elif test_name == "Rouge Score":
+            return RougeScoreTest()
+        elif test_name == "Word Overlap Test":
+            return WordOverlapTest()
+        elif test_name == "Verb Composition":
+            return VerbPercent()
+        elif test_name == "Adjective Composition":
+            return AdjectivePercent()
+        elif test_name == "Noun Composition":
+            return NounPercent()
+
+class LLMTestSuite():
+    def __init__(self, 
+                 tests:List[LLMQaTest],
+                 prompts:List[str],
+                 ground_truths:List[str],
+                 model_preds:List[str]) -> None:
 
         self.tests = tests
         self.prompts = prompts
