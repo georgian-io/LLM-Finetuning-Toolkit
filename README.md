@@ -204,24 +204,29 @@ Once all the changes have been incorporated in the YAML file, you can simply use
 
 Fine-tuning workflows typically involve running ablation studies across various LLMs, prompt designs and optimization techniques. The configuration file can be altered to support running ablation studies.
 
-* Specify different prompt templates to consider while fine-tuning.
-
-TODO
+* Specify different prompt templates to experiment with while fine-tuning.
 
 ```yaml
 data:
   file_type: "huggingface"
   path: "yahma/alpaca-cleaned"
   prompt:
-    ### Instruction: {instruction}
-    ### Input: {input}
-    ### Output:
+    - >-
+      This is the first prompt template to iterate over
+      ### Input: {input}
+      ### Output:  
+    - >-
+      This is the second prompt template
+      ### Instruction: {instruction}
+      ### Input: {input}
+      ### Output:
   prompt_stub:
     {output}
   test_size: 0.1 # Proportion of test as % of total; if integer then # of samples
   train_size: 0.9 # Proportion of train as % of total; if integer then # of samples
   train_test_split_seed: 42
 ```
+
 
 * Specify various LLMs that you would like to experiment with.
 
