@@ -197,8 +197,6 @@ Once all the changes have been incorporated in the YAML file, you can simply use
    python toolkit.py --config <path to custom YAML file>
 ```
 
-### TODO:  give some examples here
-
 ### Advanced 
 
 
