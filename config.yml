@@ -70,3 +70,15 @@ inference:
   do_sample: True
   top_p: 0.9
   temperature: 0.8
+
+qa:
+  llm_tests:
+    - jaccard_similarity
+    - dot_product
+    - rouge_score
+    - word_overlap
+    - verb_percent
+    - adjective_percent
+    - noun_percent
+    - summary_length
+
