@@ -74,5 +74,11 @@ inference:
 qa:
   llm_tests:
     - jaccard_similarity
-    - dot_similarity
+    - dot_product
+    - rouge_score
+    - word_overlap
+    - verb_percent
+    - adjective_percent
+    - noun_percent
+    - summary_length
 

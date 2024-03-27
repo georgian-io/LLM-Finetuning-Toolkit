@@ -18,32 +18,34 @@ class LLMQaTest(ABC):
     ) -> Union[float, int, bool]:
         pass
 
-class LLMQaTestFactory:
+class QaTestRegistry:
+    registry = {}
+
+    @classmethod
+    def register(cls, *names):
+        def inner_wrapper(wrapped_class):
+            for name in names:
+                cls.registry[name] = wrapped_class
+            return wrapped_class
+        return inner_wrapper
+
+    @classmethod
+    def create_test(cls, test_name: str):
+        if test_name in cls.registry:
+            return cls.registry[test_name]()
+        else:
+            raise ValueError(f"Test not found: {test_name}")
+
     @classmethod
     def from_string_list(cls, string_list: List[str]) -> List[LLMQaTest]:
         tests = []
         for test_name in string_list:
-            tests.append(cls.create_test(test_name))
+            tests.append(TestRegistry.create_test(test_name))
         return tests
 
     @classmethod 
-    def create_test(cls, test_name: str) -> LLMQaTest:
-        if test_name == "Summary Length Test":
-            return LengthTest()
-        elif test_name == "Jaccard Similarity":
-            return JaccardSimilarityTest()
-        elif test_name == "Semantic Similarity":
-            return DotProductSimilarityTest()
-        elif test_name == "Rouge Score":
-            return RougeScoreTest()
-        elif test_name == "Word Overlap Test":
-            return WordOverlapTest()
-        elif test_name == "Verb Composition":
-            return VerbPercent()
-        elif test_name == "Adjective Composition":
-            return AdjectivePercent()
-        elif test_name == "Noun Composition":
-            return NounPercent()
+    def create_test(cls, test_name: str) -> List[LLMQaTest]:
+        return [cls.create_test(test) for test in test_names]
 
 class LLMTestSuite():
     def __init__(self, 
