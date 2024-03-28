@@ -17,7 +17,7 @@ nltk.download("stopwords")
 nltk.download("punkt")
 nltk.download("averaged_perceptron_tagger")
 
-@TestRegistry.register("Summary Length Test", "summary_length", "length_test")
+@TestRegistry.register("summary_length")
 class LengthTest(LLMQaTest):
     @property
     def test_name(self) -> str:

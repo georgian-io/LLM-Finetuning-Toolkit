@@ -36,15 +36,9 @@ class QaTestRegistry:
         else:
             raise ValueError(f"Test not found: {test_name}")
 
-    @classmethod
-    def from_string_list(cls, string_list: List[str]) -> List[LLMQaTest]:
-        tests = []
-        for test_name in string_list:
-            tests.append(TestRegistry.create_test(test_name))
-        return tests
 
     @classmethod 
-    def create_test(cls, test_name: str) -> List[LLMQaTest]:
+    def create_tests_from_list(cls, test_name: str) -> List[LLMQaTest]:
         return [cls.create_test(test) for test in test_names]
 
 class LLMTestSuite():
