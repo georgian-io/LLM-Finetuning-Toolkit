@@ -8,6 +8,9 @@ import torch
 # TODO: Refactor this into multiple files...
 HfModelPath = str
 
+class QaConfig(BaseModel):
+    llm_tests: Optional[List[str]] = Field([], description = "list of tests that needs to be connected")
+    
 
 class DataConfig(BaseModel):
     file_type: Literal["json", "csv", "huggingface"] = Field(
