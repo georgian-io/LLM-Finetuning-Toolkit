@@ -8,6 +8,7 @@ from rouge_score import rouge_scorer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk import pos_tag
+from src.qa.qa import TestRegistry
 
 model_name = "distilbert-base-uncased"
 tokenizer = DistilBertTokenizer.from_pretrained(model_name)
