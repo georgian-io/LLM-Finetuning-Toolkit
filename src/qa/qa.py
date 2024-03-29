@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Union, List, Tuple, Dict
 import pandas as pd
-from toolkit.src.ui.rich_ui import RichUI
+from src.ui.rich_ui import RichUI  
 import statistics
-from toolkit.src.qa.qa_tests import *
+from src.qa.qa_tests import *
 
 
 class LLMQaTest(ABC):
