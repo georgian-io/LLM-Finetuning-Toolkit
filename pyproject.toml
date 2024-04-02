@@ -43,8 +43,31 @@ shellingham = "^1.5.4"
 
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.3.0"
+pre-commit = "~3.7.0"
+ruff = "^0.3.5"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff]
+lint.ignore = ["C901", "E501", "E741", "F402", "F823" ]
+lint.select = ["C", "E", "F", "I", "W"]
+line-length = 119
+exclude = [
+    "llama2",
+    "mistral",
+]
+
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+known-first-party = ["llmtune"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
