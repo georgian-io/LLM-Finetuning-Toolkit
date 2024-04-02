@@ -44,7 +44,7 @@ LLM Finetuning toolkit is a config-based CLI tool for launching a series of LLM 
 See poetry documentation page for poetry [installation instructions](https://python-poetry.org/docs/#installation)
 
 ```shell
-   poetry install
+   poetry install --without dev
 ```
 
 ### [Option 3] pip
@@ -255,3 +255,10 @@ If you would like to contribute to this project, we recommend following the "for
 5.  Submit a **Pull request** so that we can review your changes
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
+
+### Setting Up Repo for Development
+
+- We recommend using `poetry` to manage dependency
+- Install deps via `poetry install`
+- Enter virtual environment with `poetry shell`
+- Install pre-commit hooks using `pre-commit install`
