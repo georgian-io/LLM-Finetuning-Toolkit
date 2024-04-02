@@ -1,16 +1,15 @@
-from typing import Literal, Union, List, Dict, Optional
-from pydantic import BaseModel, FilePath, validator, Field
-
-from huggingface_hub.utils import validate_repo_id
+from typing import List, Literal, Optional, Union
 
 import torch
+from pydantic import BaseModel, Field, FilePath, validator
+
 
 # TODO: Refactor this into multiple files...
 HfModelPath = str
 
 class QaConfig(BaseModel):
     llm_tests: Optional[List[str]] = Field([], description = "list of tests that needs to be connected")
-    
+
 
 class DataConfig(BaseModel):
     file_type: Literal["json", "csv", "huggingface"] = Field(

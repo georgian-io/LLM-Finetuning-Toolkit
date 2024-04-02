@@ -1,20 +1,18 @@
+import csv
 import os
 from os.path import join
 from threading import Thread
-import csv
 
-from transformers import TextIteratorStreamer
-from rich.text import Text
-from datasets import Dataset
-from transformers import AutoTokenizer, BitsAndBytesConfig
-from peft import AutoPeftModelForCausalLM
 import torch
+from datasets import Dataset
+from peft import AutoPeftModelForCausalLM
+from rich.text import Text
+from transformers import AutoTokenizer, BitsAndBytesConfig, TextIteratorStreamer
 
-
-from llmtune.pydantic_models.config_model import Config
-from llmtune.utils.save_utils import DirectoryHelper
 from llmtune.inference.generics import Inference
+from llmtune.pydantic_models.config_model import Config
 from llmtune.ui.rich_ui import RichUI
+from llmtune.utils.save_utils import DirectoryHelper
 
 
 # TODO: Add type hints please!
@@ -89,7 +87,7 @@ class LoRAInference(Inference):
 
             try:
                 result = self.infer_one(prompt)
-            except:
+            except Exception:
                 continue
             results.append((prompt, label, result))
 

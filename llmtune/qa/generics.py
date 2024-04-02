@@ -1,9 +1,10 @@
-from abc import ABC, abstractmethod
-from typing import Union, List, Tuple, Dict
-import pandas as pd
-from llmtune.ui.rich_ui import RichUI
 import statistics
-from llmtune.qa.qa_tests import *
+from abc import ABC, abstractmethod
+from typing import Dict, List, Union
+
+import pandas as pd
+
+from llmtune.ui.rich_ui import RichUI
 
 
 class LLMQaTest(ABC):
@@ -32,7 +33,7 @@ class QaTestRegistry:
         return inner_wrapper
 
     @classmethod
-    def create_tests_from_list(cls, test_name: str) -> List[LLMQaTest]:
+    def create_tests_from_list(cls, test_names: List[str]) -> List[LLMQaTest]:
         return [cls.create_test(test) for test in test_names]
 
 
@@ -71,10 +72,7 @@ class LLMTestSuite:
 
     def print_test_results(self):
         result_dictionary = self.test_results()
-        column_data = {
-            key: [value for value in result_dictionary[key]]
-            for key in result_dictionary
-        }
+        column_data = {key: list(result_dictionary[key]) for key in result_dictionary}
         mean_values = {key: statistics.mean(column_data[key]) for key in column_data}
         median_values = {
             key: statistics.median(column_data[key]) for key in column_data

@@ -1,9 +1,8 @@
+import csv
 from abc import ABC, abstractmethod
-from functools import partial
 
 import ijson
-import csv
-from datasets import Dataset, load_dataset, concatenate_datasets
+from datasets import Dataset, concatenate_datasets, load_dataset
 
 
 def get_ingestor(data_type: str):

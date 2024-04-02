@@ -1,14 +1,16 @@
-from llmtune.qa.generics import LLMQaTest
-from typing import Union, List, Tuple, Dict
-import torch
-from transformers import DistilBertModel, DistilBertTokenizer
+from typing import List, Union
+
 import nltk
 import numpy as np
-from rouge_score import rouge_scorer
+import torch
+from nltk import pos_tag
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from nltk import pos_tag
-from llmtune.qa.generics import TestRegistry
+from rouge_score import rouge_scorer
+from transformers import DistilBertModel, DistilBertTokenizer
+
+from llmtune.qa.generics import LLMQaTest, TestRegistry
+
 
 model_name = "distilbert-base-uncased"
 tokenizer = DistilBertTokenizer.from_pretrained(model_name)

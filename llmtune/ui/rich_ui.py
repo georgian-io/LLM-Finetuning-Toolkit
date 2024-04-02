@@ -1,14 +1,14 @@
 from datasets import Dataset
-
 from rich.console import Console
 from rich.layout import Layout
+from rich.live import Live
 from rich.panel import Panel
 from rich.table import Table
-from rich.live import Live
 from rich.text import Text
 
 from llmtune.ui.generics import UI
 from llmtune.utils.rich_print_utils import inject_example_to_rich_layout
+
 
 console = Console()
 
@@ -72,7 +72,7 @@ class RichUI(UI):
     @staticmethod
     def after_dataset_creation(save_dir: str, train: Dataset, test: Dataset):
         console.print(f"Dataset Saved at {save_dir}")
-        console.print(f"Post-Split data size:")
+        console.print("Post-Split data size:")
         console.print(f"Train: {len(train)}")
         console.print(f"Test: {len(test)}")
 
@@ -122,14 +122,14 @@ class RichUI(UI):
 
     @staticmethod
     def after_finetune():
-        console.print(f"Finetuning complete!")
+        console.print("Finetuning complete!")
 
     @staticmethod
     def finetune_found(weights_path: str):
         console.print(f"Fine-Tuned Model Found at {weights_path}... skipping training")
 
     """
-    INFERENCE 
+    INFERENCE
     """
 
     # Lifecycle functions
@@ -167,7 +167,7 @@ class RichUI(UI):
         return LiveContext(text)
 
     """
-    QA 
+    QA
     """
 
     # Lifecycle functions

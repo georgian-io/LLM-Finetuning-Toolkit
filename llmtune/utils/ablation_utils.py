@@ -1,9 +1,6 @@
 import copy
 import itertools
-from typing import List, Type, Any, Dict, Optional, Union, Tuple
-from typing import get_args, get_origin, get_type_hints
-
-import yaml
+from typing import Dict, Tuple, Union, get_args, get_origin
 
 
 # TODO: organize this a little bit. It's a bit of a mess rn.
@@ -18,11 +15,11 @@ def get_types_from_dict(
     source_dict: dict, root="", type_dict={}
 ) -> Dict[str, Tuple[type, type]]:
     for key, val in source_dict.items():
-        if type(val) is not dict:
+        if not isinstance(val, dict):
             attr = f"{root}.{key}" if root else key
             tp = (
                 (type(val), None)
-                if type(val) is not list
+                if not isinstance(val, list)
                 else (type(val), type(val[0]))
             )
             type_dict[attr] = tp

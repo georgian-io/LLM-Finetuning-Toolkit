@@ -1,31 +1,26 @@
-from os.path import join, exists
-from typing import Tuple
-
-import torch
+from os.path import join
 
 import bitsandbytes as bnb
+import torch
 from datasets import Dataset
-from transformers import (
-    AutoTokenizer,
-    AutoModelForCausalLM,
-    BitsAndBytesConfig,
-    TrainingArguments,
-    AutoTokenizer,
-    ProgressCallback,
-)
 from peft import (
-    prepare_model_for_kbit_training,
-    get_peft_model,
     LoraConfig,
+    get_peft_model,
+    prepare_model_for_kbit_training,
+)
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    BitsAndBytesConfig,
+    ProgressCallback,
+    TrainingArguments,
 )
 from trl import SFTTrainer
-from rich.console import Console
 
-
-from llmtune.pydantic_models.config_model import Config
-from llmtune.utils.save_utils import DirectoryHelper
 from llmtune.finetune.generics import Finetune
+from llmtune.pydantic_models.config_model import Config
 from llmtune.ui.rich_ui import RichUI
+from llmtune.utils.save_utils import DirectoryHelper
 
 
 class LoRAFinetune(Finetune):
@@ -132,7 +127,7 @@ class LoRAFinetune(Finetune):
             **self._sft_args.model_dump(),
         )
 
-        trainer_stats = self._trainer.train()
+        self._trainer.train()
 
     def save_model(self) -> None:
         self._trainer.model.save_pretrained(self._weights_path)
