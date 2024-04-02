@@ -255,3 +255,15 @@ If you would like to contribute to this project, we recommend following the "for
 5.  Submit a **Pull request** so that we can review your changes
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
+
+
+## Releasing
+
+
+To manually release a PyPI package, please run: 
+
+```shell
+   make build-release
+```
+
+Note: Make sure you have pypi token for this [pipy repo](https://pypi.org/project/llm-toolkit/).
