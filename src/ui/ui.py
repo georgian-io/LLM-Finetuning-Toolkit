@@ -61,7 +61,7 @@ class UI(ABC):
         pass
 
     """
-    INFERENCE 
+    INFERENCE
     """
 
     # Lifecycle functions
@@ -91,7 +91,7 @@ class UI(ABC):
         pass
 
     """
-    QA 
+    QA
     """
 
     # Lifecycle functions

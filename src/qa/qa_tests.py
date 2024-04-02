@@ -1,14 +1,16 @@
-from src.qa.qa import LLMQaTest
-from typing import Union, List, Tuple, Dict
-import torch
-from transformers import DistilBertModel, DistilBertTokenizer
+from typing import List, Union
+
 import nltk
 import numpy as np
-from rouge_score import rouge_scorer
+import torch
+from nltk import pos_tag
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from nltk import pos_tag
-from src.qa.qa import TestRegistry
+from rouge_score import rouge_scorer
+from transformers import DistilBertModel, DistilBertTokenizer
+
+from src.qa.qa import LLMQaTest, TestRegistry
+
 
 model_name = "distilbert-base-uncased"
 tokenizer = DistilBertTokenizer.from_pretrained(model_name)
@@ -18,16 +20,16 @@ nltk.download("stopwords")
 nltk.download("punkt")
 nltk.download("averaged_perceptron_tagger")
 
+
 @TestRegistry.register("summary_length")
 class LengthTest(LLMQaTest):
     @property
     def test_name(self) -> str:
         return "summary_length"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
         return abs(len(ground_truth) - len(model_prediction))
+
 
 @TestRegistry.register("jaccard_similarity")
 class JaccardSimilarityTest(LLMQaTest):
@@ -35,9 +37,7 @@ class JaccardSimilarityTest(LLMQaTest):
     def test_name(self) -> str:
         return "jaccard_similarity"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
         set_ground_truth = set(ground_truth.lower())
         set_model_prediction = set(model_prediction.lower())
 
@@ -46,6 +46,7 @@ class JaccardSimilarityTest(LLMQaTest):
 
         similarity = intersection_size / union_size if union_size != 0 else 0
         return similarity
+
 
 @TestRegistry.register("dot_product")
 class DotProductSimilarityTest(LLMQaTest):
@@ -59,15 +60,12 @@ class DotProductSimilarityTest(LLMQaTest):
             outputs = model(**tokens)
         return outputs.last_hidden_state.mean(dim=1).squeeze().numpy()
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
         embedding_ground_truth = self._encode_sentence(ground_truth)
         embedding_model_prediction = self._encode_sentence(model_prediction)
-        dot_product_similarity = np.dot(
-            embedding_ground_truth, embedding_model_prediction
-        )
+        dot_product_similarity = np.dot(embedding_ground_truth, embedding_model_prediction)
         return dot_product_similarity
+
 
 @TestRegistry.register("rouge_score")
 class RougeScoreTest(LLMQaTest):
@@ -75,12 +73,11 @@ class RougeScoreTest(LLMQaTest):
     def test_name(self) -> str:
         return "rouge_score"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
         scorer = rouge_scorer.RougeScorer(["rouge1"], use_stemmer=True)
         scores = scorer.score(model_prediction, ground_truth)
         return float(scores["rouge1"].precision)
+
 
 @TestRegistry.register("word_overlap")
 class WordOverlapTest(LLMQaTest):
@@ -94,9 +91,7 @@ class WordOverlapTest(LLMQaTest):
         filtered_text = [word for word in word_tokens if word.lower() not in stop_words]
         return " ".join(filtered_text)
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
         cleaned_model_prediction = self._remove_stopwords(model_prediction)
         cleaned_ground_truth = self._remove_stopwords(ground_truth)
 
@@ -116,18 +111,16 @@ class PosCompositionTest(LLMQaTest):
         total_words = len(text.split(" "))
         return round(len(pos_words) / total_words, 2)
 
+
 @TestRegistry.register("verb_percent")
 class VerbPercent(PosCompositionTest):
     @property
     def test_name(self) -> str:
         return "verb_percent"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> float:
-        return self._get_pos_percent(
-            model_prediction, ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
-        )
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> float:
+        return self._get_pos_percent(model_prediction, ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ"])
+
 
 @TestRegistry.register("adjective_percent")
 class AdjectivePercent(PosCompositionTest):
@@ -135,10 +128,9 @@ class AdjectivePercent(PosCompositionTest):
     def test_name(self) -> str:
         return "adjective_percent"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> float:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> float:
         return self._get_pos_percent(model_prediction, ["JJ", "JJR", "JJS"])
+
 
 @TestRegistry.register("noun_percent")
 class NounPercent(PosCompositionTest):
@@ -146,9 +138,7 @@ class NounPercent(PosCompositionTest):
     def test_name(self) -> str:
         return "noun_percent"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> float:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> float:
         return self._get_pos_percent(model_prediction, ["NN", "NNS", "NNP", "NNPS"])
 
 

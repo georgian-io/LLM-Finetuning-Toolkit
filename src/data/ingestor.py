@@ -1,9 +1,8 @@
+import csv
 from abc import ABC, abstractmethod
-from functools import partial
 
 import ijson
-import csv
-from datasets import Dataset, load_dataset, concatenate_datasets
+from datasets import Dataset, concatenate_datasets, load_dataset
 
 
 def get_ingestor(data_type: str):
@@ -14,9 +13,7 @@ def get_ingestor(data_type: str):
     elif data_type == "huggingface":
         return HuggingfaceIngestor
     else:
-        raise ValueError(
-            f"'type' must be one of 'json', 'csv', or 'huggingface', you have {data_type}"
-        )
+        raise ValueError(f"'type' must be one of 'json', 'csv', or 'huggingface', you have {data_type}")
 
 
 class Ingestor(ABC):
