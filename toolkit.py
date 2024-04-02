@@ -6,6 +6,7 @@ import logging
 from transformers import utils as hf_utils
 from pydantic import ValidationError
 import torch
+import typer
 
 from src.pydantic_models.config_model import Config
 from src.data.dataset_generator import DatasetGenerator
@@ -19,7 +20,10 @@ hf_utils.logging.set_verbosity_error()
 torch._logging.set_logs(all=logging.CRITICAL)
 
 
-def run_one_experiment(config: Config) -> None:
+app = typer.Typer()
+
+
+def run_one_experiment(config: Config, config_path: str) -> None:
     dir_helper = DirectoryHelper(config_path, config)
 
     # Loading Data -------------------------------
@@ -70,7 +74,7 @@ def run_one_experiment(config: Config) -> None:
         RichUI.inference_found(results_path)
 
     # QA -------------------------------
-    # console.rule("[bold blue]:thinking_face: Running LLM Unit Tests")
+    # RichUI.before_qa()
     # qa_path = dir_helper.save_paths.qa
     # if not exists(qa_path) or not listdir(qa_path):
     #     # TODO: Instantiate unit test classes
@@ -80,9 +84,8 @@ def run_one_experiment(config: Config) -> None:
     #     pass
 
 
-if __name__ == "__main__":
-    config_path = "./config.yml"  # TODO: parameterize this
-
+@app.command()
+def run(config_path: str = "./config.yml") -> None:
     # Load YAML config
     with open(config_path, "r") as file:
         config = yaml.safe_load(file)
@@ -92,9 +95,9 @@ if __name__ == "__main__":
             else [config]
         )
     for config in configs:
+        # validate data with pydantic
         try:
             config = Config(**config)
-        # validate data with pydantic
         except ValidationError as e:
             print(e.json())
 
@@ -105,4 +108,8 @@ if __name__ == "__main__":
             config = yaml.safe_load(file)
             config = Config(**config)
 
-        run_one_experiment(config)
+        run_one_experiment(config, config_path)
+
+
+if __name__ == "__main__":
+    app()
