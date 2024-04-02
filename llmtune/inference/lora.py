@@ -4,9 +4,6 @@ from threading import Thread
 import csv
 
 from transformers import TextIteratorStreamer
-from rich.console import Console
-from rich.table import Table
-from rich.live import Live
 from rich.text import Text
 from datasets import Dataset
 from transformers import AutoTokenizer, BitsAndBytesConfig
@@ -14,10 +11,10 @@ from peft import AutoPeftModelForCausalLM
 import torch
 
 
-from src.pydantic_models.config_model import Config
-from src.utils.save_utils import DirectoryHelper
-from src.inference.inference import Inference
-from src.ui.rich_ui import RichUI
+from llmtune.pydantic_models.config_model import Config
+from llmtune.utils.save_utils import DirectoryHelper
+from llmtune.inference.generics import Inference
+from llmtune.ui.rich_ui import RichUI
 
 
 # TODO: Add type hints please!

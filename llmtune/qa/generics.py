@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Union, List, Tuple, Dict
 import pandas as pd
-from src.ui.rich_ui import RichUI  
+from llmtune.ui.rich_ui import RichUI
 import statistics
-from src.qa.qa_tests import *
+from llmtune.qa.qa_tests import *
 
 
 class LLMQaTest(ABC):
@@ -18,6 +18,7 @@ class LLMQaTest(ABC):
     ) -> Union[float, int, bool]:
         pass
 
+
 class QaTestRegistry:
     registry = {}
 
@@ -27,18 +28,22 @@ class QaTestRegistry:
             for name in names:
                 cls.registry[name] = wrapped_class
             return wrapped_class
+
         return inner_wrapper
 
-    @classmethod 
+    @classmethod
     def create_tests_from_list(cls, test_name: str) -> List[LLMQaTest]:
         return [cls.create_test(test) for test in test_names]
 
-class LLMTestSuite():
-    def __init__(self, 
-                 tests:List[LLMQaTest],
-                 prompts:List[str],
-                 ground_truths:List[str],
-                 model_preds:List[str]) -> None:
+
+class LLMTestSuite:
+    def __init__(
+        self,
+        tests: List[LLMQaTest],
+        prompts: List[str],
+        ground_truths: List[str],
+        model_preds: List[str],
+    ) -> None:
 
         self.tests = tests
         self.prompts = prompts

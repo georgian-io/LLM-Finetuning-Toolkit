@@ -6,11 +6,8 @@ import pickle
 
 import re
 from datasets import Dataset
-from rich.console import Console
-from rich.layout import Layout
-from rich.panel import Panel
 
-from src.data.ingestor import Ingestor, get_ingestor
+from llmtune.data.ingestor import Ingestor, get_ingestor
 
 
 class DatasetGenerator:

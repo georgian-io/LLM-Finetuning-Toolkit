@@ -8,13 +8,13 @@ from pydantic import ValidationError
 import torch
 import typer
 
-from src.pydantic_models.config_model import Config
-from src.data.dataset_generator import DatasetGenerator
-from src.utils.save_utils import DirectoryHelper
-from src.utils.ablation_utils import generate_permutations
-from src.finetune.lora import LoRAFinetune
-from src.inference.lora import LoRAInference
-from src.ui.rich_ui import RichUI
+from llmtune.pydantic_models.config_model import Config
+from llmtune.data.dataset_generator import DatasetGenerator
+from llmtune.utils.save_utils import DirectoryHelper
+from llmtune.utils.ablation_utils import generate_permutations
+from llmtune.finetune.lora import LoRAFinetune
+from llmtune.inference.lora import LoRAInference
+from llmtune.ui.rich_ui import RichUI
 
 hf_utils.logging.set_verbosity_error()
 torch._logging.set_logs(all=logging.CRITICAL)

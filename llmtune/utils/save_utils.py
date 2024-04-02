@@ -16,7 +16,7 @@ from dataclasses import dataclass
 
 from sqids import Sqids
 
-from src.pydantic_models.config_model import Config
+from llmtune.pydantic_models.config_model import Config
 
 NUM_MD5_DIGITS_FOR_SQIDS = 5  # TODO: maybe move consts to a dedicated folder
 

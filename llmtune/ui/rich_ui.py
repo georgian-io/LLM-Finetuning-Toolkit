@@ -7,8 +7,8 @@ from rich.table import Table
 from rich.live import Live
 from rich.text import Text
 
-from src.ui.ui import UI
-from src.utils.rich_print_utils import inject_example_to_rich_layout
+from llmtune.ui.generics import UI
+from llmtune.utils.rich_print_utils import inject_example_to_rich_layout
 
 console = Console()
 
