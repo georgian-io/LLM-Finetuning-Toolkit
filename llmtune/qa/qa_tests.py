@@ -1,4 +1,4 @@
-from src.qa.qa import LLMQaTest
+from llmtune.qa.generics import LLMQaTest
 from typing import Union, List, Tuple, Dict
 import torch
 from transformers import DistilBertModel, DistilBertTokenizer
@@ -8,7 +8,7 @@ from rouge_score import rouge_scorer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk import pos_tag
-from src.qa.qa import TestRegistry
+from llmtune.qa.generics import TestRegistry
 
 model_name = "distilbert-base-uncased"
 tokenizer = DistilBertTokenizer.from_pretrained(model_name)
@@ -17,6 +17,7 @@ model = DistilBertModel.from_pretrained(model_name)
 nltk.download("stopwords")
 nltk.download("punkt")
 nltk.download("averaged_perceptron_tagger")
+
 
 @TestRegistry.register("summary_length")
 class LengthTest(LLMQaTest):
@@ -28,6 +29,7 @@ class LengthTest(LLMQaTest):
         self, prompt: str, ground_truth: str, model_prediction: str
     ) -> Union[float, int, bool]:
         return abs(len(ground_truth) - len(model_prediction))
+
 
 @TestRegistry.register("jaccard_similarity")
 class JaccardSimilarityTest(LLMQaTest):
@@ -46,6 +48,7 @@ class JaccardSimilarityTest(LLMQaTest):
 
         similarity = intersection_size / union_size if union_size != 0 else 0
         return similarity
+
 
 @TestRegistry.register("dot_product")
 class DotProductSimilarityTest(LLMQaTest):
@@ -69,6 +72,7 @@ class DotProductSimilarityTest(LLMQaTest):
         )
         return dot_product_similarity
 
+
 @TestRegistry.register("rouge_score")
 class RougeScoreTest(LLMQaTest):
     @property
@@ -81,6 +85,7 @@ class RougeScoreTest(LLMQaTest):
         scorer = rouge_scorer.RougeScorer(["rouge1"], use_stemmer=True)
         scores = scorer.score(model_prediction, ground_truth)
         return float(scores["rouge1"].precision)
+
 
 @TestRegistry.register("word_overlap")
 class WordOverlapTest(LLMQaTest):
@@ -116,6 +121,7 @@ class PosCompositionTest(LLMQaTest):
         total_words = len(text.split(" "))
         return round(len(pos_words) / total_words, 2)
 
+
 @TestRegistry.register("verb_percent")
 class VerbPercent(PosCompositionTest):
     @property
@@ -129,6 +135,7 @@ class VerbPercent(PosCompositionTest):
             model_prediction, ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
         )
 
+
 @TestRegistry.register("adjective_percent")
 class AdjectivePercent(PosCompositionTest):
     @property
@@ -139,6 +146,7 @@ class AdjectivePercent(PosCompositionTest):
         self, prompt: str, ground_truth: str, model_prediction: str
     ) -> float:
         return self._get_pos_percent(model_prediction, ["JJ", "JJR", "JJS"])
+
 
 @TestRegistry.register("noun_percent")
 class NounPercent(PosCompositionTest):

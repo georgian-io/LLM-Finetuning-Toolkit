@@ -5,7 +5,6 @@ import torch
 
 import bitsandbytes as bnb
 from datasets import Dataset
-from accelerate import Accelerator
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
@@ -23,10 +22,10 @@ from trl import SFTTrainer
 from rich.console import Console
 
 
-from src.pydantic_models.config_model import Config
-from src.utils.save_utils import DirectoryHelper
-from src.finetune.finetune import Finetune
-from src.ui.rich_ui import RichUI
+from llmtune.pydantic_models.config_model import Config
+from llmtune.utils.save_utils import DirectoryHelper
+from llmtune.finetune.generics import Finetune
+from llmtune.ui.rich_ui import RichUI
 
 
 class LoRAFinetune(Finetune):
