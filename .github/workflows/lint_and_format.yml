@@ -1,25 +1,19 @@
-name: Ruff - Lint, Format, and Commit
+name: Ruff
 on: pull_request
 jobs:
   lint:
+    name: Lint, Format, and Commit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: chartboost/ruff-action@v1
         with:
           version: 0.3.5
-          args: check --fix
-    - uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: 'lint fixes by ruff'
-  format:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+          args: check --fix --output-format=full --statistics
       - uses: chartboost/ruff-action@v1
         with:
           version: 0.3.5
           args: format
-    - uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: 'formatting by ruff'
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "lint fixes and formatting by ruff"
