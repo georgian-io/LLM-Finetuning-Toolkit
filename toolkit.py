@@ -1,20 +1,21 @@
-from os import listdir
-from os.path import join, exists
-import yaml
 import logging
+from os import listdir
+from os.path import exists, join
 
-from transformers import utils as hf_utils
-from pydantic import ValidationError
 import torch
 import typer
+import yaml
+from pydantic import ValidationError
+from transformers import utils as hf_utils
 
-from llmtune.pydantic_models.config_model import Config
 from llmtune.data.dataset_generator import DatasetGenerator
-from llmtune.utils.save_utils import DirectoryHelper
-from llmtune.utils.ablation_utils import generate_permutations
 from llmtune.finetune.lora import LoRAFinetune
 from llmtune.inference.lora import LoRAInference
+from llmtune.pydantic_models.config_model import Config
 from llmtune.ui.rich_ui import RichUI
+from llmtune.utils.ablation_utils import generate_permutations
+from llmtune.utils.save_utils import DirectoryHelper
+
 
 hf_utils.logging.set_verbosity_error()
 torch._logging.set_logs(all=logging.CRITICAL)
@@ -32,7 +33,7 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     with RichUI.during_dataset_creation("Injecting Values into Prompt", "monkey"):
         dataset_generator = DatasetGenerator(**config.data.model_dump())
 
-    train_columns = dataset_generator.train_columns
+    _ = dataset_generator.train_columns
     test_column = dataset_generator.test_column
 
     dataset_path = dir_helper.save_paths.dataset
@@ -66,9 +67,8 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     results_path = dir_helper.save_paths.results
     results_file_path = join(dir_helper.save_paths.results, "results.csv")
     if not exists(results_path) or exists(results_file_path):
-        inference_runner = LoRAInference(
-            test, test_column, config, dir_helper
-        ).infer_all()
+        inference_runner = LoRAInference(test, test_column, config, dir_helper)
+        inference_runner.infer_all()
         RichUI.after_inference(results_path)
     else:
         RichUI.inference_found(results_path)
@@ -90,9 +90,7 @@ def run(config_path: str = "./config.yml") -> None:
     with open(config_path, "r") as file:
         config = yaml.safe_load(file)
         configs = (
-            generate_permutations(config, Config)
-            if config.get("ablation", {}).get("use_ablate", False)
-            else [config]
+            generate_permutations(config, Config) if config.get("ablation", {}).get("use_ablate", False) else [config]
         )
     for config in configs:
         # validate data with pydantic

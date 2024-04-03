@@ -1,7 +1,7 @@
-from rich.panel import Panel
 from rich.layout import Layout
-from rich.text import Text
+from rich.panel import Panel
 from rich.table import Table
+from rich.text import Text
 
 
 def inject_example_to_rich_layout(layout: Layout, layout_name: str, example: dict):

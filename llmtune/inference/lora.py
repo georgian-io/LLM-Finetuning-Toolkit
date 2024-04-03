@@ -1,20 +1,18 @@
+import csv
 import os
 from os.path import join
 from threading import Thread
-import csv
 
-from transformers import TextIteratorStreamer
-from rich.text import Text
-from datasets import Dataset
-from transformers import AutoTokenizer, BitsAndBytesConfig
-from peft import AutoPeftModelForCausalLM
 import torch
+from datasets import Dataset
+from peft import AutoPeftModelForCausalLM
+from rich.text import Text
+from transformers import AutoTokenizer, BitsAndBytesConfig, TextIteratorStreamer
 
-
-from llmtune.pydantic_models.config_model import Config
-from llmtune.utils.save_utils import DirectoryHelper
 from llmtune.inference.generics import Inference
+from llmtune.pydantic_models.config_model import Config
 from llmtune.ui.rich_ui import RichUI
+from llmtune.utils.save_utils import DirectoryHelper
 
 
 # TODO: Add type hints please!
@@ -35,9 +33,7 @@ class LoRAInference(Inference):
         self.device_map = self.config.model.device_map
         self._weights_path = dir_helper.save_paths.weights
 
-        self.model, self.tokenizer = self._get_merged_model(
-            dir_helper.save_paths.weights
-        )
+        self.model, self.tokenizer = self._get_merged_model(dir_helper.save_paths.weights)
 
     def _get_merged_model(self, weights_path: str):
         # purge VRAM
@@ -47,20 +43,14 @@ class LoRAInference(Inference):
         dtype = (
             torch.float16
             if self.config.training.training_args.fp16
-            else (
-                torch.bfloat16
-                if self.config.training.training_args.bf16
-                else torch.float32
-            )
+            else (torch.bfloat16 if self.config.training.training_args.bf16 else torch.float32)
         )
 
         self.model = AutoPeftModelForCausalLM.from_pretrained(
             weights_path,
             torch_dtype=dtype,
             device_map=self.device_map,
-            quantization_config=(
-                BitsAndBytesConfig(**self.config.model.bitsandbytes.model_dump())
-            ),
+            quantization_config=(BitsAndBytesConfig(**self.config.model.bitsandbytes.model_dump())),
         )
 
         """TODO: figure out multi-gpu
@@ -70,9 +60,7 @@ class LoRAInference(Inference):
 
         model = self.model.merge_and_unload()
 
-        tokenizer = AutoTokenizer.from_pretrained(
-            self._weights_path, device_map=self.device_map
-        )
+        tokenizer = AutoTokenizer.from_pretrained(self._weights_path, device_map=self.device_map)
 
         return model, tokenizer
 
@@ -83,13 +71,11 @@ class LoRAInference(Inference):
 
         # inference loop
         for idx, (prompt, label) in enumerate(zip(prompts, labels)):
-            RichUI.inference_ground_truth_display(
-                f"Generating on test set: {idx+1}/{len(prompts)}", prompt, label
-            )
+            RichUI.inference_ground_truth_display(f"Generating on test set: {idx+1}/{len(prompts)}", prompt, label)
 
             try:
                 result = self.infer_one(prompt)
-            except:
+            except Exception:
                 continue
             results.append((prompt, label, result))
 
@@ -103,9 +89,7 @@ class LoRAInference(Inference):
                 writer.writerow(row)
 
     def infer_one(self, prompt: str) -> str:
-        input_ids = self.tokenizer(
-            prompt, return_tensors="pt", truncation=True
-        ).input_ids.cuda()
+        input_ids = self.tokenizer(prompt, return_tensors="pt", truncation=True).input_ids.cuda()
 
         # stream processor
         streamer = TextIteratorStreamer(
@@ -115,9 +99,7 @@ class LoRAInference(Inference):
             timeout=60,  # 60 sec timeout for generation; to handle OOM errors
         )
 
-        generation_kwargs = dict(
-            input_ids=input_ids, streamer=streamer, **self.config.inference.model_dump()
-        )
+        generation_kwargs = dict(input_ids=input_ids, streamer=streamer, **self.config.inference.model_dump())
 
         thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
         thread.start()

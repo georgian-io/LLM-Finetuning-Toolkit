@@ -255,3 +255,10 @@ If you would like to contribute to this project, we recommend following the "for
 5.  Submit a **Pull request** so that we can review your changes
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
+
+### Checklist Before Pull Request (Optional)
+
+1. Use `ruff check --fix` to check and fix lint errors
+2. Use `ruff format` to apply formatting
+
+NOTE: Ruff linting and formatting checks are done when PR is raised via Git Action. Before raising a PR, it is a good practice to check and fix lint errors, as well as apply formatting.

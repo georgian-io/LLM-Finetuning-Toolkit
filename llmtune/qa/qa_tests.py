@@ -1,14 +1,16 @@
-from llmtune.qa.generics import LLMQaTest
-from typing import Union, List, Tuple, Dict
-import torch
-from transformers import DistilBertModel, DistilBertTokenizer
+from typing import List, Union
+
 import nltk
 import numpy as np
-from rouge_score import rouge_scorer
+import torch
+from nltk import pos_tag
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from nltk import pos_tag
-from llmtune.qa.generics import TestRegistry
+from rouge_score import rouge_scorer
+from transformers import DistilBertModel, DistilBertTokenizer
+
+from llmtune.qa.generics import LLMQaTest, TestRegistry
+
 
 model_name = "distilbert-base-uncased"
 tokenizer = DistilBertTokenizer.from_pretrained(model_name)
@@ -25,9 +27,7 @@ class LengthTest(LLMQaTest):
     def test_name(self) -> str:
         return "summary_length"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
         return abs(len(ground_truth) - len(model_prediction))
 
 
@@ -37,9 +37,7 @@ class JaccardSimilarityTest(LLMQaTest):
     def test_name(self) -> str:
         return "jaccard_similarity"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
         set_ground_truth = set(ground_truth.lower())
         set_model_prediction = set(model_prediction.lower())
 
@@ -62,14 +60,10 @@ class DotProductSimilarityTest(LLMQaTest):
             outputs = model(**tokens)
         return outputs.last_hidden_state.mean(dim=1).squeeze().numpy()
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
         embedding_ground_truth = self._encode_sentence(ground_truth)
         embedding_model_prediction = self._encode_sentence(model_prediction)
-        dot_product_similarity = np.dot(
-            embedding_ground_truth, embedding_model_prediction
-        )
+        dot_product_similarity = np.dot(embedding_ground_truth, embedding_model_prediction)
         return dot_product_similarity
 
 
@@ -79,9 +73,7 @@ class RougeScoreTest(LLMQaTest):
     def test_name(self) -> str:
         return "rouge_score"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
         scorer = rouge_scorer.RougeScorer(["rouge1"], use_stemmer=True)
         scores = scorer.score(model_prediction, ground_truth)
         return float(scores["rouge1"].precision)
@@ -99,9 +91,7 @@ class WordOverlapTest(LLMQaTest):
         filtered_text = [word for word in word_tokens if word.lower() not in stop_words]
         return " ".join(filtered_text)
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> Union[float, int, bool]:
         cleaned_model_prediction = self._remove_stopwords(model_prediction)
         cleaned_ground_truth = self._remove_stopwords(ground_truth)
 
@@ -128,12 +118,8 @@ class VerbPercent(PosCompositionTest):
     def test_name(self) -> str:
         return "verb_percent"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> float:
-        return self._get_pos_percent(
-            model_prediction, ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
-        )
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> float:
+        return self._get_pos_percent(model_prediction, ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ"])
 
 
 @TestRegistry.register("adjective_percent")
@@ -142,9 +128,7 @@ class AdjectivePercent(PosCompositionTest):
     def test_name(self) -> str:
         return "adjective_percent"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> float:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> float:
         return self._get_pos_percent(model_prediction, ["JJ", "JJR", "JJS"])
 
 
@@ -154,9 +138,7 @@ class NounPercent(PosCompositionTest):
     def test_name(self) -> str:
         return "noun_percent"
 
-    def get_metric(
-        self, prompt: str, ground_truth: str, model_prediction: str
-    ) -> float:
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> float:
         return self._get_pos_percent(model_prediction, ["NN", "NNS", "NNP", "NNPS"])
 
 
