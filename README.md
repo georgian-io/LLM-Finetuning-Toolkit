@@ -1,4 +1,4 @@
-# LLM Finetuning Toolkit 
+# LLM Finetuning Toolkit
 
 <p align="center">
   <img src="assets/toolkit-animation.gif" width="900" />
@@ -12,8 +12,6 @@ LLM Finetuning toolkit is a config-based CLI tool for launching a series of LLM 
 <img src="assets/overview_diagram.png" width="900" />
 </p>
 
-
-
 ## Installation
 
 ### Clone Repository
@@ -26,8 +24,8 @@ LLM Finetuning toolkit is a config-based CLI tool for launching a series of LLM 
 ### [Option 1] Docker (recommended)
 
 ```shell
-   docker build -t llm-toolkit 
-``` 
+   docker build -t llm-toolkit
+```
 
 #### CPU Only
 
@@ -63,18 +61,15 @@ See poetry documentation page for poetry [installation instructions](https://pyt
    pip install -r requirements.txt
 ```
 
-
 ## Quick Start
 
 This guide contains 3 stages that will enable you to get the most out of this toolkit!
 
-* __Basic__: Run your first LLM fine-tuning experiment  
-* __Intermediate__: Run a custom experiment by changing the componenets of the YAML configuration file 
-* __Advanced__: Launch series of fine-tuning experiments across different prompt templates, LLMs, optimization techniques -- all through **one** YAML configuration file 
+- **Basic**: Run your first LLM fine-tuning experiment
+- **Intermediate**: Run a custom experiment by changing the componenets of the YAML configuration file
+- **Advanced**: Launch series of fine-tuning experiments across different prompt templates, LLMs, optimization techniques -- all through **one** YAML configuration file
 
-
-
-### Basic 
+### Basic
 
 ```python
    python toolkit.py --config ./config.yml
@@ -82,10 +77,9 @@ This guide contains 3 stages that will enable you to get the most out of this to
 
 This command initiates the fine-tuning process using the settings specified in the default YAML configuration file `config.yaml`.
 
-
 ### Intermediate
 
-The configuration file is the central piece that defines the behavior of the toolkit. It is written in YAML format and consists of several sections that control different aspects of the process, such as data ingestion, model definition, training, inference, and quality assurance. We highlight some of the critical sections. 
+The configuration file is the central piece that defines the behavior of the toolkit. It is written in YAML format and consists of several sections that control different aspects of the process, such as data ingestion, model definition, training, inference, and quality assurance. We highlight some of the critical sections.
 
 #### Data Ingestion
 
@@ -99,14 +93,13 @@ data:
     ### Instruction: {instruction}
     ### Input: {input}
     ### Output:
-  prompt_stub:
-    {output}
+  prompt_stub: { output }
   test_size: 0.1 # Proportion of test as % of total; if integer then # of samples
   train_size: 0.9 # Proportion of train as % of total; if integer then # of samples
   train_test_split_seed: 42
 ```
 
-* While the above example illustrates using a public dataset from Hugging Face, the config file can also ingest your own data. 
+- While the above example illustrates using a public dataset from Hugging Face, the config file can also ingest your own data.
 
 ```yaml
    file_type: "json"
@@ -118,13 +111,12 @@ data:
    path: "<path to your data file>
 ```
 
-* The prompt fields help create instructions to fine-tune the LLM on. It reads data from specific columns, mentioned in {} brackets, that are present in your dataset. In the example provided, it is expected for the data file to have column names: `instruction`, `input` and `output`.  
+- The prompt fields help create instructions to fine-tune the LLM on. It reads data from specific columns, mentioned in {} brackets, that are present in your dataset. In the example provided, it is expected for the data file to have column names: `instruction`, `input` and `output`.
 
-* The prompt fields use both `prompt` and `prompt_stub` during fine-tuning. However, during testing, **only** the `prompt` section is used as input to the fine-tuned LLM.
-
+- The prompt fields use both `prompt` and `prompt_stub` during fine-tuning. However, during testing, **only** the `prompt` section is used as input to the fine-tuned LLM.
 
 #### LLM Definition
- 
+
 ```yaml
 model:
   hf_model_ckpt: "NousResearch/Llama-2-7b-hf"
@@ -149,41 +141,41 @@ lora:
     - gate_proj
 ```
 
-* While the above example showcases using Llama2 7B, in theory, any open-source LLM supported by Hugging Face can be used in this toolkit.
+- While the above example showcases using Llama2 7B, in theory, any open-source LLM supported by Hugging Face can be used in this toolkit.
 
 ```yaml
-   hf_model_ckpt: "mistralai/Mistral-7B-v0.1"
+hf_model_ckpt: "mistralai/Mistral-7B-v0.1"
 ```
 
 ```yaml
-   hf_model_ckpt: "tiiuae/falcon-7b"
+hf_model_ckpt: "tiiuae/falcon-7b"
 ```
 
-* The parameters for LoRA, such as the rank `r` and dropout, can be altered.
+- The parameters for LoRA, such as the rank `r` and dropout, can be altered.
 
 ```yaml
-   lora:
-     r: 64
-     lora_dropout: 0.25
+lora:
+  r: 64
+  lora_dropout: 0.25
 ```
- 
+
 #### Quality Assurance
 
 ```yaml
 qa:
   llm_tests:
-    - length_test 
+    - length_test
     - word_overlap_test
 ```
 
-* To ensure that the fine-tuned LLM behaves as expected, you can add tests that check if the desired behaviour is being attained. Example: for an LLM fine-tuned for a summarization task, we may want to check if the generated summary is indeed smaller in length than the input text. We would also like to learn the overlap between words in the original text and generated summary.
-
+- To ensure that the fine-tuned LLM behaves as expected, you can add tests that check if the desired behaviour is being attained. Example: for an LLM fine-tuned for a summarization task, we may want to check if the generated summary is indeed smaller in length than the input text. We would also like to learn the overlap between words in the original text and generated summary.
 
 #### Artifact Outputs
 
 This config will run finetuning and save the results under directory `./experiment/[unique_hash]`. Each unique configuration will generate a unique hash, so that our tool can automatically pick up where it left off. For example, if you need to exit in the middle of the training, by relaunching the script, the program will automatically load the existing dataset that has been generated under the directory, instead of doing it all over again.
 
 After the script finishes running you will see these distinct artifacts:
+
 ```shell
   /dataset # generated pkl file in hf datasets format
   /model # peft model weights in hf format
@@ -191,18 +183,17 @@ After the script finishes running you will see these distinct artifacts:
   /qa # csv of test results: e.g. vector similarity between ground truth and prediction
 ```
 
-Once all the changes have been incorporated in the YAML file, you can simply use it to run a custom fine-tuning experiment! 
+Once all the changes have been incorporated in the YAML file, you can simply use it to run a custom fine-tuning experiment!
 
 ```python
-   python toolkit.py --config <path to custom YAML file>
+   python toolkit.py --config-path <path to custom YAML file>
 ```
 
-### Advanced 
-
+### Advanced
 
 Fine-tuning workflows typically involve running ablation studies across various LLMs, prompt designs and optimization techniques. The configuration file can be altered to support running ablation studies.
 
-* Specify different prompt templates to experiment with while fine-tuning.
+- Specify different prompt templates to experiment with while fine-tuning.
 
 ```yaml
 data:
@@ -212,25 +203,28 @@ data:
     - >-
       This is the first prompt template to iterate over
       ### Input: {input}
-      ### Output:  
+      ### Output:
     - >-
       This is the second prompt template
       ### Instruction: {instruction}
       ### Input: {input}
       ### Output:
-  prompt_stub:
-    {output}
+  prompt_stub: { output }
   test_size: 0.1 # Proportion of test as % of total; if integer then # of samples
   train_size: 0.9 # Proportion of train as % of total; if integer then # of samples
   train_test_split_seed: 42
 ```
 
-
-* Specify various LLMs that you would like to experiment with.
+- Specify various LLMs that you would like to experiment with.
 
 ```yaml
 model:
-  hf_model_ckpt: ["NousResearch/Llama-2-7b-hf", mistralai/Mistral-7B-v0.1", "tiiuae/falcon-7b"]
+  hf_model_ckpt:
+    [
+      "NousResearch/Llama-2-7b-hf",
+      mistralai/Mistral-7B-v0.1",
+      "tiiuae/falcon-7b",
+    ]
   quantize: true
   bitsandbytes:
     load_in_4bit: true
@@ -238,29 +232,46 @@ model:
     bnb_4bit_quant_type: "nf4"
 ```
 
-* Specify different configurations of LoRA that you would like to ablate over.
+- Specify different configurations of LoRA that you would like to ablate over.
 
 ```yaml
-   lora:
-     r: [16, 32, 64]
-     lora_dropout: [0.25, 0.50]
+lora:
+  r: [16, 32, 64]
+  lora_dropout: [0.25, 0.50]
 ```
 
 ## Extending
 
 The toolkit provides a modular and extensible architecture that allows developers to customize and enhance its functionality to suit their specific needs. Each component of the toolkit, such as data ingestion, finetuning, inference, and quality assurance testing, is designed to be easily extendable.
 
-
 ## Contributing
 
 If you would like to contribute to this project, we recommend following the "fork-and-pull" Git workflow.
 
- 1. **Fork** the repo on GitHub
- 2. **Clone** the project to your own machine
- 3. **Commit** changes to your own branch
- 4. **Push** your work back up to your fork
- 5. Submit a **Pull request** so that we can review your changes
+1.  **Fork** the repo on GitHub
+2.  **Clone** the project to your own machine
+3.  **Commit** changes to your own branch
+4.  **Push** your work back up to your fork
+5.  Submit a **Pull request** so that we can review your changes
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
+### Checklist Before Pull Request (Optional)
+
+1. Use `ruff check --fix` to check and fix lint errors
+2. Use `ruff format` to apply formatting
+
+NOTE: Ruff linting and formatting checks are done when PR is raised via Git Action. Before raising a PR, it is a good practice to check and fix lint errors, as well as apply formatting.
+
+
+### Releasing
+
+
+To manually release a PyPI package, please run: 
+
+```shell
+   make build-release
+```
+
+Note: Make sure you have pypi token for this [PyPI repo](https://pypi.org/project/llm-toolkit/).
 

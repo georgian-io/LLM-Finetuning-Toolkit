@@ -4,19 +4,18 @@ Helper functions to help managing saving and loading of experiments:
     2. Check if files are present at various experiment stages
 """
 
-import shutil
-import os
-from os.path import exists
-import yaml
-
-import re
 import hashlib
-from functools import cached_property
+import os
+import re
 from dataclasses import dataclass
+from functools import cached_property
+from os.path import exists
 
+import yaml
 from sqids import Sqids
 
-from src.pydantic_models.config_model import Config
+from llmtune.pydantic_models.config_model import Config
+
 
 NUM_MD5_DIGITS_FOR_SQIDS = 5  # TODO: maybe move consts to a dedicated folder
 

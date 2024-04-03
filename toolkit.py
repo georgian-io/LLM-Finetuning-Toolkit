@@ -1,25 +1,30 @@
-from os import listdir
-from os.path import join, exists
-import yaml
 import logging
+from os import listdir
+from os.path import exists, join
 
-from transformers import utils as hf_utils
-from pydantic import ValidationError
 import torch
+import typer
+import yaml
+from pydantic import ValidationError
+from transformers import utils as hf_utils
 
-from src.pydantic_models.config_model import Config
-from src.data.dataset_generator import DatasetGenerator
-from src.utils.save_utils import DirectoryHelper
-from src.utils.ablation_utils import generate_permutations
-from src.finetune.lora import LoRAFinetune
-from src.inference.lora import LoRAInference
-from src.ui.rich_ui import RichUI
+from llmtune.data.dataset_generator import DatasetGenerator
+from llmtune.finetune.lora import LoRAFinetune
+from llmtune.inference.lora import LoRAInference
+from llmtune.pydantic_models.config_model import Config
+from llmtune.ui.rich_ui import RichUI
+from llmtune.utils.ablation_utils import generate_permutations
+from llmtune.utils.save_utils import DirectoryHelper
+
 
 hf_utils.logging.set_verbosity_error()
 torch._logging.set_logs(all=logging.CRITICAL)
 
 
-def run_one_experiment(config: Config) -> None:
+app = typer.Typer()
+
+
+def run_one_experiment(config: Config, config_path: str) -> None:
     dir_helper = DirectoryHelper(config_path, config)
 
     # Loading Data -------------------------------
@@ -28,7 +33,7 @@ def run_one_experiment(config: Config) -> None:
     with RichUI.during_dataset_creation("Injecting Values into Prompt", "monkey"):
         dataset_generator = DatasetGenerator(**config.data.model_dump())
 
-    train_columns = dataset_generator.train_columns
+    _ = dataset_generator.train_columns
     test_column = dataset_generator.test_column
 
     dataset_path = dir_helper.save_paths.dataset
@@ -62,15 +67,15 @@ def run_one_experiment(config: Config) -> None:
     results_path = dir_helper.save_paths.results
     results_file_path = join(dir_helper.save_paths.results, "results.csv")
     if not exists(results_path) or exists(results_file_path):
-        inference_runner = LoRAInference(
-            test, test_column, config, dir_helper
-        ).infer_all()
+        inference_runner = LoRAInference(test, test_column, config, dir_helper)
+        inference_runner.infer_all()
         RichUI.after_inference(results_path)
     else:
         RichUI.inference_found(results_path)
 
     # QA -------------------------------
-    # console.rule("[bold blue]:thinking_face: Running LLM Unit Tests")
+
+    RichUI.before_qa()
     qa_path = dir_helper.save_paths.qa
     if not exists(qa_path) or not listdir(qa_path):
         # TODO: Instantiate unit test classes
@@ -88,21 +93,19 @@ def run_one_experiment(config: Config) -> None:
         pass
 
 
-if __name__ == "__main__":
-    config_path = "./config.yml"  # TODO: parameterize this
 
+@app.command()
+def run(config_path: str = "./config.yml") -> None:
     # Load YAML config
     with open(config_path, "r") as file:
         config = yaml.safe_load(file)
         configs = (
-            generate_permutations(config, Config)
-            if config.get("ablation", {}).get("use_ablate", False)
-            else [config]
+            generate_permutations(config, Config) if config.get("ablation", {}).get("use_ablate", False) else [config]
         )
     for config in configs:
+        # validate data with pydantic
         try:
             config = Config(**config)
-        # validate data with pydantic
         except ValidationError as e:
             print(e.json())
 
@@ -113,4 +116,8 @@ if __name__ == "__main__":
             config = yaml.safe_load(file)
             config = Config(**config)
 
-        run_one_experiment(config)
+        run_one_experiment(config, config_path)
+
+
+if __name__ == "__main__":
+    app()

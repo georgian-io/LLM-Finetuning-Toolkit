@@ -1,27 +1,21 @@
-from typing import Literal, Union, List, Dict, Optional
-from pydantic import BaseModel, FilePath, validator, Field
-
-from huggingface_hub.utils import validate_repo_id
+from typing import List, Literal, Optional, Union
 
 import torch
+from pydantic import BaseModel, Field, FilePath, validator
+
 
 # TODO: Refactor this into multiple files...
 HfModelPath = str
 
+
 class QaConfig(BaseModel):
-    llm_tests: Optional[List[str]] = Field([], description = "list of tests that needs to be connected")
-    
+    llm_tests: Optional[List[str]] = Field([], description="list of tests that needs to be connected")
+
 
 class DataConfig(BaseModel):
-    file_type: Literal["json", "csv", "huggingface"] = Field(
-        None, description="File type"
-    )
-    path: Union[FilePath, HfModelPath] = Field(
-        None, description="Path to the file or HuggingFace model"
-    )
-    prompt: str = Field(
-        None, description="Prompt for the model. Use {} brackets for column name"
-    )
+    file_type: Literal["json", "csv", "huggingface"] = Field(None, description="File type")
+    path: Union[FilePath, HfModelPath] = Field(None, description="Path to the file or HuggingFace model")
+    prompt: str = Field(None, description="Prompt for the model. Use {} brackets for column name")
     prompt_stub: str = Field(
         None,
         description="Stub for the prompt; this is injected during training. Use {} brackets for column name",
@@ -48,9 +42,7 @@ class DataConfig(BaseModel):
 
 
 class BitsAndBytesConfig(BaseModel):
-    load_in_8bit: Optional[bool] = Field(
-        False, description="Enable 8-bit quantization with LLM.int8()"
-    )
+    load_in_8bit: Optional[bool] = Field(False, description="Enable 8-bit quantization with LLM.int8()")
     llm_int8_threshold: Optional[float] = Field(
         6.0, description="Outlier threshold for outlier detection in 8-bit quantization"
     )
@@ -61,9 +53,7 @@ class BitsAndBytesConfig(BaseModel):
         False,
         description="Enable splitting model parts between int8 on GPU and fp32 on CPU",
     )
-    llm_int8_has_fp16_weight: Optional[bool] = Field(
-        False, description="Run LLM.int8() with 16-bit main weights"
-    )
+    llm_int8_has_fp16_weight: Optional[bool] = Field(False, description="Run LLM.int8() with 16-bit main weights")
 
     load_in_4bit: Optional[bool] = Field(
         True,
@@ -86,14 +76,10 @@ class ModelConfig(BaseModel):
         "NousResearch/Llama-2-7b-hf",
         description="Path to the model (huggingface repo or local path)",
     )
-    device_map: Optional[str] = Field(
-        "auto", description="device onto which to load the model"
-    )
+    device_map: Optional[str] = Field("auto", description="device onto which to load the model")
 
     quantize: Optional[bool] = Field(False, description="Flag to enable quantization")
-    bitsandbytes: BitsAndBytesConfig = Field(
-        None, description="Bits and Bytes configuration"
-    )
+    bitsandbytes: BitsAndBytesConfig = Field(None, description="Bits and Bytes configuration")
 
     # @validator("hf_model_ckpt")
     # def validate_model(cls, v, **kwargs):
@@ -116,22 +102,12 @@ class ModelConfig(BaseModel):
 
 class LoraConfig(BaseModel):
     r: Optional[int] = Field(8, description="Lora rank")
-    task_type: Optional[str] = Field(
-        "CAUSAL_LM", description="Base Model task type during training"
-    )
+    task_type: Optional[str] = Field("CAUSAL_LM", description="Base Model task type during training")
 
-    lora_alpha: Optional[int] = Field(
-        16, description="The alpha parameter for Lora scaling"
-    )
-    bias: Optional[str] = Field(
-        "none", description="Bias type for Lora. Can be 'none', 'all' or 'lora_only'"
-    )
-    lora_dropout: Optional[float] = Field(
-        0.1, description="The dropout probability for Lora layers"
-    )
-    target_modules: Optional[List[str]] = Field(
-        None, description="The names of the modules to apply Lora to"
-    )
+    lora_alpha: Optional[int] = Field(16, description="The alpha parameter for Lora scaling")
+    bias: Optional[str] = Field("none", description="Bias type for Lora. Can be 'none', 'all' or 'lora_only'")
+    lora_dropout: Optional[float] = Field(0.1, description="The dropout probability for Lora layers")
+    target_modules: Optional[List[str]] = Field(None, description="The names of the modules to apply Lora to")
     fan_in_fan_out: Optional[bool] = Field(
         False,
         description="Flag to indicate if the layer to replace stores weight like (fan_in, fan_out)",
@@ -140,9 +116,7 @@ class LoraConfig(BaseModel):
         None,
         description="List of modules apart from LoRA layers to be set as trainable and saved in the final checkpoint",
     )
-    layers_to_transform: Optional[Union[List[int], int]] = Field(
-        None, description="The layer indexes to transform"
-    )
+    layers_to_transform: Optional[Union[List[int], int]] = Field(None, description="The layer indexes to transform")
     layers_pattern: Optional[str] = Field(None, description="The layer pattern name")
     # rank_pattern: Optional[Dict[str, int]] = Field(
     #     {}, description="The mapping from layer names or regexp expression to ranks"
@@ -155,15 +129,9 @@ class LoraConfig(BaseModel):
 # TODO: Get comprehensive Args!
 class TrainingArgs(BaseModel):
     num_train_epochs: Optional[int] = Field(1, description="Number of training epochs")
-    per_device_train_batch_size: Optional[int] = Field(
-        1, description="Batch size per training device"
-    )
-    gradient_accumulation_steps: Optional[int] = Field(
-        1, description="Number of steps for gradient accumulation"
-    )
-    gradient_checkpointing: Optional[bool] = Field(
-        True, description="Flag to enable gradient checkpointing"
-    )
+    per_device_train_batch_size: Optional[int] = Field(1, description="Batch size per training device")
+    gradient_accumulation_steps: Optional[int] = Field(1, description="Number of steps for gradient accumulation")
+    gradient_checkpointing: Optional[bool] = Field(True, description="Flag to enable gradient checkpointing")
     optim: Optional[str] = Field("paged_adamw_32bit", description="Optimizer")
     logging_steps: Optional[int] = Field(100, description="Number of logging steps")
     learning_rate: Optional[float] = Field(2.0e-4, description="Learning rate")
@@ -172,9 +140,7 @@ class TrainingArgs(BaseModel):
     fp16: Optional[bool] = Field(False, description="Flag to enable fp16")
     max_grad_norm: Optional[float] = Field(0.3, description="Maximum gradient norm")
     warmup_ratio: Optional[float] = Field(0.03, description="Warmup ratio")
-    lr_scheduler_type: Optional[str] = Field(
-        "constant", description="Learning rate scheduler type"
-    )
+    lr_scheduler_type: Optional[str] = Field("constant", description="Learning rate scheduler type")
 
 
 # TODO: Get comprehensive Args!
