@@ -90,9 +90,7 @@ def run(config_path: str = "./config.yml") -> None:
     with open(config_path, "r") as file:
         config = yaml.safe_load(file)
         configs = (
-            generate_permutations(config, Config)
-            if config.get("ablation", {}).get("use_ablate", False)
-            else [config]
+            generate_permutations(config, Config) if config.get("ablation", {}).get("use_ablate", False) else [config]
         )
     for config in configs:
         # validate data with pydantic
