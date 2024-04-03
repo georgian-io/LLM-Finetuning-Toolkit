@@ -109,5 +109,5 @@ def run(config_path: str = "./config.yml") -> None:
         run_one_experiment(config, config_path)
 
 
-if __name__ == "__main__":
+def cli():
     app()
