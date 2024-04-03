@@ -71,13 +71,21 @@ def run_one_experiment(config: Config) -> None:
 
     # QA -------------------------------
     # console.rule("[bold blue]:thinking_face: Running LLM Unit Tests")
-    # qa_path = dir_helper.save_paths.qa
-    # if not exists(qa_path) or not listdir(qa_path):
-    #     # TODO: Instantiate unit test classes
-    #     # TODO: Load results.csv
-    #     # TODO: Run Unit Tests
-    #     # TODO: Save Unit Test Results
-    #     pass
+    qa_path = dir_helper.save_paths.qa
+    if not exists(qa_path) or not listdir(qa_path):
+        # TODO: Instantiate unit test classes
+        llm_tests = config.get('qa', {}).get('llm_tests', [])
+        tests = TestRegistry.create_tests_from_list(llm_tests)
+         # TODO: Load results.csv
+        results_df = pd.read_csv(results_file_path)
+        prompts = results_df['prompt'].tolist()
+        ground_truths = results_df['ground_truth'].tolist()
+        model_preds = results_df['model_prediction'].tolist()
+        # TODO: Run Unit Tests
+        test_suite = LLMTestSuite(tests, prompts, ground_truths, model_preds)
+        # TODO: Save Unit Test Results
+        test_suite.save_test_results('unit_test_results.csv')
+        pass
 
 
 if __name__ == "__main__":
