@@ -7,9 +7,6 @@ license = "Apache 2.0"
 readme = "README.md"
 packages = [{include = "llmtune"}]
 
-[tool.poetry.scripts]
-llmtune = "llmtune.cli.toolkit:cli"
-
 [tool.poetry.dependencies]
 python = ">=3.9, <=3.12"
 transformers = "~4.37.2"
@@ -46,6 +43,7 @@ shellingham = "^1.5.4"
 
 
 [tool.poetry.group.dev.dependencies]
+twine = "^5.0.0"
 ruff = "~0.3.5"
 
 [build-system]
