@@ -2,7 +2,7 @@ name: Ruff
 on: pull_request
 jobs:
   lint:
-    name: Lint, Format, and Commit
+    name: Lint & Format
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
