@@ -14,9 +14,7 @@ class LLMQaTest(ABC):
         pass
 
     @abstractmethod
-    def get_metric(
-        self, prompt: str, grount_truth: str, model_pred: str
-    ) -> Union[float, int, bool]:
+    def get_metric(self, prompt: str, grount_truth: str, model_pred: str) -> Union[float, int, bool]:
         pass
 
 
@@ -45,7 +43,6 @@ class LLMTestSuite:
         ground_truths: List[str],
         model_preds: List[str],
     ) -> None:
-
         self.tests = tests
         self.prompts = prompts
         self.ground_truths = ground_truths
@@ -57,9 +54,7 @@ class LLMTestSuite:
         test_results = {}
         for test in zip(self.tests):
             metrics = []
-            for prompt, ground_truth, model_pred in zip(
-                self.prompts, self.ground_truths, self.model_preds
-            ):
+            for prompt, ground_truth, model_pred in zip(self.prompts, self.ground_truths, self.model_preds):
                 metrics.append(test.get_metric(prompt, ground_truth, model_pred))
             test_results[test.test_name] = metrics
 
@@ -74,14 +69,10 @@ class LLMTestSuite:
         result_dictionary = self.test_results()
         column_data = {key: list(result_dictionary[key]) for key in result_dictionary}
         mean_values = {key: statistics.mean(column_data[key]) for key in column_data}
-        median_values = {
-            key: statistics.median(column_data[key]) for key in column_data
-        }
+        median_values = {key: statistics.median(column_data[key]) for key in column_data}
         stdev_values = {key: statistics.stdev(column_data[key]) for key in column_data}
         # Use the RichUI class to display the table
-        RichUI.display_table(
-            result_dictionary, mean_values, median_values, stdev_values
-        )
+        RichUI.display_table(result_dictionary, mean_values, median_values, stdev_values)
 
     def save_test_results(self, path: str):
         # TODO: save these!

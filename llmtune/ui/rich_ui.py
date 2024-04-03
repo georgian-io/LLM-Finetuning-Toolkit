@@ -25,9 +25,7 @@ class StatusContext:
         return self  # This allows you to use variables from this context if needed
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.task.__exit__(
-            exc_type, exc_val, exc_tb
-        )  # Cleanly exit the console status context
+        self.task.__exit__(exc_type, exc_val, exc_tb)  # Cleanly exit the console status context
 
 
 class LiveContext:
@@ -47,9 +45,7 @@ class LiveContext:
         return self  # This allows you to use variables from this context if needed
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.task.__exit__(
-            exc_type, exc_val, exc_tb
-        )  # Cleanly exit the console status context
+        self.task.__exit__(exc_type, exc_val, exc_tb)  # Cleanly exit the console status context
 
     def update(self, new_text: Text):
         self.task.update(new_text)
@@ -93,9 +89,7 @@ class RichUI(UI):
         )
 
         inject_example_to_rich_layout(layout["train"], "Train Example", train_row)
-        inject_example_to_rich_layout(
-            layout["inference"], "Inference Example", test_row
-        )
+        inject_example_to_rich_layout(layout["inference"], "Inference Example", test_row)
 
         console.print(layout)
 
@@ -188,10 +182,7 @@ class RichUI(UI):
         pass
 
     @staticmethod
-    def qa_display_table(
-        self, result_dictionary, mean_values, median_values, stdev_values
-    ):
-
+    def qa_display_table(self, result_dictionary, mean_values, median_values, stdev_values):
         # Create a table
         table = Table(show_header=True, header_style="bold", title="Test Results")
 

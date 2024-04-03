@@ -11,17 +11,11 @@ fron a single config yaml
 """
 
 
-def get_types_from_dict(
-    source_dict: dict, root="", type_dict={}
-) -> Dict[str, Tuple[type, type]]:
+def get_types_from_dict(source_dict: dict, root="", type_dict={}) -> Dict[str, Tuple[type, type]]:
     for key, val in source_dict.items():
         if not isinstance(val, dict):
             attr = f"{root}.{key}" if root else key
-            tp = (
-                (type(val), None)
-                if not isinstance(val, list)
-                else (type(val), type(val[0]))
-            )
+            tp = (type(val), None) if not isinstance(val, list) else (type(val), type(val[0]))
             type_dict[attr] = tp
         else:
             join_array = [root, key] if root else [key]

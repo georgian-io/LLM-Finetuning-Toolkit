@@ -94,9 +94,7 @@ class LoRAFinetune(Finetune):
         self.model = get_peft_model(self.model, self._lora_config)
 
         if not self.config.accelerate:
-            self.optimizer = bnb.optim.Adam8bit(
-                self.model.parameters(), lr=self._training_args.learning_rate
-            )
+            self.optimizer = bnb.optim.Adam8bit(self.model.parameters(), lr=self._training_args.learning_rate)
             self.lr_scheduler = torch.optim.lr_scheduler.ConstantLR(self.optimizer)
         if self.config.accelerate:
             self.model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(

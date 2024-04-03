@@ -61,12 +61,8 @@ class DatasetGenerator:
         return example
 
     def _format_prompts(self):
-        self.dataset["train"] = self.dataset["train"].map(
-            partial(self._format_one_prompt, is_test=False)
-        )
-        self.dataset["test"] = self.dataset["test"].map(
-            partial(self._format_one_prompt, is_test=True)
-        )
+        self.dataset["train"] = self.dataset["train"].map(partial(self._format_one_prompt, is_test=False))
+        self.dataset["test"] = self.dataset["test"].map(partial(self._format_one_prompt, is_test=True))
 
     def get_dataset(self) -> Tuple[Dataset, Dataset]:
         self._train_test_split()
