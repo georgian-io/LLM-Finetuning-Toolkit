@@ -258,7 +258,7 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 ### Checklist Before Pull Request (Optional)
 
-1. Use `ruff check` to check for lint errors
+1. Use `ruff check --fix` to check and fix lint errors
 2. Use `ruff format` to apply formatting
 
-NOTE: Ruff linting and formatting are done automatically when PR is raised using Git Action (and changes will be automatically applied via another commit). It is, however, a good practice to check and fix lint errors, as well as apply formatting before PR.
+NOTE: Ruff linting and formatting checks are done when PR is raised via Git Action. Before raising a PR, it is a good practice to check and fix lint errors, as well as apply formatting.

@@ -7,13 +7,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: chartboost/ruff-action@v1
+        name: Lint
         with:
           version: 0.3.5
-          args: check --fix --output-format=full --statistics
+          args: "check --output-format=full --statistics"
       - uses: chartboost/ruff-action@v1
+        name: Format
         with:
           version: 0.3.5
-          args: format
+          args: "format --check"
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "lint fixes and formatting by ruff"
