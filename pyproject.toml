@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "llm-finetuning-hub"
+name = "llm-toolkit"
 version = "0.1.0"
 description = "LLM Finetuning resource hub + toolkit"
 authors = ["Benjamin Ye <benjamin.ye@georgian.io>"]
 license = "Apache 2.0"
 readme = "README.md"
-packages = [{include = "llm_finetuning_hub"}]
+packages = [{include = "llmtune"}]
 
 [tool.poetry.dependencies]
 python = ">=3.9, <=3.12"
@@ -43,6 +43,7 @@ shellingham = "^1.5.4"
 
 
 [tool.poetry.group.dev.dependencies]
+twine = "^5.0.0"
 ruff = "~0.3.5"
 
 [build-system]
