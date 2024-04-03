@@ -256,8 +256,15 @@ If you would like to contribute to this project, we recommend following the "for
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
+### Checklist Before Pull Request (Optional)
 
-## Releasing
+1. Use `ruff check --fix` to check and fix lint errors
+2. Use `ruff format` to apply formatting
+
+NOTE: Ruff linting and formatting checks are done when PR is raised via Git Action. Before raising a PR, it is a good practice to check and fix lint errors, as well as apply formatting.
+
+
+### Releasing
 
 
 To manually release a PyPI package, please run: 
@@ -266,4 +273,5 @@ To manually release a PyPI package, please run:
    make build-release
 ```
 
-Note: Make sure you have pypi token for this [pipy repo](https://pypi.org/project/llm-toolkit/).
+Note: Make sure you have pypi token for this [PyPI repo](https://pypi.org/project/llm-toolkit/).
+
