@@ -1,4 +1,4 @@
-name: Publish Docker Image
+name: Github Packages CD
 on:
   release:
     types: [published]
@@ -7,6 +7,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 jobs:
   build-and-push-image:
+    name: Build and Push Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
