@@ -1,10 +1,16 @@
-name: Publish to PyPI
+name: PyPI CD
 on:
   release:
     types: [published]
 jobs:
   pypi:
+    name: Build and Upload Release
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/llm-toolkit
+    permissions:
+      id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
       # ----------------
       # Set Up
@@ -31,11 +37,10 @@ jobs:
         run: |
           poetry install --no-interaction --no-root
           poetry self add "poetry-dynamic-versioning[plugin]"
-      - name: Install PyPI Credential
-        run: |
-          poetry config pypi-token ${{ secrets.PYPI_API_TOKEN }}
       # ----------------
       # Build & Publish
       # ----------------
-      - name: Build & Publish
-        run: make build-release
+      - name: Build
+        run: poetry build
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
