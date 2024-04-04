@@ -14,6 +14,7 @@ llmtune = "llmtune.cli.toolkit:cli"
 enable = true
 vcs = "git"
 style = "semver"
+pattern = "default-unprefixed"
 
 [tool.poetry-dynamic-versioning.substitution]
 folders = [
