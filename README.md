@@ -1,7 +1,7 @@
 # LLM Finetuning Toolkit
 
 <p align="center">
-  <img src="https://github.com/georgian-io/LLM-Finetuning-Toolkit/blob/main/assets/toolkit-animation.gif" width="900" />
+  <img src="https://github.com/georgian-io/LLM-Finetuning-Toolkit/blob/main/assets/toolkit-animation.gif?raw=true" width="900" />
 </p>
 
 ## Overview
@@ -9,7 +9,7 @@
 LLM Finetuning toolkit is a config-based CLI tool for launching a series of LLM finetuning experiments on your data and gathering their results. From one single `yaml` config file, control all elements of a typical experimentation pipeline - **prompts**, **open-source LLMs**, **optimization strategy** and **LLM testing**.
 
 <p align="center">
-<img src="https://github.com/georgian-io/LLM-Finetuning-Toolkit/blob/main/assets/overview_diagram.png" width="900" />
+<img src="https://github.com/georgian-io/LLM-Finetuning-Toolkit/blob/main/assets/overview_diagram.png?raw=true" width="900" />
 </p>
 
 ## Installation
