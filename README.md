@@ -26,7 +26,7 @@ pip install llm-toolkit
 
 ### docker
 ```shell
-docker pull ghcr.io/georgian-io/llm-toolkit:latest
+docker pull ghcr.io/georgian-io/llm-finetuning-toolkit:latest
 ```
 
 ## Quick Start
