@@ -24,10 +24,6 @@ pipx install llm-toolkit
 pip install llm-toolkit
 ```
 
-### docker
-```shell
-docker pull ghcr.io/georgian-io/llm-toolkit:latest
-```
 
 ## Quick Start
 
