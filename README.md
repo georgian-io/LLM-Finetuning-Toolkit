@@ -13,52 +13,20 @@ LLM Finetuning toolkit is a config-based CLI tool for launching a series of LLM 
 </p>
 
 ## Installation
-
-### Clone Repository
-
+### pipx (recommended)
+pipx installs the package and depdencies in a seperate virtual environment
 ```shell
-   git clone https://github.com/georgian-io/LLM-Finetuning-Hub.git
-   cd LLM-Finetuning-Hub/
+pipx install llm-toolkit
 ```
 
-### [Option 1] Docker (recommended)
-
+### pip
 ```shell
-   docker build -t llm-toolkit
+pip install llm-toolkit
 ```
 
-#### CPU Only
-
+### docker
 ```shell
-   docker run -it llm-toolkit
-```
-
-#### With GPU
-
-```shell
-   docker run -it --gpus all llm-toolkit
-```
-
-### [Option 2] Poetry (recommended)
-
-See poetry documentation page for poetry [installation instructions](https://python-poetry.org/docs/#installation)
-
-```shell
-   poetry install
-```
-
-### [Option 3] pip
-
-```shell
-   pip install -r requirements.txt
-```
-
-### [Option 4] Conda
-
-```shell
-   conda create --name llm-toolkit python=3.11
-   conda activate llm-toolkit
-   pip install -r requirements.txt
+docker pull ghcr.io/georgian-io/llm-toolkit:latest
 ```
 
 ## Quick Start
@@ -72,7 +40,7 @@ This guide contains 3 stages that will enable you to get the most out of this to
 ### Basic
 
 ```python
-   python toolkit.py --config ./config.yml
+   llmtune --config-path ./config.yml
 ```
 
 This command initiates the fine-tuning process using the settings specified in the default YAML configuration file `config.yaml`.
@@ -255,6 +223,56 @@ If you would like to contribute to this project, we recommend following the "for
 5.  Submit a **Pull request** so that we can review your changes
 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request!
+
+### Set Up Dev Environment
+
+<details>
+<summary>1. Clone Repo</summary>
+  
+```shell
+   git clone https://github.com/georgian-io/LLM-Finetuning-Toolkit.git
+   cd LLM-Finetuning-Toolkit/
+```
+
+</details>
+
+<details>
+<summary>2. Install Dependencies</summary>
+<details>
+<summary>Install with Docker [Recommended]</summary>
+
+```shell
+   docker build -t llm-toolkit
+```
+
+```shell
+   # CPU
+   docker run -it llm-toolkit
+   # GPU
+   docker run -it --gpus all llm-toolkit
+```
+</details>
+
+<details>
+<summary>Poetry (recommended)</summary>
+
+See poetry documentation page for poetry [installation instructions](https://python-poetry.org/docs/#installation)
+
+```shell
+   poetry install
+```
+</details>
+<details>
+<summary>pip</summary>
+We recommend using a virtual environment like `venv` or `conda` for installation
+
+```shell
+   pip install -e .
+```
+</details>
+</details>
+
+
 
 ### Checklist Before Pull Request (Optional)
 
