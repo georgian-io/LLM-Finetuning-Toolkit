@@ -6,6 +6,16 @@ authors = ["Benjamin Ye <benjamin.ye@georgian.io>"]
 license = "Apache 2.0"
 readme = "README.md"
 packages = [{include = "llmtune"}]
+repository = "https://github.com/georgian-io/LLM-Finetuning-Toolkit"
+# homepage = ""
+# documentation = ""
+keywords = ["llm", "finetuning", "language models", "machine learning", "deep learning"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
 
 [tool.poetry.scripts]
 llmtune = "llmtune.cli.toolkit:cli"
