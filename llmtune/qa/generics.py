@@ -50,6 +50,14 @@ class LLMTestSuite:
 
         self.test_results = {}
 
+    @staticmethod
+    def from_csv(file_path: str, tests: List[LLMQaTest]) -> "LLMTestSuite":
+        results_df = pd.read_csv(file_path)
+        prompts = results_df["prompt"].tolist()
+        ground_truths = results_df["ground_truth"].tolist()
+        model_preds = results_df["model_prediction"].tolist()
+        return LLMTestSuite(tests, prompts, ground_truths, model_preds)
+
     def run_tests(self) -> Dict[str, List[Union[float, int, bool]]]:
         test_results = {}
         for test in zip(self.tests):

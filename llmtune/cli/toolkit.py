@@ -2,8 +2,8 @@ import logging
 from os import listdir
 from os.path import exists, join
 
-import torch
 import pandas as pd
+import torch
 import typer
 import yaml
 from pydantic import ValidationError
@@ -13,10 +13,11 @@ from llmtune.data.dataset_generator import DatasetGenerator
 from llmtune.finetune.lora import LoRAFinetune
 from llmtune.inference.lora import LoRAInference
 from llmtune.pydantic_models.config_model import Config
+from llmtune.qa.generics import LLMTestSuite, QaTestRegistry
 from llmtune.ui.rich_ui import RichUI
 from llmtune.utils.ablation_utils import generate_permutations
 from llmtune.utils.save_utils import DirectoryHelper
-from llmtune.qa.generics import QaTestRegistry, LLMTestSuite
+
 
 hf_utils.logging.set_verbosity_error()
 torch._logging.set_logs(all=logging.CRITICAL)
@@ -82,13 +83,8 @@ def run_one_experiment(config: Config, config_path: str) -> None:
         tests = QaTestRegistry.create_tests_from_list(llm_tests)
         # TODO: Load results.csv
         results_df = pd.read_csv(results_file_path)
-        prompts = results_df["prompt"].tolist()
-        ground_truths = results_df["ground_truth"].tolist()
-        model_preds = results_df["model_prediction"].tolist()
-        # TODO: Run Unit Tests
-        test_suite = LLMTestSuite(tests, prompts, ground_truths, model_preds)
-        # TODO: Save Unit Test Results
-        test_suite.save_test_results("unit_test_results.csv")
+        test_suite = LLMTestSuite.from_csv(results_file_path, tests)
+        test_suite.save_test_results(os.path.join(qa_path, "unit_test_results.csv"))
 
 
 @app.command()
