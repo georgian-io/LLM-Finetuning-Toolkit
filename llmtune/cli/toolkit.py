@@ -84,7 +84,7 @@ def run_one_experiment(config: Config, config_path: str) -> None:
         ground_truths = results_df["ground_truth"].tolist()
         model_preds = results_df["model_prediction"].tolist()
         test_suite = LLMTestSuite(tests, prompts, ground_truths, model_preds)
-        test_suite.save_test_results("unit_test_results.csv")
+        test_suite.save_test_results("unit_test_results.csv") # need some confirmation
 
 
 @app.command()
