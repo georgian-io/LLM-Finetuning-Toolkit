@@ -13,7 +13,7 @@ class QaConfig(BaseModel):
 
 
 class DataConfig(BaseModel):
-    file_type: Literal["json", "csv", "huggingface"] = Field(None, description="File type")
+    file_type: Literal["json", "jsonl", "csv", "huggingface"] = Field(None, description="File type")
     path: Union[FilePath, HfModelPath] = Field(None, description="Path to the file or HuggingFace model")
     prompt: str = Field(None, description="Prompt for the model. Use {} brackets for column name")
     prompt_stub: str = Field(
