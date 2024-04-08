@@ -203,3 +203,11 @@ class RichUI(UI):
 
         # Print the table
         console.print(table)
+
+    """
+    GENERATE
+    """
+
+    @staticmethod
+    def generate_config(file_name: str):
+        console.print(f"Generated config at [bold green]./{file_name}[/]")

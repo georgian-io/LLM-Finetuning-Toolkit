@@ -1,13 +1,17 @@
 import logging
-from os import listdir
-from os.path import exists, join
+import shutil
+from os import getcwd, listdir
+from os.path import dirname, exists, join
 
 import torch
 import typer
 import yaml
 from pydantic import ValidationError
 from transformers import utils as hf_utils
+from typing_extensions import Annotated
 
+import llmtune
+from llmtune.constants.files import EXAMPLE_CONFIG_FNAME
 from llmtune.data.dataset_generator import DatasetGenerator
 from llmtune.finetune.lora import LoRAFinetune
 from llmtune.inference.lora import LoRAInference
@@ -22,6 +26,13 @@ torch._logging.set_logs(all=logging.CRITICAL)
 
 
 app = typer.Typer()
+generate_app = typer.Typer()
+
+app.add_typer(
+    generate_app,
+    name="generate",
+    help="Generate various artefacts, such as config files",
+)
 
 
 def run_one_experiment(config: Config, config_path: str) -> None:
@@ -84,8 +95,9 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     #     pass
 
 
-@app.command()
-def run(config_path: str = "./config.yml") -> None:
+@app.command("run")
+def run(config_path: Annotated[str, typer.Argument(help="Path of the config yaml file")] = "./config.yml") -> None:
+    """Run the entire exmperiment pipeline"""
     # Load YAML config
     with open(config_path, "r") as file:
         config = yaml.safe_load(file)
@@ -107,6 +119,19 @@ def run(config_path: str = "./config.yml") -> None:
             config = Config(**config)
 
         run_one_experiment(config, config_path)
+
+
+@generate_app.command("config")
+def generate_config():
+    """
+    Generate an example `config.yml` file in current directory
+    """
+    module_dir = dirname(llmtune.__file__)
+    fpath = join(module_dir, f"../{EXAMPLE_CONFIG_FNAME}")
+    dest = getcwd()
+
+    shutil.copy(fpath, dest)
+    RichUI.generate_config(EXAMPLE_CONFIG_FNAME)
 
 
 def cli():
