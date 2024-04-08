@@ -30,7 +30,7 @@ pip install llm-toolkit
 This guide contains 3 stages that will enable you to get the most out of this toolkit!
 
 - **Basic**: Run your first LLM fine-tuning experiment
-- **Intermediate**: Run a custom experiment by changing the componenets of the YAML configuration file
+- **Intermediate**: Run a custom experiment by changing the components of the YAML configuration file
 - **Advanced**: Launch series of fine-tuning experiments across different prompt templates, LLMs, optimization techniques -- all through **one** YAML configuration file
 
 ### Basic
