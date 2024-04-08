@@ -8,12 +8,14 @@ from datasets import Dataset, concatenate_datasets, load_dataset
 def get_ingestor(data_type: str):
     if data_type == "json":
         return JsonIngestor
+    elif data_type == "jsonl":
+        return JsonlIngestor
     elif data_type == "csv":
         return CsvIngestor
     elif data_type == "huggingface":
         return HuggingfaceIngestor
     else:
-        raise ValueError(f"'type' must be one of 'json', 'csv', or 'huggingface', you have {data_type}")
+        raise ValueError(f"'type' must be one of 'json', 'jsonl', 'csv', or 'huggingface', you have {data_type}")
 
 
 class Ingestor(ABC):
@@ -33,6 +35,19 @@ class JsonIngestor(Ingestor):
 
     def to_dataset(self) -> Dataset:
         return Dataset.from_generator(self._json_generator)
+
+
+class JsonlIngestor(Ingestor):
+    def __init__(self, path: str):
+        self.path = path
+
+    def _jsonl_generator(self):
+        with open(self.path, "rb") as f:
+            for item in ijson.items(f, "", multiple_values=True):
+                yield item
+
+    def to_dataset(self) -> Dataset:
+        return Dataset.from_generator(self._jsonl_generator)
 
 
 class CsvIngestor(Ingestor):
