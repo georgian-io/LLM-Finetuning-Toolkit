@@ -77,7 +77,13 @@ class ModelConfig(BaseModel):
         description="Path to the model (huggingface repo or local path)",
     )
     device_map: Optional[str] = Field("auto", description="device onto which to load the model")
+    torch_dtype: Optional[str] = Field("auto", description="torch dtype to use for model weights")
+    attn_implementation: Optional[str] = Field(
+        None,
+        description="set desired attention implementation; leave None for default. E.g. `flash_attention_2` (please ensure `torch_dtype` is either float16 or bfloat16).",
+    )
 
+    # Quantization Config
     quantize: Optional[bool] = Field(False, description="Flag to enable quantization")
     bitsandbytes: BitsAndBytesConfig = Field(None, description="Bits and Bytes configuration")
 
@@ -98,6 +104,16 @@ class ModelConfig(BaseModel):
         if v.lower() == "none":
             return None
         return v
+
+    @validator("torch_dtype", pre=True, allow_reuse=True)
+    def convert_str_to_torch_dtype(cls, v):
+        try:
+            # Attempt to retrieve the corresponding PyTorch data type
+            torch_dtype = getattr(torch, v)
+        except AttributeError:
+            # Handle the case where the string does not match any PyTorch data type
+            raise ValueError(f"{v} is not a valid torch data type")
+        return torch_dtype
 
 
 class LoraConfig(BaseModel):
