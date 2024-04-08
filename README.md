@@ -13,17 +13,20 @@ LLM Finetuning toolkit is a config-based CLI tool for launching a series of LLM 
 </p>
 
 ## Installation
+
 ### pipx (recommended)
+
 pipx installs the package and depdencies in a seperate virtual environment
+
 ```shell
 pipx install llm-toolkit
 ```
 
 ### pip
+
 ```shell
 pip install llm-toolkit
 ```
-
 
 ## Quick Start
 
@@ -44,6 +47,30 @@ This command initiates the fine-tuning process using the settings specified in t
 ### Intermediate
 
 The configuration file is the central piece that defines the behavior of the toolkit. It is written in YAML format and consists of several sections that control different aspects of the process, such as data ingestion, model definition, training, inference, and quality assurance. We highlight some of the critical sections.
+
+#### Flash Attention 2
+
+To enable Flash-attention for [supported models](https://huggingface.co/docs/transformers/perf_infer_gpu_one#flashattention-2). First install `flash-attn`:
+
+**pipx**
+
+```shell
+pipx inject llm-toolkit flash-attn --pip-args=--no-build-isolation
+```
+
+**pip**
+
+```
+pip install flash-attn --no-build-isolation
+```
+
+Then, add to config file.
+
+```yaml
+model:
+  torch_dtype: "bfloat16" # or "float16" if using older GPU
+  attn_implementation: "flash_attention_2"
+```
 
 #### Data Ingestion
 
@@ -247,6 +274,7 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
    # GPU
    docker run -it --gpus all llm-toolkit
 ```
+
 </details>
 
 <details>
@@ -257,6 +285,7 @@ See poetry documentation page for poetry [installation instructions](https://pyt
 ```shell
    poetry install
 ```
+
 </details>
 <details>
 <summary>pip</summary>
@@ -265,10 +294,9 @@ We recommend using a virtual environment like `venv` or `conda` for installation
 ```shell
    pip install -e .
 ```
+
 </details>
 </details>
-
-
 
 ### Checklist Before Pull Request (Optional)
 
@@ -277,15 +305,12 @@ We recommend using a virtual environment like `venv` or `conda` for installation
 
 NOTE: Ruff linting and formatting checks are done when PR is raised via Git Action. Before raising a PR, it is a good practice to check and fix lint errors, as well as apply formatting.
 
-
 ### Releasing
 
-
-To manually release a PyPI package, please run: 
+To manually release a PyPI package, please run:
 
 ```shell
    make build-release
 ```
 
 Note: Make sure you have pypi token for this [PyPI repo](https://pypi.org/project/llm-toolkit/).
-
