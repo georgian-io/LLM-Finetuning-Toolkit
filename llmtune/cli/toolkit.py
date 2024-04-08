@@ -1,8 +1,8 @@
 import logging
+import os
 from os import listdir
 from os.path import exists, join
 
-import pandas as pd
 import torch
 import typer
 import yaml
@@ -78,11 +78,9 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     RichUI.before_qa()
     qa_path = dir_helper.save_paths.qa
     if not exists(qa_path) or not listdir(qa_path):
-        # TODO: Instantiate unit test classes
+        # Instantiate unit test classes
         llm_tests = config.get("qa", {}).get("llm_tests", [])
         tests = QaTestRegistry.create_tests_from_list(llm_tests)
-        # TODO: Load results.csv
-        results_df = pd.read_csv(results_file_path)
         test_suite = LLMTestSuite.from_csv(results_file_path, tests)
         test_suite.save_test_results(os.path.join(qa_path, "unit_test_results.csv"))
 
