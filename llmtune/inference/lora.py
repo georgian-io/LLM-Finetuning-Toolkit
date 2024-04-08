@@ -64,7 +64,7 @@ class LoRAInference(Inference):
 
         return model, tokenizer
 
-    def infer_all(self):
+    def infer_test_set(self):
         results = []
         prompts = self.test_dataset["formatted_prompt"]
         labels = self.test_dataset[self.label_column]
