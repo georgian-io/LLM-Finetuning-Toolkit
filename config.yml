@@ -24,6 +24,8 @@ data:
 # Model Definition -------------------
 model:
   hf_model_ckpt: "NousResearch/Llama-2-7b-hf"
+  torch_dtype: "bfloat16"
+  attn_implementation: "flash_attention_2"
   quantize: true
   bitsandbytes:
     load_in_4bit: true
