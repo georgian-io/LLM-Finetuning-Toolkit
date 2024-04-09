@@ -1,13 +1,16 @@
 import logging
-from os import listdir
-from os.path import exists, join
+import shutil
+from pathlib import Path
 
 import torch
 import typer
 import yaml
 from pydantic import ValidationError
 from transformers import utils as hf_utils
+from typing_extensions import Annotated
 
+import llmtune
+from llmtune.constants.files import EXAMPLE_CONFIG_FNAME
 from llmtune.data.dataset_generator import DatasetGenerator
 from llmtune.finetune.lora import LoRAFinetune
 from llmtune.inference.lora import LoRAInference
@@ -22,9 +25,16 @@ torch._logging.set_logs(all=logging.CRITICAL)
 
 
 app = typer.Typer()
+generate_app = typer.Typer()
+
+app.add_typer(
+    generate_app,
+    name="generate",
+    help="Generate various artefacts, such as config files",
+)
 
 
-def run_one_experiment(config: Config, config_path: str) -> None:
+def run_one_experiment(config: Config, config_path: Path) -> None:
     dir_helper = DirectoryHelper(config_path, config)
 
     # Loading Data -------------------------------
@@ -37,7 +47,7 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     test_column = dataset_generator.test_column
 
     dataset_path = dir_helper.save_paths.dataset
-    if not exists(dataset_path):
+    if not dataset_path.exists():
         train, test = dataset_generator.get_dataset()
         dataset_generator.save_dataset(dataset_path)
     else:
@@ -53,7 +63,7 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     weights_path = dir_helper.save_paths.weights
 
     # model_loader = ModelLoader(config, console, dir_helper)
-    if not exists(weights_path) or not listdir(weights_path):
+    if not weights_path.exists() or not any(weights_path.iterdir()):
         finetuner = LoRAFinetune(config, dir_helper)
         with RichUI.during_finetune():
             finetuner.finetune(train)
@@ -65,13 +75,13 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     # Inference -------------------------------
     RichUI.before_inference()
     results_path = dir_helper.save_paths.results
-    results_file_path = join(dir_helper.save_paths.results, "results.csv")
-    if not exists(results_path) or exists(results_file_path):
+    results_file_path = dir_helper.save_paths.results_file
+    if not results_file_path.exists():
         inference_runner = LoRAInference(test, test_column, config, dir_helper)
         inference_runner.infer_all()
         RichUI.after_inference(results_path)
     else:
-        RichUI.inference_found(results_path)
+        RichUI.results_found(results_path)
 
     # QA -------------------------------
     # RichUI.before_qa()
@@ -84,10 +94,11 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     #     pass
 
 
-@app.command()
-def run(config_path: str = "./config.yml") -> None:
+@app.command("run")
+def run(config_path: Annotated[str, typer.Argument(help="Path of the config yaml file")] = "./config.yml") -> None:
+    """Run the entire exmperiment pipeline"""
     # Load YAML config
-    with open(config_path, "r") as file:
+    with Path(config_path).open("r") as file:
         config = yaml.safe_load(file)
         configs = (
             generate_permutations(config, Config) if config.get("ablation", {}).get("use_ablate", False) else [config]
@@ -102,11 +113,23 @@ def run(config_path: str = "./config.yml") -> None:
         dir_helper = DirectoryHelper(config_path, config)
 
         # Reload config from saved config
-        with open(join(dir_helper.save_paths.config, "config.yml"), "r") as file:
+        with dir_helper.save_paths.config_file.open("r") as file:
             config = yaml.safe_load(file)
             config = Config(**config)
 
         run_one_experiment(config, config_path)
+
+
+@generate_app.command("config")
+def generate_config():
+    """
+    Generate an example `config.yml` file in current directory
+    """
+    module_path = Path(llmtune.__file__).parent
+    example_config_path = module_path.parent / EXAMPLE_CONFIG_FNAME
+    destination = Path.cwd()
+    shutil.copy(example_config_path, destination)
+    RichUI.generate_config(EXAMPLE_CONFIG_FNAME)
 
 
 def cli():

@@ -13,17 +13,20 @@ LLM Finetuning toolkit is a config-based CLI tool for launching a series of LLM 
 </p>
 
 ## Installation
+
 ### pipx (recommended)
+
 pipx installs the package and depdencies in a seperate virtual environment
+
 ```shell
 pipx install llm-toolkit
 ```
 
 ### pip
+
 ```shell
 pip install llm-toolkit
 ```
-
 
 ## Quick Start
 
@@ -35,11 +38,14 @@ This guide contains 3 stages that will enable you to get the most out of this to
 
 ### Basic
 
-```python
-   llmtune --config-path ./config.yml
+```shell
+   llmtune generate config
+   llmtune run --config-path ./config.yml
 ```
 
-This command initiates the fine-tuning process using the settings specified in the default YAML configuration file `config.yaml`.
+The first command generates a helpful starter `config.yml` file and saves in the current working directory. This is provided to users to quickly get started and as a base for further modification.
+
+Then the second command initiates the fine-tuning process using the settings specified in the default YAML configuration file `config.yaml`.
 
 ### Intermediate
 
@@ -247,6 +253,7 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
    # GPU
    docker run -it --gpus all llm-toolkit
 ```
+
 </details>
 
 <details>
@@ -257,6 +264,7 @@ See poetry documentation page for poetry [installation instructions](https://pyt
 ```shell
    poetry install
 ```
+
 </details>
 <details>
 <summary>pip</summary>
@@ -265,10 +273,9 @@ We recommend using a virtual environment like `venv` or `conda` for installation
 ```shell
    pip install -e .
 ```
+
 </details>
 </details>
-
-
 
 ### Checklist Before Pull Request (Optional)
 
@@ -277,15 +284,12 @@ We recommend using a virtual environment like `venv` or `conda` for installation
 
 NOTE: Ruff linting and formatting checks are done when PR is raised via Git Action. Before raising a PR, it is a good practice to check and fix lint errors, as well as apply formatting.
 
-
 ### Releasing
 
-
-To manually release a PyPI package, please run: 
+To manually release a PyPI package, please run:
 
 ```shell
    make build-release
 ```
 
 Note: Make sure you have pypi token for this [PyPI repo](https://pypi.org/project/llm-toolkit/).
-

@@ -5,60 +5,79 @@ Helper functions to help managing saving and loading of experiments:
 """
 
 import hashlib
-import os
 import re
 from dataclasses import dataclass
 from functools import cached_property
-from os.path import exists
+from pathlib import Path
 
 import yaml
 from sqids import Sqids
 
+from llmtune.constants.files import (
+    CONFIG_DIR_NAME,
+    CONFIG_FILE_NAME,
+    DATASET_DIR_NAME,
+    NUM_MD5_DIGITS_FOR_SQIDS,
+    QA_DIR_NAME,
+    QA_FILE_NAME,
+    RESULTS_DIR_NAME,
+    RESULTS_FILE_NAME,
+    WEIGHTS_DIR_NAME,
+)
 from llmtune.pydantic_models.config_model import Config
-
-
-NUM_MD5_DIGITS_FOR_SQIDS = 5  # TODO: maybe move consts to a dedicated folder
 
 
 @dataclass
 class DirectoryList:
-    save_dir: str
+    save_dir: Path
     config_hash: str
 
     @property
-    def experiment(self) -> str:
-        return os.path.join(self.save_dir, self.config_hash)
+    def experiment(self) -> Path:
+        return self.save_dir / self.config_hash
 
     @property
-    def config(self) -> str:
-        return os.path.join(self.experiment, "config")
+    def config(self) -> Path:
+        return self.experiment / CONFIG_DIR_NAME
 
     @property
-    def dataset(self) -> str:
-        return os.path.join(self.experiment, "dataset")
+    def config_file(self) -> Path:
+        return self.config / CONFIG_FILE_NAME
 
     @property
-    def weights(self) -> str:
-        return os.path.join(self.experiment, "weights")
+    def dataset(self) -> Path:
+        return self.experiment / DATASET_DIR_NAME
 
     @property
-    def results(self) -> str:
-        return os.path.join(self.experiment, "results")
+    def weights(self) -> Path:
+        return self.experiment / WEIGHTS_DIR_NAME
 
     @property
-    def qa(self) -> str:
-        return os.path.join(self.experiment, "qa")
+    def results(self) -> Path:
+        return self.experiment / RESULTS_DIR_NAME
+
+    @property
+    def results_file(self) -> Path:
+        return self.results / RESULTS_FILE_NAME
+
+    @property
+    def qa(self) -> Path:
+        return self.experiment / QA_DIR_NAME
+
+    @property
+    def qa_file(self) -> Path:
+        return self.qa / QA_FILE_NAME
 
 
 class DirectoryHelper:
-    def __init__(self, config_path: str, config: Config):
-        self.config_path: str = config_path
+    def __init__(self, config_path: Path, config: Config):
+        self.config_path: Path = config_path
         self.config: Config = config
         self.sqids: Sqids = Sqids()
         self.save_paths: DirectoryList = self._get_directory_state()
 
-        os.makedirs(self.save_paths.experiment, exist_ok=True)
-        if not exists(self.save_paths.config):
+        self.save_paths.experiment.mkdir(parents=True, exist_ok=True)
+        if not self.save_paths.config.exists():
             self.save_config()
 
     @cached_property
@@ -70,15 +89,15 @@ class DirectoryHelper:
 
     def _get_directory_state(self) -> DirectoryList:
         save_dir = (
-            self.config.save_dir
+            Path(self.config.save_dir)
             if not self.config.ablation.use_ablate
-            else os.path.join(self.config.save_dir, self.config.ablation.study_name)
+            else Path(self.config.save_dir) / self.config.ablation.study_name
         )
         return DirectoryList(save_dir, self.config_hash)
 
     def save_config(self) -> None:
-        os.makedirs(self.save_paths.config, exist_ok=True)
+        self.save_paths.config.mkdir(parents=True, exist_ok=True)
         model_dict = self.config.model_dump()
 
-        with open(os.path.join(self.save_paths.config, "config.yml"), "w") as file:
+        with (self.save_paths.config / "config.yml").open("w") as file:
             yaml.dump(model_dict, file)
