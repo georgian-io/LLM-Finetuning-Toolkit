@@ -1,7 +1,6 @@
 import logging
 import shutil
-from os import getcwd, listdir
-from os.path import dirname, exists, join
+from pathlib import Path
 
 import torch
 import typer
@@ -35,7 +34,7 @@ app.add_typer(
 )
 
 
-def run_one_experiment(config: Config, config_path: str) -> None:
+def run_one_experiment(config: Config, config_path: Path) -> None:
     dir_helper = DirectoryHelper(config_path, config)
 
     # Loading Data -------------------------------
@@ -48,7 +47,7 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     test_column = dataset_generator.test_column
 
     dataset_path = dir_helper.save_paths.dataset
-    if not exists(dataset_path):
+    if not dataset_path.exists():
         train, test = dataset_generator.get_dataset()
         dataset_generator.save_dataset(dataset_path)
     else:
@@ -64,7 +63,7 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     weights_path = dir_helper.save_paths.weights
 
     # model_loader = ModelLoader(config, console, dir_helper)
-    if not exists(weights_path) or not listdir(weights_path):
+    if not weights_path.exists() or not any(weights_path.iterdir()):
         finetuner = LoRAFinetune(config, dir_helper)
         with RichUI.during_finetune():
             finetuner.finetune(train)
@@ -76,8 +75,8 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     # Inference -------------------------------
     RichUI.before_inference()
     results_path = dir_helper.save_paths.results
-    results_file_path = join(dir_helper.save_paths.results, "results.csv")
-    if not exists(results_path) or exists(results_file_path):
+    results_file_path = dir_helper.save_paths.results_file
+    if results_file_path.exists():
         inference_runner = LoRAInference(test, test_column, config, dir_helper)
         inference_runner.infer_all()
         RichUI.after_inference(results_path)
@@ -99,7 +98,7 @@ def run_one_experiment(config: Config, config_path: str) -> None:
 def run(config_path: Annotated[str, typer.Argument(help="Path of the config yaml file")] = "./config.yml") -> None:
     """Run the entire exmperiment pipeline"""
     # Load YAML config
-    with open(config_path, "r") as file:
+    with config_path.open("r") as file:
         config = yaml.safe_load(file)
         configs = (
             generate_permutations(config, Config) if config.get("ablation", {}).get("use_ablate", False) else [config]
@@ -114,7 +113,7 @@ def run(config_path: Annotated[str, typer.Argument(help="Path of the config yaml
         dir_helper = DirectoryHelper(config_path, config)
 
         # Reload config from saved config
-        with open(join(dir_helper.save_paths.config, "config.yml"), "r") as file:
+        with dir_helper.save_paths.config_file.open("r") as file:
             config = yaml.safe_load(file)
             config = Config(**config)
 
@@ -126,11 +125,10 @@ def generate_config():
     """
     Generate an example `config.yml` file in current directory
     """
-    module_dir = dirname(llmtune.__file__)
-    fpath = join(module_dir, f"../{EXAMPLE_CONFIG_FNAME}")
-    dest = getcwd()
-
-    shutil.copy(fpath, dest)
+    module_path = Path(llmtune.__file__).parent
+    example_config_path = module_path.parent / EXAMPLE_CONFIG_FNAME
+    destination = Path.cwd()
+    shutil.copy(example_config_path, destination)
     RichUI.generate_config(EXAMPLE_CONFIG_FNAME)
 
 
