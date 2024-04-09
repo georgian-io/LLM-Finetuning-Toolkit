@@ -1,7 +1,7 @@
 from typing import List, Literal, Optional, Union
 
 import torch
-from pydantic import BaseModel, Field, FilePath, validator
+from pydantic import BaseModel, ConfigDict, Field, FilePath, validator
 
 
 # TODO: Refactor this into multiple files...
@@ -105,14 +105,16 @@ class ModelConfig(BaseModel):
             return None
         return v
 
-    @validator("torch_dtype", pre=True, allow_reuse=True)
-    def convert_str_to_torch_dtype(cls, v):
+    @property
+    def casted_torch_dtype(self) -> Union[str, torch.dtype]:
+        if self.torch_dtype == "auto":
+            return self.torch_dtype
+
         try:
-            # Attempt to retrieve the corresponding PyTorch data type
-            torch_dtype = getattr(torch, v)
+            torch_dtype = getattr(torch, self.torch_dtype)
         except AttributeError:
-            # Handle the case where the string does not match any PyTorch data type
-            raise ValueError(f"{v} is not a valid torch data type")
+            raise ValueError(f"{self.torch_dtype} is not a valid torch data type")
+
         return torch_dtype
 
 

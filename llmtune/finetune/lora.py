@@ -74,7 +74,7 @@ class LoRAFinetune(Finetune):
             ),
             use_cache=False,
             device_map=self.device_map,
-            torch_dtype=self._model_config.torch_dtype,
+            torch_dtype=self._model_config.casted_torch_dtype,
             attn_implementation=self._model_config.attn_implementation,
         )
 
