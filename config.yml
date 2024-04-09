@@ -61,7 +61,7 @@ training:
     warmup_ratio: 0.03
     lr_scheduler_type: "constant"
   sft_args:
-    max_seq_length: 5000
+    max_seq_length: 1024
     # neftune_noise_alpha: None
 
 inference:
