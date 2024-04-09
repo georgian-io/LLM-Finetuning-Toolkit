@@ -76,12 +76,12 @@ def run_one_experiment(config: Config, config_path: Path) -> None:
     RichUI.before_inference()
     results_path = dir_helper.save_paths.results
     results_file_path = dir_helper.save_paths.results_file
-    if results_file_path.exists():
+    if not results_file_path.exists():
         inference_runner = LoRAInference(test, test_column, config, dir_helper)
         inference_runner.infer_all()
         RichUI.after_inference(results_path)
     else:
-        RichUI.inference_found(results_path)
+        RichUI.results_found(results_path)
 
     # QA -------------------------------
     # RichUI.before_qa()
@@ -98,7 +98,7 @@ def run_one_experiment(config: Config, config_path: Path) -> None:
 def run(config_path: Annotated[str, typer.Argument(help="Path of the config yaml file")] = "./config.yml") -> None:
     """Run the entire exmperiment pipeline"""
     # Load YAML config
-    with config_path.open("r") as file:
+    with Path(config_path).open("r") as file:
         config = yaml.safe_load(file)
         configs = (
             generate_permutations(config, Config) if config.get("ablation", {}).get("use_ablate", False) else [config]
