@@ -17,6 +17,7 @@ from llmtune.constants.files import (
     CONFIG_DIR_NAME,
     CONFIG_FILE_NAME,
     DATASET_DIR_NAME,
+    NUM_MD5_DIGITS_FOR_SQIDS,
     QA_DIR_NAME,
     QA_FILE_NAME,
     RESULTS_DIR_NAME,
@@ -24,9 +25,6 @@ from llmtune.constants.files import (
     WEIGHTS_DIR_NAME,
 )
 from llmtune.pydantic_models.config_model import Config
-
-
-NUM_MD5_DIGITS_FOR_SQIDS = 5  # TODO: maybe move consts to a dedicated folder
 
 
 @dataclass
