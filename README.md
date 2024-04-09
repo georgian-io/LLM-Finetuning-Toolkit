@@ -43,7 +43,7 @@ This guide contains 3 stages that will enable you to get the most out of this to
    llmtune run --config-path ./config.yml
 ```
 
-The first command generates an example `config.yml` file and saves in the current working directory.
+The first command generates a helpful starter `config.yml` file and saves in the current working directory. This is provided to users to quickly get started and as a base for further modification.
 
 Then the second command initiates the fine-tuning process using the settings specified in the default YAML configuration file `config.yaml`.
 
