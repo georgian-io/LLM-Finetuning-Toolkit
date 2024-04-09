@@ -1,7 +1,7 @@
 from typing import List, Literal, Optional, Union
 
 import torch
-from pydantic import BaseModel, ConfigDict, Field, FilePath, validator
+from pydantic import BaseModel, Field, FilePath, validator
 
 
 # TODO: Refactor this into multiple files...
