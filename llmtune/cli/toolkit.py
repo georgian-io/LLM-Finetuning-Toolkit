@@ -68,7 +68,7 @@ def run_one_experiment(config: Config, config_path: str) -> None:
     results_file_path = join(dir_helper.save_paths.results, "results.csv")
     if not exists(results_path) or exists(results_file_path):
         inference_runner = LoRAInference(test, test_column, config, dir_helper)
-        inference_runner.infer_test_set()
+        inference_runner.infer_all()
         RichUI.after_inference(results_path)
     else:
         RichUI.inference_found(results_path)

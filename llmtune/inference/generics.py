@@ -7,5 +7,5 @@ class Inference(ABC):
         pass
 
     @abstractmethod
-    def infer_test_set(self):
+    def infer_all(self):
         pass
