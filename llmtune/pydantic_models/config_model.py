@@ -77,7 +77,13 @@ class ModelConfig(BaseModel):
         description="Path to the model (huggingface repo or local path)",
     )
     device_map: Optional[str] = Field("auto", description="device onto which to load the model")
+    torch_dtype: Optional[str] = Field("auto", description="torch dtype to use for model weights")
+    attn_implementation: Optional[str] = Field(
+        None,
+        description="set desired attention implementation; leave None for default. E.g. `flash_attention_2` (please ensure `torch_dtype` is either float16 or bfloat16).",
+    )
 
+    # Quantization Config
     quantize: Optional[bool] = Field(False, description="Flag to enable quantization")
     bitsandbytes: BitsAndBytesConfig = Field(None, description="Bits and Bytes configuration")
 
@@ -98,6 +104,18 @@ class ModelConfig(BaseModel):
         if v.lower() == "none":
             return None
         return v
+
+    @property
+    def casted_torch_dtype(self) -> Union[str, torch.dtype]:
+        if self.torch_dtype == "auto":
+            return self.torch_dtype
+
+        try:
+            torch_dtype = getattr(torch, self.torch_dtype)
+        except AttributeError:
+            raise ValueError(f"{self.torch_dtype} is not a valid torch data type")
+
+        return torch_dtype
 
 
 class LoraConfig(BaseModel):
@@ -126,7 +144,6 @@ class LoraConfig(BaseModel):
     # )
 
 
-# TODO: Get comprehensive Args!
 class TrainingArgs(BaseModel):
     num_train_epochs: Optional[int] = Field(1, description="Number of training epochs")
     per_device_train_batch_size: Optional[int] = Field(1, description="Batch size per training device")
@@ -141,9 +158,12 @@ class TrainingArgs(BaseModel):
     max_grad_norm: Optional[float] = Field(0.3, description="Maximum gradient norm")
     warmup_ratio: Optional[float] = Field(0.03, description="Warmup ratio")
     lr_scheduler_type: Optional[str] = Field("constant", description="Learning rate scheduler type")
+    save_steps: Optional[Union[int, float]] = Field(
+        500,
+        description="Number of updates steps before checkpoint saves. Should be an integer or a float in range [0,1). If smaller than 1, will be interpreted as ratio of total training steps.",
+    )
 
 
-# TODO: Get comprehensive Args!
 class SftArgs(BaseModel):
     max_seq_length: Optional[int] = Field(None, description="Maximum sequence length")
     neftune_noise_alpha: Optional[float] = Field(
@@ -157,16 +177,56 @@ class TrainingConfig(BaseModel):
     sft_args: SftArgs
 
 
-# TODO: Get comprehensive Args!
 class InferenceConfig(BaseModel):
-    max_new_tokens: Optional[int] = Field(None, description="Maximum new tokens")
-    use_cache: Optional[bool] = Field(True, description="Flag to enable cache usage")
-    do_sample: Optional[bool] = Field(True, description="Flag to enable sampling")
-    top_p: Optional[float] = Field(1.0, description="Top p value")
-    temperature: Optional[float] = Field(0.1, description="Temperature value")
-    epsilon_cutoff: Optional[float] = Field(0.0, description="epsilon cutoff value")
-    eta_cutoff: Optional[float] = Field(0.0, description="eta cutoff value")
-    top_k: Optional[int] = Field(50, description="top-k sampling")
+    # Length
+    max_length: Optional[int] = Field(None, description="The maximum length the generated tokens can have.")
+    max_new_tokens: Optional[int] = Field(None, description="The maximum numbers of tokens to generate.")
+    min_length: Optional[int] = Field(0, description="The minimum length of the sequence to be generated.")
+    min_new_tokens: Optional[int] = Field(None, description="The minimum numbers of tokens to generate.")
+    early_stopping: Optional[Union[bool, str]] = Field(
+        False, description="Controls the stopping condition for beam search."
+    )
+    max_time: Optional[float] = Field(None, description="The maximum amount of time for the computation in seconds.")
+
+    # Generation Strategy
+    do_sample: Optional[bool] = Field(False, description="Whether or not to use sampling.")
+    num_beams: Optional[int] = Field(1, description="Number of beams for beam search.")
+    num_beam_groups: Optional[int] = Field(1, description="Number of groups for diversity among beams.")
+    penalty_alpha: Optional[float] = Field(None, description="Balances model confidence and degeneration penalty.")
+    use_cache: Optional[bool] = Field(
+        True,
+        description="Whether to use past key/values attentions to speed up decoding.",
+    )
+
+    # Manipulation of Model Output Logits
+    temperature: Optional[float] = Field(1.0, description="Modulates the next token probabilities.")
+    top_k: Optional[int] = Field(
+        50,
+        description="Number of highest probability tokens to keep for top-k-filtering.",
+    )
+    top_p: Optional[float] = Field(
+        1.0,
+        description="Keeps the smallest set of most probable tokens summing up to top_p.",
+    )
+    typical_p: Optional[float] = Field(1.0, description="Local typicality measure.")
+    epsilon_cutoff: Optional[float] = Field(0.0, description="Minimum conditional probability for token sampling.")
+    eta_cutoff: Optional[float] = Field(0.0, description="Hybrid of locally typical sampling and epsilon sampling.")
+    diversity_penalty: Optional[float] = Field(
+        0.0, description="Penalty for token repetition across different beam groups."
+    )
+    repetition_penalty: Optional[float] = Field(1.0, description="Penalty for token repetition.")
+    encoder_repetition_penalty: Optional[float] = Field(
+        1.0, description="Penalty on sequences not in the original input."
+    )
+    length_penalty: Optional[float] = Field(1.0, description="Exponential penalty to the length for beam search.")
+    no_repeat_ngram_size: Optional[int] = Field(0, description="Size of ngrams that cannot occur more than once.")
+    bad_words_ids: Optional[List[List[int]]] = Field(None, description="Tokens that are not allowed to be generated.")
+    force_words_ids: Optional[List[Union[List[int], List[List[int]]]]] = Field(
+        None, description="Tokens that must be generated."
+    )
+    renormalize_logits: Optional[bool] = Field(
+        False, description="Whether to renormalize logits after all processors."
+    )
 
 
 class AblationConfig(BaseModel):
