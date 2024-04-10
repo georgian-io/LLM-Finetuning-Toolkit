@@ -40,7 +40,7 @@ This guide contains 3 stages that will enable you to get the most out of this to
 
 ```shell
    llmtune generate config
-   llmtune run --config-path ./config.yml
+   llmtune run --config_path ./config.yml
 ```
 
 The first command generates a helpful starter `config.yml` file and saves in the current working directory. This is provided to users to quickly get started and as a base for further modification.
