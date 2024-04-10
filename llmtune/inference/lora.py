@@ -44,15 +44,10 @@ class LoRAInference(Inference):
         self.model = AutoPeftModelForCausalLM.from_pretrained(
             weights_path,
             torch_dtype=self.config.model.casted_torch_dtype,
-            quantization_config=(BitsAndBytesConfig(**self.config.model.bitsandbytes.model_dump())),
+            quantization_config=BitsAndBytesConfig(**self.config.model.bitsandbytes.model_dump()),
             device_map=self.device_map,
             attn_implementation=self.config.model.attn_implementation,
         )
-
-        """TODO: figure out multi-gpu
-        if self.config.accelerate:
-            self.model = self.accelerator.prepare(self.model)
-        """
 
         model = self.model.merge_and_unload()
 
