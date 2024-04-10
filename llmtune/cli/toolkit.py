@@ -3,10 +3,10 @@ import shutil
 from pathlib import Path
 
 import torch
+import transformers
 import typer
 import yaml
 from pydantic import ValidationError
-from transformers import utils as hf_utils
 from typing_extensions import Annotated
 
 import llmtune
@@ -20,8 +20,9 @@ from llmtune.utils.ablation_utils import generate_permutations
 from llmtune.utils.save_utils import DirectoryHelper
 
 
-hf_utils.logging.set_verbosity_error()
+transformers.logging.set_verbosity(transformers.logging.CRITICAL)
 torch._logging.set_logs(all=logging.CRITICAL)
+logging.captureWarnings(True)
 
 
 app = typer.Typer()

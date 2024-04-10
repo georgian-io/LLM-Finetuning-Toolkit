@@ -23,7 +23,7 @@ data:
 
 # Model Definition -------------------
 model:
-  hf_model_ckpt: "NousResearch/Llama-2-7b-hf"
+  hf_model_ckpt: "mistralai/Mistral-7B-Instruct-v0.2"
   torch_dtype: "bfloat16"
   #attn_implementation: "flash_attention_2"
   quantize: true
@@ -36,6 +36,7 @@ model:
 lora:
   task_type: "CAUSAL_LM"
   r: 32
+  lora_alpha: 64
   lora_dropout: 0.1
   target_modules:
     - q_proj
@@ -49,12 +50,12 @@ lora:
 # Training -------------------
 training:
   training_args:
-    num_train_epochs: 5
+    num_train_epochs: 1
     per_device_train_batch_size: 4
     gradient_accumulation_steps: 4
     gradient_checkpointing: True
     optim: "paged_adamw_32bit"
-    logging_steps: 100
+    logging_steps: 1
     learning_rate: 2.0e-4
     bf16: true # Set to true for mixed precision training on Newer GPUs
     tf32: true
@@ -67,7 +68,7 @@ training:
     # neftune_noise_alpha: None
 
 inference:
-  max_new_tokens: 1024
+  max_new_tokens: 256
   use_cache: True
   do_sample: True
   top_p: 0.9
