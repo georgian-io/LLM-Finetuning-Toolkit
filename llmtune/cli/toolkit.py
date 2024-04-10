@@ -125,7 +125,7 @@ def generate_config():
     """
     Generate an example `config.yml` file in current directory
     """
-    module_path = Path(llmtune.__file__).parent
+    module_path = Path(llmtune.__file__)
     example_config_path = module_path.parent / EXAMPLE_CONFIG_FNAME
     destination = Path.cwd()
     shutil.copy(example_config_path, destination)
