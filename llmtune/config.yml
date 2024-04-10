@@ -17,15 +17,15 @@ data:
   prompt_stub:
     >- # Stub to add for training at the end of prompt, for test set or inference, this is omitted; make sure only one variable is present
     {output}
-  test_size: 0.1 # Proportion of test as % of total; if integer then # of samples
-  train_size: 0.9 # Proportion of train as % of total; if integer then # of samples
+  test_size: 25 # Proportion of test as % of total; if integer then # of samples
+  train_size: 500 # Proportion of train as % of total; if integer then # of samples
   train_test_split_seed: 42
 
 # Model Definition -------------------
 model:
   hf_model_ckpt: "mistralai/Mistral-7B-Instruct-v0.2"
   torch_dtype: "bfloat16"
-  attn_implementation: "flash_attention_2"
+  #attn_implementation: "flash_attention_2"
   quantize: true
   bitsandbytes:
     load_in_4bit: true
