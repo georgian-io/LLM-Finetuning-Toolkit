@@ -32,15 +32,15 @@ class DatasetGenerator:
         self.train_test_split_seed: int = train_test_split_seed
 
         self.train_columns: list = self._get_train_columns()
-        self.test_column: str = self._get_test_column()
+        self.test_columns: list = self._get_test_columns()
 
     def _get_train_columns(self):
         pattern = r"\{([^}]*)\}"
         return re.findall(pattern, self.prompt)
 
-    def _get_test_column(self):
+    def _get_test_columns(self):
         pattern = r"\{([^}]*)\}"
-        return re.findall(pattern, self.prompt_stub)[0]
+        return re.findall(pattern, self.prompt_stub)
 
     # TODO: stratify_by_column
     def _train_test_split(self):
@@ -52,10 +52,12 @@ class DatasetGenerator:
 
     def _format_one_prompt(self, example, is_test: bool = False):
         train_mapping = {var_name: example[var_name] for var_name in self.train_columns}
+        test_mapping = {var_name: example[var_name] for var_name in self.test_columns}
+
         example["formatted_prompt"] = self.prompt.format(**train_mapping)
+        example["formatted_stub"] = self.prompt_stub.format(**test_mapping)
 
         if not is_test:
-            test_mapping = {self.test_column: example[self.test_column]}
             example["formatted_prompt"] += self.prompt_stub.format(**test_mapping)
 
         return example

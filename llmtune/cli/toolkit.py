@@ -44,7 +44,7 @@ def run_one_experiment(config: Config, config_path: Path) -> None:
         dataset_generator = DatasetGenerator(**config.data.model_dump())
 
     _ = dataset_generator.train_columns
-    test_column = dataset_generator.test_column
+    test_columns = dataset_generator.test_columns
 
     dataset_path = dir_helper.save_paths.dataset
     if not dataset_path.exists():
@@ -77,7 +77,7 @@ def run_one_experiment(config: Config, config_path: Path) -> None:
     results_path = dir_helper.save_paths.results
     results_file_path = dir_helper.save_paths.results_file
     if not results_file_path.exists():
-        inference_runner = LoRAInference(test, test_column, config, dir_helper)
+        inference_runner = LoRAInference(test, test_columns, config, dir_helper)
         inference_runner.infer_all()
         RichUI.after_inference(results_path)
     else:

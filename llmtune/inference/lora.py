@@ -20,12 +20,12 @@ class LoRAInference(Inference):
     def __init__(
         self,
         test_dataset: Dataset,
-        label_column_name: str,
+        label_column_names: list,
         config: Config,
         dir_helper: DirectoryHelper,
     ):
         self.test_dataset = test_dataset
-        self.label_column = label_column_name
+        self.label_columns = label_column_names
         self.config = config
 
         self.save_dir = dir_helper.save_paths.results
@@ -58,7 +58,7 @@ class LoRAInference(Inference):
     def infer_all(self):
         results = []
         prompts = self.test_dataset["formatted_prompt"]
-        labels = self.test_dataset[self.label_column]
+        labels = self.test_dataset["formatted_stub"]
 
         # inference loop
         for idx, (prompt, label) in enumerate(zip(prompts, labels)):
