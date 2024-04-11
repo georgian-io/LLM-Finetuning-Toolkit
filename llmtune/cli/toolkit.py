@@ -1,10 +1,6 @@
 import logging
-import os
-from os import listdir
-from os.path import exists, join
 import shutil
 from pathlib import Path
-
 
 import torch
 import transformers
@@ -90,13 +86,12 @@ def run_one_experiment(config: Config, config_path: Path) -> None:
         RichUI.results_found(results_path)
 
     RichUI.before_qa()
-    qa_path = dir_helper.save_paths.qa
-    if not exists(qa_path) or not listdir(qa_path):
-        # Instantiate unit test classes
-        llm_tests = config.get("qa", {}).get("llm_tests", [])
+    qa_file_path = dir_helper.save_paths.qa_file
+    if not qa_file_path.exists():
+        llm_tests = config.qa.llm_tests
         tests = QaTestRegistry.create_tests_from_list(llm_tests)
         test_suite = LLMTestSuite.from_csv(results_file_path, tests)
-        test_suite.save_test_results(os.path.join(qa_path, "unit_test_results.csv"))
+        test_suite.save_test_results(qa_file_path)
 
 
 @app.command("run")
