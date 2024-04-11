@@ -40,23 +40,14 @@ class LoRAInference(Inference):
         torch.cuda.empty_cache()
 
         # Load from path
-        dtype = (
-            torch.float16
-            if self.config.training.training_args.fp16
-            else (torch.bfloat16 if self.config.training.training_args.bf16 else torch.float32)
-        )
 
         self.model = AutoPeftModelForCausalLM.from_pretrained(
             weights_path,
-            torch_dtype=dtype,
+            torch_dtype=self.config.model.casted_torch_dtype,
+            quantization_config=BitsAndBytesConfig(**self.config.model.bitsandbytes.model_dump()),
             device_map=self.device_map,
-            quantization_config=(BitsAndBytesConfig(**self.config.model.bitsandbytes.model_dump())),
+            attn_implementation=self.config.model.attn_implementation,
         )
-
-        """TODO: figure out multi-gpu
-        if self.config.accelerate:
-            self.model = self.accelerator.prepare(self.model)
-        """
 
         model = self.model.merge_and_unload()
 
