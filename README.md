@@ -16,7 +16,7 @@ LLM Finetuning toolkit is a config-based CLI tool for launching a series of LLM 
 
 ### pipx (recommended)
 
-pipx installs the package and depdencies in a seperate virtual environment
+pipx installs the package and dependencies in a separate virtual environment
 
 ```shell
 pipx install llm-toolkit
@@ -153,7 +153,7 @@ lora:
   lora_dropout: 0.25
 ```
 
-#### Quality Assurance
+#### LLM testing
 
 ```yaml
 qa:
@@ -163,6 +163,7 @@ qa:
 ```
 
 - To ensure that the fine-tuned LLM behaves as expected, you can add tests that check if the desired behaviour is being attained. Example: for an LLM fine-tuned for a summarization task, we may want to check if the generated summary is indeed smaller in length than the input text. We would also like to learn the overlap between words in the original text and generated summary.
+- For more information and guidance on LLM testing, see our [LLM Testing Guidebook](testing.md)
 
 #### Artifact Outputs
 
