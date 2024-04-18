@@ -1,6 +1,6 @@
 ## Contributing
 
-If you would like to contribute to this project, we recommend following the "fork-and-pull" Git workflow.
+If you would like to contribute to this project, we recommend following the ["fork-and-pull" Git workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow).
 
 1.  **Fork** the repo on GitHub
 2.  **Clone** the project to your own machine
@@ -14,7 +14,7 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 
 <details>
 <summary>1. Clone Repo</summary>
-  
+
 ```shell
    git clone https://github.com/georgian-io/LLM-Finetuning-Toolkit.git
    cd LLM-Finetuning-Toolkit/
