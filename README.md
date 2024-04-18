@@ -171,16 +171,16 @@ This config will run fine-tuning and save the results under directory `./experim
 After the script finishes running you will see these distinct artifacts:
 
 ```shell
-  /dataset # generated pkl file in hf datasets format
-  /model # peft model weights in hf format
-  /results # csv of prompt, ground truth, and predicted values
-  /qa # csv of test results: e.g. vector similarity between ground truth and prediction
+/dataset # generated pkl file in hf datasets format
+/model # peft model weights in hf format
+/results # csv of prompt, ground truth, and predicted values
+/qa # csv of test results: e.g. vector similarity between ground truth and prediction
 ```
 
 Once all the changes have been incorporated in the YAML file, you can simply use it to run a custom fine-tuning experiment!
 
-```python
-   python toolkit.py --config-path <path to custom YAML file>
+```shell
+python toolkit.py --config-path <path to custom YAML file>
 ```
 
 ### Advanced

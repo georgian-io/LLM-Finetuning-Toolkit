@@ -16,8 +16,8 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 <summary>1. Clone Repo</summary>
 
 ```shell
-   git clone https://github.com/georgian-io/LLM-Finetuning-Toolkit.git
-   cd LLM-Finetuning-Toolkit/
+git clone https://github.com/georgian-io/LLM-Finetuning-Toolkit.git
+cd LLM-Finetuning-Toolkit/
 ```
 
 </details>
@@ -28,14 +28,14 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 <summary>Install with Docker [Recommended]</summary>
 
 ```shell
-   docker build -t llm-toolkit
+docker build -t llm-toolkit
 ```
 
 ```shell
-   # CPU
-   docker run -it llm-toolkit
-   # GPU
-   docker run -it --gpus all llm-toolkit
+# CPU
+docker run -it llm-toolkit
+# GPU
+docker run -it --gpus all llm-toolkit
 ```
 
 </details>
@@ -46,7 +46,7 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 See poetry documentation page for poetry [installation instructions](https://python-poetry.org/docs/#installation)
 
 ```shell
-   poetry install
+poetry install
 ```
 
 </details>
@@ -55,7 +55,7 @@ See poetry documentation page for poetry [installation instructions](https://pyt
 We recommend using a virtual environment like `venv` or `conda` for installation
 
 ```shell
-   pip install -e .
+pip install -e .
 ```
 
 </details>
@@ -73,7 +73,7 @@ NOTE: Ruff linting and formatting checks are done when PR is raised via Git Acti
 To manually release a PyPI package, please run:
 
 ```shell
-   make build-release
+make build-release
 ```
 
 Note: Make sure you have a pypi token for this [PyPI repo](https://pypi.org/project/llm-toolkit/).
