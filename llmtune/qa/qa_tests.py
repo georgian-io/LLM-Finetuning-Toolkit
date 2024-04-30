@@ -45,7 +45,7 @@ class JaccardSimilarityTest(LLMQaTest):
         union_size = len(set_ground_truth.union(set_model_prediction))
 
         similarity = intersection_size / union_size if union_size != 0 else 0
-        return similarity
+        return float(similarity)
 
 
 @QaTestRegistry.register("dot_product")
@@ -64,7 +64,7 @@ class DotProductSimilarityTest(LLMQaTest):
         embedding_ground_truth = self._encode_sentence(ground_truth)
         embedding_model_prediction = self._encode_sentence(model_prediction)
         dot_product_similarity = np.dot(embedding_ground_truth, embedding_model_prediction)
-        return dot_product_similarity
+        return float(dot_product_similarity)
 
 
 @QaTestRegistry.register("rouge_score")
@@ -100,10 +100,9 @@ class WordOverlapTest(LLMQaTest):
 
         common_words = words_model_prediction.intersection(words_ground_truth)
         overlap_percentage = (len(common_words) / len(words_ground_truth)) * 100
-        return overlap_percentage
+        return float(overlap_percentage)
 
 
-@QaTestRegistry.register("verb_percent")
 class PosCompositionTest(LLMQaTest):
     def _get_pos_percent(self, text: str, pos_tags: List[str]) -> float:
         words = word_tokenize(text)
