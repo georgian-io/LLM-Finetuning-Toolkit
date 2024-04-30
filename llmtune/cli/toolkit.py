@@ -3,10 +3,10 @@ import shutil
 from pathlib import Path
 
 import torch
+import transformers
 import typer
 import yaml
 from pydantic import ValidationError
-from transformers import utils as hf_utils
 from typing_extensions import Annotated
 
 import llmtune
@@ -15,13 +15,15 @@ from llmtune.data.dataset_generator import DatasetGenerator
 from llmtune.finetune.lora import LoRAFinetune
 from llmtune.inference.lora import LoRAInference
 from llmtune.pydantic_models.config_model import Config
+from llmtune.qa.generics import LLMTestSuite, QaTestRegistry
 from llmtune.ui.rich_ui import RichUI
 from llmtune.utils.ablation_utils import generate_permutations
 from llmtune.utils.save_utils import DirectoryHelper
 
 
-hf_utils.logging.set_verbosity_error()
+transformers.logging.set_verbosity(transformers.logging.CRITICAL)
 torch._logging.set_logs(all=logging.CRITICAL)
+logging.captureWarnings(True)
 
 
 app = typer.Typer()
@@ -83,15 +85,13 @@ def run_one_experiment(config: Config, config_path: Path) -> None:
     else:
         RichUI.results_found(results_path)
 
-    # QA -------------------------------
-    # RichUI.before_qa()
-    # qa_path = dir_helper.save_paths.qa
-    # if not exists(qa_path) or not listdir(qa_path):
-    #     # TODO: Instantiate unit test classes
-    #     # TODO: Load results.csv
-    #     # TODO: Run Unit Tests
-    #     # TODO: Save Unit Test Results
-    #     pass
+    RichUI.before_qa()
+    qa_file_path = dir_helper.save_paths.qa_file
+    if not qa_file_path.exists():
+        llm_tests = config.qa.llm_tests
+        tests = QaTestRegistry.create_tests_from_list(llm_tests)
+        test_suite = LLMTestSuite.from_csv(results_file_path, tests)
+        test_suite.save_test_results(qa_file_path)
 
 
 @app.command("run")
@@ -125,7 +125,7 @@ def generate_config():
     """
     Generate an example `config.yml` file in current directory
     """
-    module_path = Path(llmtune.__file__).parent
+    module_path = Path(llmtune.__file__)
     example_config_path = module_path.parent / EXAMPLE_CONFIG_FNAME
     destination = Path.cwd()
     shutil.copy(example_config_path, destination)

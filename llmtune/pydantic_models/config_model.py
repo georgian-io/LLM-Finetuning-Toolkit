@@ -237,10 +237,6 @@ class AblationConfig(BaseModel):
 class Config(BaseModel):
     save_dir: Optional[str] = Field("./experiments", description="Folder to save to")
     ablation: AblationConfig
-    accelerate: Optional[bool] = Field(
-        False,
-        description="set to True if you want to use multi-gpu training; then launch with `accelerate launch --config_file ./accelerate_config toolkit.py`",
-    )
     data: DataConfig
     model: ModelConfig
     lora: LoraConfig
