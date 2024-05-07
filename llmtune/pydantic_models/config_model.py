@@ -125,7 +125,9 @@ class LoraConfig(BaseModel):
     lora_alpha: Optional[int] = Field(16, description="The alpha parameter for Lora scaling")
     bias: Optional[str] = Field("none", description="Bias type for Lora. Can be 'none', 'all' or 'lora_only'")
     lora_dropout: Optional[float] = Field(0.1, description="The dropout probability for Lora layers")
-    target_modules: Optional[List[str]] = Field(None, description="The names of the modules to apply Lora to")
+    target_modules: Optional[Union[List[str], Literal["all-linear"]]] = Field(
+        "all-linear", description="The names of the modules to apply Lora to"
+    )
     fan_in_fan_out: Optional[bool] = Field(
         False,
         description="Flag to indicate if the layer to replace stores weight like (fan_in, fan_out)",

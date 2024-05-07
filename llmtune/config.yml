@@ -38,14 +38,16 @@ lora:
   r: 32
   lora_alpha: 64
   lora_dropout: 0.1
-  target_modules:
-    - q_proj
-    - v_proj
-    - k_proj
-    - o_proj
-    - up_proj
-    - down_proj
-    - gate_proj
+  target_modules: "all-linear"
+  # to target specific modules
+  # target_modules:
+  #   - q_proj
+  #   - v_proj
+  #   - k_proj
+  #   - o_proj
+  #   - up_proj
+  #   - down_proj
+  #   - gate_proj
 
 # Training -------------------
 training:
