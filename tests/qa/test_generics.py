@@ -1,7 +1,7 @@
 import pytest
-from unittest.mock import Mock
 from pandas import DataFrame
-from llmtune.qa.generics import LLMQaTest, QaTestRegistry, LLMTestSuite
+
+from llmtune.qa.generics import LLMQaTest, LLMTestSuite
 
 
 @pytest.fixture
