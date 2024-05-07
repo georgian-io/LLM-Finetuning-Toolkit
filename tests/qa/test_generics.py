@@ -65,9 +65,7 @@ def test_save_test_results(mock_csv, mock_tests, mocker):
 
 def test_print_test_results(capfd, example_data):
     tests = [MockQaTest()]
-    test_suite = LLMTestSuite(
-        tests, example_data["Prompt"], example_data["Ground Truth"], example_data["Predicted"]
-    )
+    test_suite = LLMTestSuite(tests, example_data["Prompt"], example_data["Ground Truth"], example_data["Predicted"])
     test_suite.print_test_results()
     out, err = capfd.readouterr()
 

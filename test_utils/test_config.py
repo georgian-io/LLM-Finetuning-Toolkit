@@ -6,10 +6,10 @@ from llmtune.pydantic_models.config_model import (
     InferenceConfig,
     LoraConfig,
     ModelConfig,
+    QaConfig,
     SftArgs,
     TrainingArgs,
     TrainingConfig,
-    QaConfig
 )
 
 
@@ -72,6 +72,15 @@ def get_sample_config():
             train_test_split_seed=42,
         ),
         qa=QaConfig(
-            llm_tests=["jaccard_similarity", "dot_product", "rouge_score", "word_overlap", "verb_percent", "adjective_percent", "noun_percent", "summary_length"]
-        )
+            llm_tests=[
+                "jaccard_similarity",
+                "dot_product",
+                "rouge_score",
+                "word_overlap",
+                "verb_percent",
+                "adjective_percent",
+                "noun_percent",
+                "summary_length",
+            ]
+        ),
     )
