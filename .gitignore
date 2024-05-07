@@ -47,3 +47,6 @@ ENV/
 env.bak/
 venv.bak/
 
+# Coverage Report
+.coverage
+/htmlcov
