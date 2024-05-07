@@ -1,14 +1,9 @@
-import pytest
-from unittest.mock import MagicMock, patch
-from pathlib import Path
+from unittest.mock import patch
 
-from pydantic import ValidationError
 from typer.testing import CliRunner
 
-from llmtune.cli.toolkit import app, cli, run_one_experiment
-from llmtune.pydantic_models.config_model import Config
+from llmtune.cli.toolkit import app, cli
 
-from test_utils.test_config import get_sample_config
 
 runner = CliRunner()
 
