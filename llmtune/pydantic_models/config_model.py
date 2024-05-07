@@ -244,3 +244,4 @@ class Config(BaseModel):
     lora: LoraConfig
     training: TrainingConfig
     inference: InferenceConfig
+    qa: QaConfig

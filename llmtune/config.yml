@@ -23,7 +23,7 @@ data:
 
 # Model Definition -------------------
 model:
-  hf_model_ckpt: "mistralai/Mistral-7B-Instruct-v0.2"
+  hf_model_ckpt: "facebook/opt-125m"
   torch_dtype: "bfloat16"
   #attn_implementation: "flash_attention_2"
   quantize: true

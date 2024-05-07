@@ -15,7 +15,8 @@ from llmtune.data.dataset_generator import DatasetGenerator
 from llmtune.finetune.lora import LoRAFinetune
 from llmtune.inference.lora import LoRAInference
 from llmtune.pydantic_models.config_model import Config
-from llmtune.qa.generics import LLMTestSuite, QaTestRegistry
+from llmtune.qa.generics import LLMTestSuite
+from llmtune.qa.qa_tests import QaTestRegistry
 from llmtune.ui.rich_ui import RichUI
 from llmtune.utils.ablation_utils import generate_permutations
 from llmtune.utils.save_utils import DirectoryHelper
@@ -92,6 +93,7 @@ def run_one_experiment(config: Config, config_path: Path) -> None:
         tests = QaTestRegistry.create_tests_from_list(llm_tests)
         test_suite = LLMTestSuite.from_csv(results_file_path, tests)
         test_suite.save_test_results(qa_file_path)
+        test_suite.print_test_results()
 
 
 @app.command("run")

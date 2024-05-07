@@ -9,7 +9,7 @@ from nltk.tokenize import word_tokenize
 from rouge_score import rouge_scorer
 from transformers import DistilBertModel, DistilBertTokenizer
 
-from llmtune.qa.generics import LLMQaTest, QaTestRegistry
+from llmtune.qa.generics import LLMQaTest
 
 
 model_name = "distilbert-base-uncased"
@@ -19,6 +19,23 @@ model = DistilBertModel.from_pretrained(model_name)
 nltk.download("stopwords")
 nltk.download("punkt")
 nltk.download("averaged_perceptron_tagger")
+
+
+class QaTestRegistry:
+    registry = {}
+
+    @classmethod
+    def register(cls, *names):
+        def inner_wrapper(wrapped_class):
+            for name in names:
+                cls.registry[name] = wrapped_class
+            return wrapped_class
+
+        return inner_wrapper
+
+    @classmethod
+    def create_tests_from_list(cls, test_names: List[str]) -> List[LLMQaTest]:
+        return [cls.registry[test]() for test in test_names]
 
 
 @QaTestRegistry.register("summary_length")
