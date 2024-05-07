@@ -6,7 +6,7 @@
 
 ## Overview
 
-LLM Finetuning toolkit is a config-based CLI tool for launching a series of LLM finetuning experiments on your data and gathering their results. From one single `yaml` config file, control all elements of a typical experimentation pipeline - **prompts**, **open-source LLMs**, **optimization strategy** and **LLM testing**.
+LLM Finetuning toolkit is a config-based CLI tool for launching a series of LLM fine-tuning experiments on your data and gathering their results. From one single `yaml` config file, control all elements of a typical experimentation pipeline - **prompts**, **open-source LLMs**, **optimization strategy** and **LLM testing**.
 
 <p align="center">
 <img src="https://github.com/georgian-io/LLM-Finetuning-Toolkit/blob/main/assets/overview_diagram.png?raw=true" width="900" />
@@ -14,9 +14,9 @@ LLM Finetuning toolkit is a config-based CLI tool for launching a series of LLM 
 
 ## Installation
 
-### pipx (recommended)
+### [pipx](https://pipx.pypa.io/stable/) (recommended)
 
-pipx installs the package and depdencies in a seperate virtual environment
+[pipx](https://pipx.pypa.io/stable/) installs the package and dependencies in a separate virtual environment
 
 ```shell
 pipx install llm-toolkit
@@ -39,8 +39,8 @@ This guide contains 3 stages that will enable you to get the most out of this to
 ### Basic
 
 ```shell
-   llmtune generate config
-   llmtune run --config-path ./config.yml
+llmtune generate config
+llmtune run ./config.yml
 ```
 
 The first command generates a helpful starter `config.yml` file and saves in the current working directory. This is provided to users to quickly get started and as a base for further modification.
@@ -166,21 +166,21 @@ qa:
 
 #### Artifact Outputs
 
-This config will run finetuning and save the results under directory `./experiment/[unique_hash]`. Each unique configuration will generate a unique hash, so that our tool can automatically pick up where it left off. For example, if you need to exit in the middle of the training, by relaunching the script, the program will automatically load the existing dataset that has been generated under the directory, instead of doing it all over again.
+This config will run fine-tuning and save the results under directory `./experiment/[unique_hash]`. Each unique configuration will generate a unique hash, so that our tool can automatically pick up where it left off. For example, if you need to exit in the middle of the training, by relaunching the script, the program will automatically load the existing dataset that has been generated under the directory, instead of doing it all over again.
 
 After the script finishes running you will see these distinct artifacts:
 
 ```shell
-  /dataset # generated pkl file in hf datasets format
-  /model # peft model weights in hf format
-  /results # csv of prompt, ground truth, and predicted values
-  /qa # csv of test results: e.g. vector similarity between ground truth and prediction
+/dataset # generated pkl file in hf datasets format
+/model # peft model weights in hf format
+/results # csv of prompt, ground truth, and predicted values
+/qa # csv of test results: e.g. vector similarity between ground truth and prediction
 ```
 
 Once all the changes have been incorporated in the YAML file, you can simply use it to run a custom fine-tuning experiment!
 
-```python
-   python toolkit.py --config-path <path to custom YAML file>
+```shell
+python toolkit.py --config-path <path to custom YAML file>
 ```
 
 ### Advanced
@@ -236,84 +236,9 @@ lora:
 
 ## Extending
 
-The toolkit provides a modular and extensible architecture that allows developers to customize and enhance its functionality to suit their specific needs. Each component of the toolkit, such as data ingestion, finetuning, inference, and quality assurance testing, is designed to be easily extendable.
+The toolkit provides a modular and extensible architecture that allows developers to customize and enhance its functionality to suit their specific needs. Each component of the toolkit, such as data ingestion, fine-tuning, inference, and quality assurance testing, is designed to be easily extendable.
 
 ## Contributing
 
-If you would like to contribute to this project, we recommend following the "fork-and-pull" Git workflow.
-
-1.  **Fork** the repo on GitHub
-2.  **Clone** the project to your own machine
-3.  **Commit** changes to your own branch
-4.  **Push** your work back up to your fork
-5.  Submit a **Pull request** so that we can review your changes
-
-NOTE: Be sure to merge the latest from "upstream" before making a pull request!
-
-### Set Up Dev Environment
-
-<details>
-<summary>1. Clone Repo</summary>
-  
-```shell
-   git clone https://github.com/georgian-io/LLM-Finetuning-Toolkit.git
-   cd LLM-Finetuning-Toolkit/
-```
-
-</details>
-
-<details>
-<summary>2. Install Dependencies</summary>
-<details>
-<summary>Install with Docker [Recommended]</summary>
-
-```shell
-   docker build -t llm-toolkit
-```
-
-```shell
-   # CPU
-   docker run -it llm-toolkit
-   # GPU
-   docker run -it --gpus all llm-toolkit
-```
-
-</details>
-
-<details>
-<summary>Poetry (recommended)</summary>
-
-See poetry documentation page for poetry [installation instructions](https://python-poetry.org/docs/#installation)
-
-```shell
-   poetry install
-```
-
-</details>
-<details>
-<summary>pip</summary>
-We recommend using a virtual environment like `venv` or `conda` for installation
-
-```shell
-   pip install -e .
-```
-
-</details>
-</details>
-
-### Checklist Before Pull Request (Optional)
-
-1. Use `ruff check --fix` to check and fix lint errors
-2. Use `ruff format` to apply formatting
-
-NOTE: Ruff linting and formatting checks are done when PR is raised via Git Action. Before raising a PR, it is a good practice to check and fix lint errors, as well as apply formatting.
-
-### Releasing
-
-To manually release a PyPI package, please run:
-
-```shell
-   make build-release
-```
-
-Note: Make sure you have pypi token for this [PyPI repo](https://pypi.org/project/llm-toolkit/).
+Open-source contributions to this toolkit are welcome and encouraged.
+If you would like to contribute, please see [CONTRIBUTING.md](CONTRIBUTING.md).
