@@ -8,10 +8,12 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from rouge_score import rouge_scorer
 from transformers import DistilBertModel, DistilBertTokenizer
+from langchain.evaluation import JsonValidityEvaluator
 
 from llmtune.qa.generics import LLMQaTest
 
 
+json_validity_evaluator = JsonValidityEvaluator()
 model_name = "distilbert-base-uncased"
 tokenizer = DistilBertTokenizer.from_pretrained(model_name)
 model = DistilBertModel.from_pretrained(model_name)
@@ -119,6 +121,21 @@ class WordOverlapTest(LLMQaTest):
         overlap_percentage = (len(common_words) / len(words_ground_truth)) * 100
         return float(overlap_percentage)
 
+@QaTestRegistry.register("json_valid")
+class JSONValidityTest(LLMQaTest):
+    """
+    Checks to see if valid json can be parsed from the model output, according
+    to langchain_core.utils.json.parse_json_markdown
+    The JSON can be wrapped in markdown and this test will still pass
+    """
+    @property
+    def test_name(self) -> str:
+        return "json_valid"
+
+    def get_metric(self, prompt: str, ground_truth: str, model_prediction: str) -> float:
+        result = json_validity_evaluator.evaluate_strings(prediction=model_prediction)
+        binary_res = result["score"]
+        return float(binary_res)
 
 class PosCompositionTest(LLMQaTest):
     def _get_pos_percent(self, text: str, pos_tags: List[str]) -> float:
