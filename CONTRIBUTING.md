@@ -28,7 +28,7 @@ cd LLM-Finetuning-Toolkit/
 <summary>Install with Docker [Recommended]</summary>
 
 ```shell
-docker build -t llm-toolkit
+docker build -t llm-toolkit .
 ```
 
 ```shell
