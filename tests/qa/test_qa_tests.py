@@ -4,12 +4,12 @@ from llmtune.qa.qa_tests import (
     AdjectivePercent,
     DotProductSimilarityTest,
     JaccardSimilarityTest,
+    JSONValidityTest,
     LengthTest,
     NounPercent,
     RougeScoreTest,
     VerbPercent,
     WordOverlapTest,
-    JSONValidityTest
 )
 
 
@@ -87,11 +87,12 @@ def test_noun_percent():
     result = test.get_metric("prompt", "The cat", "The cat and the dog")
     assert result >= 0, "Noun percentage should be non-negative."
 
+
 @pytest.mark.parametrize(
     "input_string,expected_value",
     [
         ('{"Answer": "The cat"}', 1),
-        ("{'Answer': 'The cat'}", 0), # Double quotes are required in json
+        ("{'Answer': 'The cat'}", 0),  # Double quotes are required in json
         ('{"Answer": "The cat",}', 0),
         ('{"Answer": "The cat", "test": "case"}', 1),
         ('```json\n{"Answer": "The cat"}\n```', 1),  # this json block can still be processed

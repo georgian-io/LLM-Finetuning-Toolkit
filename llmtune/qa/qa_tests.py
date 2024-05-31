@@ -3,12 +3,12 @@ from typing import List, Union
 import nltk
 import numpy as np
 import torch
+from langchain.evaluation import JsonValidityEvaluator
 from nltk import pos_tag
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from rouge_score import rouge_scorer
 from transformers import DistilBertModel, DistilBertTokenizer
-from langchain.evaluation import JsonValidityEvaluator
 
 from llmtune.qa.generics import LLMQaTest
 
@@ -121,6 +121,7 @@ class WordOverlapTest(LLMQaTest):
         overlap_percentage = (len(common_words) / len(words_ground_truth)) * 100
         return float(overlap_percentage)
 
+
 @QaTestRegistry.register("json_valid")
 class JSONValidityTest(LLMQaTest):
     """
@@ -128,6 +129,7 @@ class JSONValidityTest(LLMQaTest):
     to langchain_core.utils.json.parse_json_markdown
     The JSON can be wrapped in markdown and this test will still pass
     """
+
     @property
     def test_name(self) -> str:
         return "json_valid"
@@ -136,6 +138,7 @@ class JSONValidityTest(LLMQaTest):
         result = json_validity_evaluator.evaluate_strings(prediction=model_prediction)
         binary_res = result["score"]
         return float(binary_res)
+
 
 class PosCompositionTest(LLMQaTest):
     def _get_pos_percent(self, text: str, pos_tags: List[str]) -> float:
