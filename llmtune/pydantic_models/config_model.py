@@ -9,7 +9,7 @@ HfModelPath = str
 
 
 class QaConfig(BaseModel):
-    llm_tests: Optional[List[str]] = Field([], description="list of tests that needs to be connected")
+    llm_metrics: Optional[List[str]] = Field([], description="list of metrics that needs to be connected")
 
 
 class DataConfig(BaseModel):
