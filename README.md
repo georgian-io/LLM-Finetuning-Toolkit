@@ -157,7 +157,7 @@ lora:
 
 ```yaml
 qa:
-  llm_tests:
+  llm_metrics:
     - length_test
     - word_overlap_test
 ```

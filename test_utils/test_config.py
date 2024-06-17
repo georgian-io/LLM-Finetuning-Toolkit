@@ -1,3 +1,7 @@
+"""
+Defines a configuration that can be used for unit testing.
+"""
+
 from llmtune.pydantic_models.config_model import (
     AblationConfig,
     BitsAndBytesConfig,
@@ -72,7 +76,7 @@ def get_sample_config():
             train_test_split_seed=42,
         ),
         qa=QaConfig(
-            llm_tests=[
+            llm_metrics=[
                 "jaccard_similarity",
                 "dot_product",
                 "rouge_score",

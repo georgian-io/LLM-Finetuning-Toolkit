@@ -70,7 +70,7 @@ class LLMTestSuite:
         median_values = {key: statistics.median(column_data[key]) for key in column_data}
         stdev_values = {key: statistics.stdev(column_data[key]) for key in column_data}
         # Use the RichUI class to display the table
-        RichUI.qa_display_table(result_dictionary, mean_values, median_values, stdev_values)
+        RichUI.qa_display_metric_table(result_dictionary, mean_values, median_values, stdev_values)
 
     def save_test_results(self, path: str):
         # TODO: save these!

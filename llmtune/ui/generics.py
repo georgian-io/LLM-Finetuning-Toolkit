@@ -112,5 +112,5 @@ class UI(ABC):
         pass
 
     @abstractstaticmethod
-    def qa_display_table(cls):
+    def qa_display_metric_table(cls):
         pass

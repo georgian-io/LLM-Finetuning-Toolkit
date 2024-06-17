@@ -182,9 +182,9 @@ class RichUI(UI):
         pass
 
     @staticmethod
-    def qa_display_table(result_dictionary, mean_values, median_values, stdev_values):
+    def qa_display_metric_table(result_dictionary, mean_values, median_values, stdev_values):
         # Create a table
-        table = Table(show_header=True, header_style="bold", title="Test Results")
+        table = Table(show_header=True, header_style="bold", title="Test Set Metric Results")
 
         # Add columns to the table
         table.add_column("Metric", style="cyan")

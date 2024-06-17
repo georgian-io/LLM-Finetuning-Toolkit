@@ -60,7 +60,7 @@ def test_save_test_results(mock_csv, mock_tests, mocker):
 # def test_print_test_results(mock_csv, mock_tests, mock_rich_ui):
 #     test_suite = LLMTestSuite.from_csv("dummy_path.csv", mock_tests)
 #     test_suite.print_test_results()
-#     assert mock_rich_ui.qa_display_table.called
+#     assert mock_rich_ui.qa_display_metric_table.called
 
 
 def test_print_test_results(capfd, example_data):

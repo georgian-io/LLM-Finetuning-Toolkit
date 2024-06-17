@@ -77,7 +77,7 @@ inference:
   temperature: 0.8
 
 qa:
-  llm_tests:
+  llm_metrics:
     - jaccard_similarity
     - dot_product
     - rouge_score
