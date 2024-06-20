@@ -33,6 +33,6 @@ jobs:
       # Run Test
       # ----------------
       - name: Run pytest
-        run: pytest --cov=./ --cov-report=term
+        run: poetry run pytest --cov=./ --cov-report=term
       - name: Check Coverage
-        run: coverage report --fail-under=80
+        run: poetry run coverage report --fail-under=80
