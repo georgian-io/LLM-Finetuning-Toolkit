@@ -21,13 +21,13 @@ def test_lora_inference_initialization(mocker):
     test_dataset = Dataset.from_dict(
         {
             "formatted_prompt": ["prompt1", "prompt2"],
-            "label_column_name": ["label1", "label2"],
+            "formatted_stub": ["label1", "label2"],
         }
     )
 
     _ = LoRAInference(
         test_dataset=test_dataset,
-        label_column_name="label_column_name",
+        label_column_names="label_column_name",
         config=config,
         dir_helper=dir_helper,
     )
@@ -56,11 +56,11 @@ def test_infer_all(mocker):
 
     config = get_sample_config()
     dir_helper = MagicMock(save_paths=MagicMock(results="results_dir", weights="weights_dir"))
-    test_dataset = Dataset.from_dict({"formatted_prompt": ["prompt1"], "label_column_name": ["label1"]})
+    test_dataset = Dataset.from_dict({"formatted_prompt": ["prompt1"], "formatted_stub": ["label1"]})
 
     inference = LoRAInference(
         test_dataset=test_dataset,
-        label_column_name="label_column_name",
+        label_column_names="label_column_name",
         config=config,
         dir_helper=dir_helper,
     )
