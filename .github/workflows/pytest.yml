@@ -1,4 +1,4 @@
-name: PyPI CD
+name: pytest CI
 on: pull_request
 jobs:
   pytest:
