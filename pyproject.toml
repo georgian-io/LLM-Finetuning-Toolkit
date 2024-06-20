@@ -63,6 +63,7 @@ sqids = "^0.4.1"
 pydantic = "^2.6.1"
 typer = "^0.10.0"
 shellingham = "^1.5.4"
+langchain = "^0.2.5"
 
 
 [tool.poetry.group.dev.dependencies]
