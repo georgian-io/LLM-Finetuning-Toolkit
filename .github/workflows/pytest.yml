@@ -35,4 +35,4 @@ jobs:
       - name: Run pytest
         run: pytest --cov=./ --cov-report=term
       - name: Check Coverage
-        uses: coverage report --fail-under=80
+        run: coverage report --fail-under=80
