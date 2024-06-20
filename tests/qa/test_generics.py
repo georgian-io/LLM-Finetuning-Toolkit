@@ -1,7 +1,7 @@
 import pytest
-from unittest.mock import Mock
 from pandas import DataFrame
-from llmtune.qa.generics import LLMQaTest, QaTestRegistry, LLMTestSuite
+
+from llmtune.qa.generics import LLMQaTest, LLMTestSuite
 
 
 @pytest.fixture
@@ -12,9 +12,9 @@ def mock_rich_ui(mocker):
 @pytest.fixture
 def example_data():
     data = {
-        "prompt": ["What is 2+2?", "What is the capital of France?"],
-        "ground_truth": ["4", "Paris"],
-        "model_prediction": ["3", "Paris"],
+        "Prompt": ["What is 2+2?", "What is the capital of France?"],
+        "Ground Truth": ["4", "Paris"],
+        "Predicted": ["3", "Paris"],
     }
     return DataFrame(data)
 
@@ -60,14 +60,12 @@ def test_save_test_results(mock_csv, mock_tests, mocker):
 # def test_print_test_results(mock_csv, mock_tests, mock_rich_ui):
 #     test_suite = LLMTestSuite.from_csv("dummy_path.csv", mock_tests)
 #     test_suite.print_test_results()
-#     assert mock_rich_ui.qa_display_table.called
+#     assert mock_rich_ui.qa_display_metric_table.called
 
 
 def test_print_test_results(capfd, example_data):
     tests = [MockQaTest()]
-    test_suite = LLMTestSuite(
-        tests, example_data["prompt"], example_data["ground_truth"], example_data["model_prediction"]
-    )
+    test_suite = LLMTestSuite(tests, example_data["Prompt"], example_data["Ground Truth"], example_data["Predicted"])
     test_suite.print_test_results()
     out, err = capfd.readouterr()
 

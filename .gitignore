@@ -3,6 +3,7 @@
 # experiment files
 */experiments
 */experiment
+experiment/*
 */archive
 */backup
 */baseline_results

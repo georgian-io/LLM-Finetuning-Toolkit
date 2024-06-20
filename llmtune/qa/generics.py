@@ -1,5 +1,6 @@
 import statistics
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import Dict, List, Union
 
 import pandas as pd
@@ -18,23 +19,6 @@ class LLMQaTest(ABC):
         pass
 
 
-class QaTestRegistry:
-    registry = {}
-
-    @classmethod
-    def register(cls, *names):
-        def inner_wrapper(wrapped_class):
-            for name in names:
-                cls.registry[name] = wrapped_class
-            return wrapped_class
-
-        return inner_wrapper
-
-    @classmethod
-    def create_tests_from_list(cls, test_names: List[str]) -> List[LLMQaTest]:
-        return [cls.create_test(test) for test in test_names]
-
-
 class LLMTestSuite:
     def __init__(
         self,
@@ -51,11 +35,17 @@ class LLMTestSuite:
         self._results = {}
 
     @staticmethod
-    def from_csv(file_path: str, tests: List[LLMQaTest]) -> "LLMTestSuite":
+    def from_csv(
+        file_path: str,
+        tests: List[LLMQaTest],
+        prompt_col: str = "Prompt",
+        gold_col: str = "Ground Truth",
+        pred_col="Predicted",
+    ) -> "LLMTestSuite":
         results_df = pd.read_csv(file_path)
-        prompts = results_df["prompt"].tolist()
-        ground_truths = results_df["ground_truth"].tolist()
-        model_preds = results_df["model_prediction"].tolist()
+        prompts = results_df[prompt_col].tolist()
+        ground_truths = results_df[gold_col].tolist()
+        model_preds = results_df[pred_col].tolist()
         return LLMTestSuite(tests, prompts, ground_truths, model_preds)
 
     def run_tests(self) -> Dict[str, List[Union[float, int, bool]]]:
@@ -80,9 +70,15 @@ class LLMTestSuite:
         median_values = {key: statistics.median(column_data[key]) for key in column_data}
         stdev_values = {key: statistics.stdev(column_data[key]) for key in column_data}
         # Use the RichUI class to display the table
-        RichUI.qa_display_table(result_dictionary, mean_values, median_values, stdev_values)
+        RichUI.qa_display_metric_table(result_dictionary, mean_values, median_values, stdev_values)
 
     def save_test_results(self, path: str):
         # TODO: save these!
+        path = Path(path)
+        dir = path.parent
+
+        if not dir.exists():
+            dir.mkdir(parents=True, exist_ok=True)
+
         resultant_dataframe = pd.DataFrame(self.test_results)
         resultant_dataframe.to_csv(path, index=False)

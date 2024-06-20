@@ -1,14 +1,15 @@
 import pytest
+
 from llmtune.qa.qa_tests import (
-    QaTestRegistry,
-    LengthTest,
-    JaccardSimilarityTest,
-    DotProductSimilarityTest,
-    RougeScoreTest,
-    WordOverlapTest,
-    VerbPercent,
     AdjectivePercent,
+    DotProductSimilarityTest,
+    JaccardSimilarityTest,
+    JSONValidityTest,
+    LengthTest,
     NounPercent,
+    RougeScoreTest,
+    VerbPercent,
+    WordOverlapTest,
 )
 
 
@@ -23,6 +24,7 @@ from llmtune.qa.qa_tests import (
         (VerbPercent, float),
         (AdjectivePercent, float),
         (NounPercent, float),
+        (JSONValidityTest, float),
     ],
 )
 def test_metric_return_type(test_class, expected_type):
@@ -84,3 +86,20 @@ def test_noun_percent():
     test = NounPercent()
     result = test.get_metric("prompt", "The cat", "The cat and the dog")
     assert result >= 0, "Noun percentage should be non-negative."
+
+
+@pytest.mark.parametrize(
+    "input_string,expected_value",
+    [
+        ('{"Answer": "The cat"}', 1),
+        ("{'Answer': 'The cat'}", 0),  # Double quotes are required in json
+        ('{"Answer": "The cat",}', 0),
+        ('{"Answer": "The cat", "test": "case"}', 1),
+        ('```json\n{"Answer": "The cat"}\n```', 1),  # this json block can still be processed
+        ('Here is an example of a JSON block: {"Answer": "The cat"}', 0),
+    ],
+)
+def test_json_valid(input_string: str, expected_value: float):
+    test = JSONValidityTest()
+    result = test.get_metric("prompt", "The cat", input_string)
+    assert result == expected_value, f"JSON validity should be {expected_value} but got {result}."

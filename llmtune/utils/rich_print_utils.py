@@ -28,14 +28,15 @@ def inject_example_to_rich_layout(layout: Layout, layout_name: str, example: dic
     formatted = example.pop("formatted_prompt", None)
     formatted_text = Text(formatted)
 
+    print(example)
     for key, c in zip(example.keys(), colors):
         table.add_column(key, style=c)
 
-        tgt_text = example[key]
+        tgt_text = str(example[key])
         start_idx = formatted.find(tgt_text)
         formatted_text.stylize(f"bold {c}", start_idx, start_idx + len(tgt_text))
 
-    table.add_row(*example.values())
+    table.add_row(*[str(v) for v in example.values()])
 
     layout.split_column(
         Layout(

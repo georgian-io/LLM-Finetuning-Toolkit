@@ -1,5 +1,7 @@
+from unittest.mock import MagicMock, mock_open
+
 import pytest
-from unittest.mock import patch, MagicMock, mock_open
+from datasets import Dataset
 
 from llmtune.data.ingestor import (
     CsvIngestor,
@@ -8,8 +10,6 @@ from llmtune.data.ingestor import (
     JsonlIngestor,
     get_ingestor,
 )
-
-from datasets import Dataset
 
 
 def test_get_ingestor():
@@ -31,9 +31,7 @@ def test_json_ingestor_to_dataset(mocker):
 
 
 def test_jsonl_ingestor_to_dataset(mocker):
-    mock_generator = mocker.patch(
-        "llmtune.data.ingestor.JsonlIngestor._jsonl_generator"
-    )
+    mock_generator = mocker.patch("llmtune.data.ingestor.JsonlIngestor._jsonl_generator")
     mock_dataset = mocker.patch("llmtune.data.ingestor.Dataset")
     JsonlIngestor("").to_dataset()
 
@@ -52,9 +50,7 @@ def test_huggingface_to_dataset(mocker):
     # Setup
     path = "some_path"
     ingestor = HuggingfaceIngestor(path)
-    mock_concatenate_datasets = mocker.patch(
-        "llmtune.data.ingestor.concatenate_datasets"
-    )
+    mock_concatenate_datasets = mocker.patch("llmtune.data.ingestor.concatenate_datasets")
     mock_load_dataset = mocker.patch("llmtune.data.ingestor.load_dataset")
     mock_dataset = mocker.patch("llmtune.data.ingestor.Dataset")
 
@@ -108,9 +104,7 @@ def test_jsonl_ingestor_generator(file_content, expected_output, mocker):
     mocker.patch("builtins.open", mock_open(read_data=file_content))
     mocker.patch(
         "ijson.items",
-        side_effect=lambda f, prefix, multiple_values: (
-            iter(expected_output) if multiple_values else iter([])
-        ),
+        side_effect=lambda f, prefix, multiple_values: (iter(expected_output) if multiple_values else iter([])),
     )
     ingestor = JsonlIngestor("dummy_path.jsonl")
 

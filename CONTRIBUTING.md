@@ -28,7 +28,7 @@ cd LLM-Finetuning-Toolkit/
 <summary>Install with Docker [Recommended]</summary>
 
 ```shell
-docker build -t llm-toolkit
+docker build -t llm-toolkit .
 ```
 
 ```shell
@@ -65,6 +65,7 @@ pip install -e .
 
 1. Use `ruff check --fix` to check and fix lint errors
 2. Use `ruff format` to apply formatting
+3. Run `pytest` at the top level directory to run unit tests
 
 NOTE: Ruff linting and formatting checks are done when PR is raised via Git Action. Before raising a PR, it is a good practice to check and fix lint errors, as well as apply formatting.
 

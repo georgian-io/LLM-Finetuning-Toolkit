@@ -18,15 +18,11 @@ def test_lora_finetune_initialization(mocker):
     )
 
     # Initialize LoRAFinetune with the sample configuration
-    lora_finetune = LoRAFinetune(
-        config=get_sample_config(), directory_helper=MagicMock()
-    )
+    lora_finetune = LoRAFinetune(config=get_sample_config(), directory_helper=MagicMock())
     # Assertions to ensure that LoRAFinetune is initialized as expected
     mock_lora_config.assert_called_once_with(**get_sample_config().lora.model_dump())
 
-    assert (
-        lora_finetune.config == get_sample_config()
-    ), "Configuration should match the input configuration"
+    assert lora_finetune.config == get_sample_config(), "Configuration should match the input configuration"
 
 
 def test_model_and_tokenizer_loading(mocker):
@@ -37,9 +33,7 @@ def test_model_and_tokenizer_loading(mocker):
         "llmtune.finetune.lora.AutoModelForCausalLM.from_pretrained",
         return_value=MagicMock(),
     )
-    mock_tokenizer = mocker.patch(
-        "llmtune.finetune.lora.AutoTokenizer.from_pretrained", return_value=MagicMock()
-    )
+    mock_tokenizer = mocker.patch("llmtune.finetune.lora.AutoTokenizer.from_pretrained", return_value=MagicMock())
     mock_inject_lora = mocker.patch(
         "llmtune.finetune.lora.LoRAFinetune._inject_lora",
         return_value=None,  # _inject_lora doesn't return a value
@@ -89,18 +83,14 @@ def test_model_finetune(mocker):
         "llmtune.finetune.lora.AutoModelForCausalLM.from_pretrained",
         return_value=MagicMock(),
     )
-    mocker.patch(
-        "llmtune.finetune.lora.AutoTokenizer.from_pretrained", return_value=MagicMock()
-    )
+    mocker.patch("llmtune.finetune.lora.AutoTokenizer.from_pretrained", return_value=MagicMock())
     mocker.patch(
         "llmtune.finetune.lora.LoRAFinetune._inject_lora",
         return_value=None,  # _inject_lora doesn't return a value
     )
 
     mock_trainer = mocker.MagicMock()
-    mock_sft_trainer = mocker.patch(
-        "llmtune.finetune.lora.SFTTrainer", return_value=mock_trainer
-    )
+    mock_sft_trainer = mocker.patch("llmtune.finetune.lora.SFTTrainer", return_value=mock_trainer)
 
     directory_helper = MagicMock()
 
@@ -144,9 +134,7 @@ def test_save_model(mocker):
     mocker.patch("llmtune.finetune.lora.AutoModelForCausalLM.from_pretrained")
 
     mock_tok = mocker.MagicMock()
-    mocker.patch(
-        "llmtune.finetune.lora.AutoTokenizer.from_pretrained", return_value=mock_tok
-    )
+    mocker.patch("llmtune.finetune.lora.AutoTokenizer.from_pretrained", return_value=mock_tok)
     mocker.patch(
         "llmtune.finetune.lora.LoRAFinetune._inject_lora",
         return_value=None,

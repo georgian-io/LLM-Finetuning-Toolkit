@@ -1,12 +1,12 @@
 import pytest
 from pydantic import BaseModel
+
 from llmtune.utils.ablation_utils import (
-    get_types_from_dict,
+    generate_permutations,
     get_annotation,
     get_model_field_type,
-    validate_and_get_ablations,
+    get_types_from_dict,
     patch_with_permutation,
-    generate_permutations,
 )
 
 
