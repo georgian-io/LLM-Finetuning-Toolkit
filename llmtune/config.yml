@@ -59,8 +59,8 @@ training:
     optim: "paged_adamw_32bit"
     logging_steps: 1
     learning_rate: 2.0e-4
-    bf16: true # Set to true for mixed precision training on Newer GPUs
-    tf32: true
+    bf16: true # [Ampere+] Set to true for mixed precision training on Newer GPUs
+    tf32: true # [Ampere+] Set to true for mixed precision training on Newer GPUs
     # fp16: false     # Set to true for mixed precision training on Older GPUs
     max_grad_norm: 0.3
     warmup_ratio: 0.03
