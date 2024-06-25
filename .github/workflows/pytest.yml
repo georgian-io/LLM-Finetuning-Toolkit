@@ -1,0 +1,38 @@
+name: pytest CI
+on: pull_request
+jobs:
+  pytest:
+    name: Run pytest and check min coverage threshold (80%)
+    runs-on: ubuntu-latest
+    steps:
+      # ----------------
+      # Set Up
+      # ----------------
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      # ----------------
+      # Install Deps
+      # ----------------
+      - name: Install Dependencies
+        run: |
+          poetry install --no-interaction --no-root
+      # ----------------
+      # Run Test
+      # ----------------
+      - name: Run pytest
+        run: poetry run pytest --cov=./ --cov-report=term
+      - name: Check Coverage
+        run: poetry run coverage report --fail-under=80
