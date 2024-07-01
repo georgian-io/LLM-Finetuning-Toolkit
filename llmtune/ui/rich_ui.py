@@ -129,7 +129,7 @@ class RichUI(UI):
     # Lifecycle functions
     @staticmethod
     def before_inference():
-        console.rule("[bold pink]:face_with_monocle: Testing")
+        console.rule("[bold pink]:face_with_monocle: Running Inference")
 
     @staticmethod
     def during_inference():
