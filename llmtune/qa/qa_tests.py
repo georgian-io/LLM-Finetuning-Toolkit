@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List, Union
 
 from langchain.evaluation import JsonValidityEvaluator
 
@@ -9,6 +8,7 @@ class LLMQaTest(ABC):
     Abstract base class for a test. A test can be computed over a single
     data instance/llm response, and outputs a boolean value (pass or fail).
     """
+
     @property
     @abstractmethod
     def test_name(self) -> str:
@@ -25,6 +25,7 @@ class JSONValidityTest(LLMQaTest):
     to langchain_core.utils.json.parse_json_markdown
     The JSON can be wrapped in markdown and this test will still pass
     """
+
     def __init__(self):
         self.json_validity_evaluator = JsonValidityEvaluator()
 
@@ -32,7 +33,7 @@ class JSONValidityTest(LLMQaTest):
     def test_name(self) -> str:
         return "json_valid"
 
-    def get_metric(self, model_prediction: str) -> bool:
-        result = self.json_validity_evaluator.evaluate_strings(prediction=model_prediction)
+    def test(self, prompt: str, grount_truth: str, model_pred: str) -> bool:
+        result = self.json_validity_evaluator.evaluate_strings(prediction=model_pred)
         binary_res = result["score"]
         return bool(binary_res)

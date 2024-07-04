@@ -24,6 +24,7 @@ class LLMQaMetric(ABC):
     Abstract base class for a metric. A metric can be computed over a single
     data instance, and outputs a scalar value (integer or float).
     """
+
     @property
     @abstractmethod
     def metric_name(self) -> str:
@@ -82,6 +83,7 @@ class JaccardSimilarityMetric(LLMQaMetric):
 class DotProductSimilarityMetric(LLMQaMetric):
     """Encodes both the ground truth and model prediction using DistilBERT, and
     computes the dot product similarity between the two embeddings."""
+
     def __init__(self):
         model_name = "distilbert-base-uncased"
         self.tokenizer = DistilBertTokenizer.from_pretrained(model_name)

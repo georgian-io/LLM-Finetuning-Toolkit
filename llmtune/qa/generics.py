@@ -1,5 +1,4 @@
 import statistics
-from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Dict, List, Union
 
@@ -14,6 +13,7 @@ class LLMMetricSuite:
     Represents and runs a suite of metrics on a set of prompts,
     golden responses, and model predictions.
     """
+
     def __init__(
         self,
         metrics: List[LLMQaMetric],
