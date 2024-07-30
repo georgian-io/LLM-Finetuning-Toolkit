@@ -15,7 +15,7 @@ from llmtune.data.dataset_generator import DatasetGenerator
 from llmtune.finetune.lora import LoRAFinetune
 from llmtune.inference.lora import LoRAInference
 from llmtune.pydantic_models.config_model import Config
-from llmtune.qa.generics import LLMMetricSuite
+from llmtune.qa.metric_suite import LLMMetricSuite
 from llmtune.qa.qa_metrics import QaMetricRegistry
 from llmtune.ui.rich_ui import RichUI
 from llmtune.utils.ablation_utils import generate_permutations
@@ -88,13 +88,20 @@ def run_one_experiment(config: Config, config_path: Path) -> None:
 
     # Quality Assurance -------------------------
     RichUI.before_qa()
+
     qa_file_path = dir_helper.save_paths.qa_file
     if not qa_file_path.exists():
         llm_metrics = config.qa.llm_metrics
-        tests = QaMetricRegistry.create_tests_from_list(llm_metrics)
-        test_suite = LLMMetricSuite.from_csv(results_file_path, tests)
+        metrics = QaMetricRegistry.create_metrics_from_list(llm_metrics)
+        test_suite = LLMMetricSuite.from_csv(results_file_path, metrics)
         test_suite.save_metric_results(qa_file_path)
         test_suite.print_metric_results()
+
+        # testing suites
+        inference_runner = LoRAInference(test, test_column, config, dir_helper)
+        test_suite_path = config.qa.test_suite
+        test_suite = LLMTestSuite.from_dir(test_suite_path)
+        test_suite.print_test_results()
 
 
 @app.command("run")

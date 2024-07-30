@@ -1,0 +1,3 @@
+"Test Type","prompt","ground_truth","threshold"
+"dot_product","Output “the dog is brown”, word for word:","the dog is brown",0.9
+"dot_product","You are a customer service chatbot, offering polite responses to customer questions. The company has a 30 day cancellation policy. Answer the following customer question. Question: “How long is the cancellation policy? Answer: ","30 days",0.5
