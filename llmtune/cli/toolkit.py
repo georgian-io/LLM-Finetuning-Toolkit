@@ -16,6 +16,7 @@ from llmtune.finetune.lora import LoRAFinetune
 from llmtune.inference.lora import LoRAInference
 from llmtune.pydantic_models.config_model import Config
 from llmtune.qa.metric_suite import LLMMetricSuite
+from llmtune.qa.test_suite import LLMTestSuite
 from llmtune.qa.qa_metrics import QaMetricRegistry
 from llmtune.ui.rich_ui import RichUI
 from llmtune.utils.ablation_utils import generate_permutations
@@ -76,31 +77,32 @@ def run_one_experiment(config: Config, config_path: Path) -> None:
         RichUI.finetune_found(weights_path)
 
     # Inference -------------------------------
-    RichUI.before_inference()
-    results_path = dir_helper.save_paths.results
-    results_file_path = dir_helper.save_paths.results_file
-    if not results_file_path.exists():
-        inference_runner = LoRAInference(test, test_column, config, dir_helper)
-        inference_runner.infer_all()
-        RichUI.after_inference(results_path)
-    else:
-        RichUI.results_found(results_path)
+    # RichUI.before_inference()
+    # results_path = dir_helper.save_paths.results
+    # results_file_path = dir_helper.save_paths.results_file
+    # if not results_file_path.exists():
+        # inference_runner = LoRAInference(test, test_column, config, dir_helper)
+        # inference_runner.infer_all()
+        # RichUI.after_inference(results_path)
+    # else:
+        # RichUI.results_found(results_path)
 
     # Quality Assurance -------------------------
     RichUI.before_qa()
 
     qa_file_path = dir_helper.save_paths.qa_file
     if not qa_file_path.exists():
-        llm_metrics = config.qa.llm_metrics
-        metrics = QaMetricRegistry.create_metrics_from_list(llm_metrics)
-        test_suite = LLMMetricSuite.from_csv(results_file_path, metrics)
-        test_suite.save_metric_results(qa_file_path)
-        test_suite.print_metric_results()
+        # llm_metrics = config.qa.llm_metrics
+        # metrics = QaMetricRegistry.create_metrics_from_list(llm_metrics)
+        # test_suite = LLMMetricSuite.from_csv(results_file_path, metrics)
+        # test_suite.save_metric_results(qa_file_path)
+        # test_suite.print_metric_results()
 
         # testing suites
         inference_runner = LoRAInference(test, test_column, config, dir_helper)
         test_suite_path = config.qa.test_suite
         test_suite = LLMTestSuite.from_dir(test_suite_path)
+        test_suite.run_inference(inference_runner)
         test_suite.print_test_results()
 
 

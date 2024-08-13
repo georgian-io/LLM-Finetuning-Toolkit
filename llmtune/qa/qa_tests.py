@@ -70,8 +70,8 @@ class JSONValidityTest(LLMQaTest):
         return bool(binary_res)
 
 
-@QaTestRegistry.register("dot_product")
-class DotProductSimilarityTest(LLMQaTest):
+@QaTestRegistry.register("cosine_similarity")
+class CosineSimilarityTest(LLMQaTest):
     """
     Checks to see if the response of the LLM is within a certain cosine
     similarity to the gold-standard response. Uses a DistilBERT model to encode
@@ -85,7 +85,7 @@ class DotProductSimilarityTest(LLMQaTest):
 
     @property
     def test_name(self) -> str:
-        return "dot_product"
+        return "cosine_similarity"
 
     def _encode_sentence(self, sentence):
         tokens = self.tokenizer(sentence, return_tensors="pt")
@@ -97,4 +97,7 @@ class DotProductSimilarityTest(LLMQaTest):
         embedding_ground_truth = self._encode_sentence(ground_truth)
         embedding_model_prediction = self._encode_sentence(model_pred)
         dot_product_similarity = np.dot(embedding_ground_truth, embedding_model_prediction)
-        return dot_product_similarity >= threshold
+        norm_ground_truth = np.linalg.norm(embedding_ground_truth)
+        norm_model_prediction = np.linalg.norm(embedding_model_prediction)
+        cosine_similarity = dot_product_similarity / (norm_ground_truth * norm_model_prediction)
+        return cosine_similarity >= threshold

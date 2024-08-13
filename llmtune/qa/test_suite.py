@@ -15,12 +15,20 @@ def assert_all_same(items, filename: str) -> None:
     for item in items:
         assert item == items[0], f"Tests in {filename} are not all the same: {items}"
 
-@dataclass
 class TestBank:
-    test_type: str
-    test: LLMQaTest
-    cases: List[Dict[str, str]]  # list of parameters to feed the test
-    results: List[bool] = []
+    def __init__(self, test: LLMQaTest, cases: List[Dict[str, str]]):
+        self.test = test
+        self.cases = cases
+        self.results: List[bool] = []
+
+    def generate_results(self, model: LoRAInference) -> None:
+        for case in self.cases:
+            prompt = case["prompt"]
+            model_pred = model.infer_one(prompt)
+            # run the test with the model prediction and additional args
+            test_args = {k: v for k, v in case.items() if k != "prompt"}
+            result = self.test.test(model_pred, **test_args)
+            self.results.append(result)
 
 
 class LLMTestSuite:
@@ -51,11 +59,10 @@ class LLMTestSuite:
         for file_name in csv_files:
             df = pd.read_csv(file_name)
             test_type_column = df[test_type_col].tolist()
-            params = df.columns - [test_type_col]
+            params = list(set(df.columns.tolist()) - set([test_type_col]))
             assert_all_same(test_type_column, file_name)
             test_type = test_type_column[0]
             # TODO validate columns
-            # TODO instantiate test and add to bank 
             test = QaTestRegistry.from_name(test_type)
             cases = []
             # all rows are a test case, encode them all
@@ -64,31 +71,25 @@ class LLMTestSuite:
                 for param in params:
                     case[param] = row[param]
                 cases.append(case)
-            test_banks.append(TestBank(test_type, test, cases))
+            test_banks.append(TestBank(test, cases))
         return LLMTestSuite(test_banks)
 
 
-
-
-    def run_inference(self, model: LoRAInference):
+    def run_inference(self, model: LoRAInference) -> None:
+        for test_bank in self.test_banks:
+            test_bank.generate_results(model)
 
 
     def print_test_results(self):
-        result_dictionary = self.metric_results
-        column_data = {key: list(result_dictionary[key]) for key in result_dictionary}
-        mean_values = {key: statistics.mean(column_data[key]) for key in column_data}
-        median_values = {key: statistics.median(column_data[key]) for key in column_data}
-        stdev_values = {key: statistics.stdev(column_data[key]) for key in column_data}
         # Use the RichUI class to display the table
-        RichUI.qa_display_metric_table(result_dictionary, mean_values, median_values, stdev_values)
+        test_names, num_passed, num_instances = [], [], []
+        for test_bank in self.test_banks:
+            test_name = test_bank.test.test_name
+            test_results = test_bank.results
+            passed = sum(test_results)
+            instances = len(test_results)
+            test_names.append(test_name)
+            num_passed.append(passed)
+            num_instances.append(instances)
 
-    def save_metric_results(self, path: str):
-        # TODO: save these!
-        path = Path(path)
-        dir = path.parent
-
-        if not dir.exists():
-            dir.mkdir(parents=True, exist_ok=True)
-
-        resultant_dataframe = pd.DataFrame(self.metric_results)
-        resultant_dataframe.to_csv(path, index=False)
+        RichUI.qa_display_test_table(test_names, num_passed, num_instances)

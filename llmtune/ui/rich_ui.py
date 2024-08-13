@@ -204,6 +204,22 @@ class RichUI(UI):
         # Print the table
         console.print(table)
 
+    @staticmethod
+    def qa_display_test_table(test_names, num_passed, num_instances):
+        # Create a table
+        table = Table(show_header=True, header_style="bold", title="Test Suite Results")
+
+        # Add columns to the table
+        table.add_column("Test Suite", style="cyan")
+        table.add_column("Passing", style="magenta")
+
+        # Add data rows to the table
+        for test_name, passed, total in zip(test_names, num_passed, num_instances):
+            table.add_row(test_name, f"{passed}/{total}")
+
+        # Print the table
+        console.print(table)
+
     """
     GENERATE
     """
