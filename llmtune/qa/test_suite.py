@@ -16,12 +16,14 @@ def assert_all_same(items, filename: str) -> None:
         assert item == items[0], f"Tests in {filename} are not all the same: {items}"
 
 class TestBank:
-    def __init__(self, test: LLMQaTest, cases: List[Dict[str, str]]):
+    def __init__(self, test: LLMQaTest, cases: List[Dict[str, str]], file_name_stem: str) -> None:
         self.test = test
         self.cases = cases
         self.results: List[bool] = []
+        self.file_name = file_name_stem + "_results.csv"
 
     def generate_results(self, model: LoRAInference) -> None:
+        self.results = []  # reset results
         for case in self.cases:
             prompt = case["prompt"]
             model_pred = model.infer_one(prompt)
@@ -29,6 +31,14 @@ class TestBank:
             test_args = {k: v for k, v in case.items() if k != "prompt"}
             result = self.test.test(model_pred, **test_args)
             self.results.append(result)
+
+    def save_test_results(self, output_dir: Path) -> None:
+        """
+        Re-saves the test results in a CSV file, with results
+        """
+        df = pd.DataFrame(self.cases)
+        df["result"] = self.results
+        df.to_csv(output_dir / self.file_name, index=False)
 
 
 class LLMTestSuite:
@@ -71,16 +81,15 @@ class LLMTestSuite:
                 for param in params:
                     case[param] = row[param]
                 cases.append(case)
-            test_banks.append(TestBank(test, cases))
+            # get file name stub without extension or path
+            test_banks.append(TestBank(test, cases, file_name.stem))
         return LLMTestSuite(test_banks)
-
 
     def run_inference(self, model: LoRAInference) -> None:
         for test_bank in self.test_banks:
             test_bank.generate_results(model)
 
-
-    def print_test_results(self):
+    def print_test_results(self) -> None:
         # Use the RichUI class to display the table
         test_names, num_passed, num_instances = [], [], []
         for test_bank in self.test_banks:
@@ -93,3 +102,9 @@ class LLMTestSuite:
             num_instances.append(instances)
 
         RichUI.qa_display_test_table(test_names, num_passed, num_instances)
+
+    def save_test_results(self, output_dir: Path) -> None:
+        if not output_dir.exists():
+            output_dir.mkdir(parents=True, exist_ok=True)
+        for test_bank in self.test_banks:
+            test_bank.save_test_results(output_dir)
