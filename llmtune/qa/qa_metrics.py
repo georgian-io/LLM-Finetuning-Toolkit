@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Union
+
 import nltk
 import numpy as np
 import torch
@@ -39,6 +40,7 @@ class QaMetricRegistry:
     A user can provide a list of metrics by name, and the registry will convert
     that into a list of metric objects.
     """
+
     registry = {}
 
     @classmethod

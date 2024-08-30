@@ -16,8 +16,8 @@ from llmtune.finetune.lora import LoRAFinetune
 from llmtune.inference.lora import LoRAInference
 from llmtune.pydantic_models.config_model import Config
 from llmtune.qa.metric_suite import LLMMetricSuite
-from llmtune.qa.test_suite import LLMTestSuite
 from llmtune.qa.qa_metrics import QaMetricRegistry
+from llmtune.qa.test_suite import LLMTestSuite
 from llmtune.ui.rich_ui import RichUI
 from llmtune.utils.ablation_utils import generate_permutations
 from llmtune.utils.save_utils import DirectoryHelper

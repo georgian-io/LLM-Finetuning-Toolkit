@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import List, Union
+from typing import List
 
-import torch
 import numpy as np
+import torch
 from langchain.evaluation import JsonValidityEvaluator
 from transformers import DistilBertModel, DistilBertTokenizer
 
@@ -22,12 +22,14 @@ class LLMQaTest(ABC):
     def test(self, prompt: str, grount_truth: str, model_pred: str) -> bool:
         pass
 
+
 # TODO this is the same as QaMetricRegistry, could be combined?
 class QaTestRegistry:
     """Provides a registry that maps metric names to metric classes.
     A user can provide a list of metrics by name, and the registry will convert
     that into a list of metric objects.
     """
+
     registry = {}
 
     @classmethod
@@ -45,7 +47,7 @@ class QaTestRegistry:
 
     @classmethod
     def from_name(cls, name: str) -> LLMQaTest:
-        """Return a Test object from a given name."""
+        """Return a LLMQaTest object from a given name."""
         return cls.registry[name]()
 
 
@@ -87,17 +89,18 @@ class CosineSimilarityTest(LLMQaTest):
     def test_name(self) -> str:
         return "cosine_similarity"
 
-    def _encode_sentence(self, sentence):
+    def _encode_sentence(self, sentence: str) -> np.ndarray:
+        """Encode a sentence into a vector using a language model."""
         tokens = self.tokenizer(sentence, return_tensors="pt")
         with torch.no_grad():
             outputs = self.model(**tokens)
         return outputs.last_hidden_state.mean(dim=1).squeeze().numpy()
 
-    def test(self, model_pred: str, ground_truth: str, threshold: float=0.8) -> bool:
+    def test(self, model_pred: str, ground_truth: str, threshold: float = 0.8) -> bool:
         embedding_ground_truth = self._encode_sentence(ground_truth)
         embedding_model_prediction = self._encode_sentence(model_pred)
-        dot_product_similarity = np.dot(embedding_ground_truth, embedding_model_prediction)
+        dot_product = np.dot(embedding_ground_truth, embedding_model_prediction)
         norm_ground_truth = np.linalg.norm(embedding_ground_truth)
         norm_model_prediction = np.linalg.norm(embedding_model_prediction)
-        cosine_similarity = dot_product_similarity / (norm_ground_truth * norm_model_prediction)
+        cosine_similarity = dot_product / (norm_ground_truth * norm_model_prediction)
         return cosine_similarity >= threshold

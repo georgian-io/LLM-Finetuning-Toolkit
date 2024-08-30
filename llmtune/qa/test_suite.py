@@ -1,21 +1,24 @@
-import statistics
 from pathlib import Path
-from typing import Dict, List, Union
-from dataclasses import dataclass
+from typing import Dict, List
 
 import pandas as pd
 
+from llmtune.inference.lora import LoRAInference
 from llmtune.qa.qa_tests import LLMQaTest, QaTestRegistry
 from llmtune.ui.rich_ui import RichUI
-from llmtune.inference.lora import LoRAInference
 
 
-def assert_all_same(items, filename: str) -> None:
+def assert_all_same(items, filename: Path) -> None:
     assert len(items) > 0
     for item in items:
         assert item == items[0], f"Tests in {filename} are not all the same: {items}"
 
+
 class TestBank:
+    """A test bank is a collection of test cases for a single test type.
+    Test banks can be specified using CSV files, and also save their results to CSV files.
+    """
+
     def __init__(self, test: LLMQaTest, cases: List[Dict[str, str]], file_name_stem: str) -> None:
         self.test = test
         self.cases = cases
@@ -23,6 +26,7 @@ class TestBank:
         self.file_name = file_name_stem + "_results.csv"
 
     def generate_results(self, model: LoRAInference) -> None:
+        """Generates pass/fail results for each test case, based on the model's predictions."""
         self.results = []  # reset results
         for case in self.cases:
             prompt = case["prompt"]
@@ -32,19 +36,18 @@ class TestBank:
             result = self.test.test(model_pred, **test_args)
             self.results.append(result)
 
-    def save_test_results(self, output_dir: Path) -> None:
+    def save_test_results(self, output_dir: Path, result_col: str = "result") -> None:
         """
-        Re-saves the test results in a CSV file, with results
+        Re-saves the test results in a CSV file, with a results column.
         """
         df = pd.DataFrame(self.cases)
-        df["result"] = self.results
+        df[result_col] = self.results
         df.to_csv(output_dir / self.file_name, index=False)
 
 
 class LLMTestSuite:
     """
-    Represents and runs a suite of metrics on a set of prompts,
-    golden responses, and model predictions.
+    Represents and runs a suite of different tests for LLMs.
     """
 
     def __init__(
@@ -56,12 +59,12 @@ class LLMTestSuite:
     @staticmethod
     def from_dir(
         dir_path: str,
-        prompt_col: str = "prompt",
         test_type_col: str = "Test Type",
     ) -> "LLMTestSuite":
-        # walk the directory and get all the csv files:
-        # for each csv file, load the data into a pandas dataframe
-        # then extract the prompts, ground truths, and model predictions
+        """Creates an LLMTestSuite from a directory of CSV files.
+        Each CSV file is a test bank, which encodes test cases for a certain
+        test type.
+        """
 
         csv_files = Path(dir_path).rglob("*.csv")
 
@@ -69,7 +72,8 @@ class LLMTestSuite:
         for file_name in csv_files:
             df = pd.read_csv(file_name)
             test_type_column = df[test_type_col].tolist()
-            params = list(set(df.columns.tolist()) - set([test_type_col]))
+            # everything that isn't the test type column is a test parameter
+            params = list(set(df.columns.tolist()) - set(test_type_col))
             assert_all_same(test_type_column, file_name)
             test_type = test_type_column[0]
             # TODO validate columns
@@ -86,11 +90,12 @@ class LLMTestSuite:
         return LLMTestSuite(test_banks)
 
     def run_inference(self, model: LoRAInference) -> None:
+        """Runs inference on all test cases in all the test banks."""
         for test_bank in self.test_banks:
             test_bank.generate_results(model)
 
     def print_test_results(self) -> None:
-        # Use the RichUI class to display the table
+        """Prints the results of the tests in the suite."""
         test_names, num_passed, num_instances = [], [], []
         for test_bank in self.test_banks:
             test_name = test_bank.test.test_name
