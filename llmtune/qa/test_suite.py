@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import pandas as pd
 
@@ -8,10 +8,17 @@ from llmtune.qa.qa_tests import LLMQaTest, QaTestRegistry
 from llmtune.ui.rich_ui import RichUI
 
 
-def assert_all_same(items, filename: Path) -> None:
-    assert len(items) > 0
+def all_same(items: List[Any]) -> bool:
+    """Check if all items in a list are the same."""
+    if len(items) == 0:
+        return False
+
+    same = True
     for item in items:
-        assert item == items[0], f"Tests in {filename} are not all the same: {items}"
+        if item != items[0]:
+            same = False
+            break
+    return same
 
 
 class TestBank:
@@ -73,10 +80,11 @@ class LLMTestSuite:
             df = pd.read_csv(file_name)
             test_type_column = df[test_type_col].tolist()
             # everything that isn't the test type column is a test parameter
-            params = list(set(df.columns.tolist()) - set(test_type_col))
-            assert_all_same(test_type_column, file_name)
+            params = list(set(df.columns.tolist()) - set([test_type_col]))  # noqa: C405
+            assert all_same(
+                test_type_column
+            ), f"All test cases in a test bank {file_name} must have the same test type."
             test_type = test_type_column[0]
-            # TODO validate columns
             test = QaTestRegistry.from_name(test_type)
             cases = []
             # all rows are a test case, encode them all
@@ -109,6 +117,7 @@ class LLMTestSuite:
         RichUI.qa_display_test_table(test_names, num_passed, num_instances)
 
     def save_test_results(self, output_dir: Path) -> None:
+        """Saves the results of the tests in a folder of CSV files."""
         if not output_dir.exists():
             output_dir.mkdir(parents=True, exist_ok=True)
         for test_bank in self.test_banks:
