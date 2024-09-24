@@ -16,4 +16,4 @@ RESULTS_DIR_NAME = "results"
 RESULTS_FILE_NAME = "results.csv"
 
 QA_DIR_NAME = "qa"
-QA_FILE_NAME = "qa_test_results.csv"
+METRIC_FILE_NAME = "qa_metrics_results.csv"

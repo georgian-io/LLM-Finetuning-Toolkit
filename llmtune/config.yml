@@ -86,3 +86,4 @@ qa:
     - adjective_percent
     - noun_percent
     - summary_length
+  test_suite: "examples/test_suite"

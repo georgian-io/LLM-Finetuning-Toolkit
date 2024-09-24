@@ -14,11 +14,9 @@ from llmtune.qa.qa_tests import (
 def test_test_return_bool(test_class):
     """Test to ensure that all tests return pass/fail boolean value."""
     test_instance = test_class()
-    prompt = "This is a test prompt."
-    ground_truth = "This is a ground truth sentence."
     model_prediction = "This is a model predicted sentence."
 
-    metric_result = test_instance.test(prompt, ground_truth, model_prediction)
+    metric_result = test_instance.test(model_prediction)
     assert isinstance(metric_result, bool), f"Expected return type bool, but got {type(metric_result)}."
 
 
@@ -35,5 +33,5 @@ def test_test_return_bool(test_class):
 )
 def test_json_valid_metric(input_string: str, expected_value: bool):
     test = JSONValidityTest()
-    result = test.test("prompt", "The cat", input_string)
+    result = test.test(input_string)
     assert result == expected_value, f"JSON validity should be {expected_value} but got {result}."

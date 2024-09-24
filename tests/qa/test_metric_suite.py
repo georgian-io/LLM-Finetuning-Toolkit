@@ -1,7 +1,7 @@
 import pytest
 from pandas import DataFrame
 
-from llmtune.qa.generics import LLMMetricSuite
+from llmtune.qa.metric_suite import LLMMetricSuite
 from llmtune.qa.qa_metrics import LLMQaMetric
 
 

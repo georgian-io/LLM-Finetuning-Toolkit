@@ -36,6 +36,11 @@ class LLMQaMetric(ABC):
 
 
 class QaMetricRegistry:
+    """Provides a registry that maps metric names to metric classes.
+    A user can provide a list of metrics by name, and the registry will convert
+    that into a list of metric objects.
+    """
+
     registry = {}
 
     @classmethod
@@ -48,8 +53,8 @@ class QaMetricRegistry:
         return inner_wrapper
 
     @classmethod
-    def create_tests_from_list(cls, metric_names: List[str]) -> List[LLMQaMetric]:
-        return [cls.registry[test]() for test in metric_names]
+    def create_metrics_from_list(cls, metric_names: List[str]) -> List[LLMQaMetric]:
+        return [cls.registry[metric]() for metric in metric_names]
 
 
 @QaMetricRegistry.register("summary_length")

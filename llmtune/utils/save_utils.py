@@ -17,9 +17,9 @@ from llmtune.constants.files import (
     CONFIG_DIR_NAME,
     CONFIG_FILE_NAME,
     DATASET_DIR_NAME,
+    METRIC_FILE_NAME,
     NUM_MD5_DIGITS_FOR_SQIDS,
     QA_DIR_NAME,
-    QA_FILE_NAME,
     RESULTS_DIR_NAME,
     RESULTS_FILE_NAME,
     WEIGHTS_DIR_NAME,
@@ -65,8 +65,8 @@ class DirectoryList:
         return self.experiment / QA_DIR_NAME
 
     @property
-    def qa_file(self) -> Path:
-        return self.qa / QA_FILE_NAME
+    def metric_file(self) -> Path:
+        return self.qa / METRIC_FILE_NAME
 
 
 class DirectoryHelper:
