@@ -12,9 +12,14 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Configure Cloudsmith package access
+        uses: georgian-io/terraform-infra/.github/actions/setup-cloudsmith@0be379908cc2dda36c063a4720fb3d073f39efb8
+        with:
+          python-repository: georgian-main
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -33,3 +38,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          # The index URL carries no credential; the netrc goes in as a BuildKit
+          # secret, so nothing sensitive reaches an image layer.
+          build-args: |
+            PIP_INDEX_URL=${{ env.PIP_INDEX_URL }}
+          secret-files: |
+            cloudsmith_netrc=${{ env.NETRC }}
