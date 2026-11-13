@@ -17,7 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Configure Cloudsmith package access
-        uses: georgian-io/terraform-infra/.github/actions/setup-cloudsmith@0be379908cc2dda36c063a4720fb3d073f39efb8
+        uses: georgian-io/global-github-actions-public/.github/actions/setup-cloudsmith@31d12c08e31d2c1a4270172c704428efcdffbe55
         with:
           python-repository: georgian-main
       - name: Log in to the Container registry
