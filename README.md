@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **Maintenance freeze.** This repository is in maintenance freeze. No new contributions are accepted; no new releases will be cut without explicit approval from Georgian leadership.
+
 # LLM Finetuning Toolkit
 
 <p align="center">
