@@ -4,15 +4,23 @@ jobs:
   lint:
     name: Lint & Format
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
-      - uses: chartboost/ruff-action@v1
-        name: Lint
+      # chartboost/ruff-action is archived and not on the open-source tier's
+      # allowed actions. Install the same pinned ruff through Cloudsmith instead.
+      - name: Configure Cloudsmith package access
+        uses: georgian-io/global-github-actions-public/.github/actions/setup-cloudsmith@31d12c08e31d2c1a4270172c704428efcdffbe55
         with:
-          version: 0.3.5
-          args: "check --output-format=full --statistics"
-      - uses: chartboost/ruff-action@v1
-        name: Format
+          python-repository: georgian-main
+      - uses: actions/setup-python@v5
         with:
-          version: 0.3.5
-          args: "format --check"
+          python-version: "3.11"
+      - name: Install ruff
+        run: python -m pip install ruff==0.3.5
+      - name: Lint
+        run: ruff check --output-format=full --statistics
+      - name: Format
+        run: ruff format --check
