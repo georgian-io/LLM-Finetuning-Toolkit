@@ -1,5 +1,10 @@
 name: pytest CI
-on: pull_request
+on:
+  pull_request:
+  # Also run on main: GitHub scopes a cache saved by a pull request to that
+  # pull request, so only a run on main saves a cache every PR can restore.
+  push:
+    branches: [main]
 jobs:
   pytest:
     name: Run pytest and check min coverage threshold (80%)
