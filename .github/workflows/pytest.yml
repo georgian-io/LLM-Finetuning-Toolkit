@@ -23,6 +23,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          # Keep downloaded wheels between runs. Every package comes through
+          # Cloudsmith, which bills per byte delivered, so re-downloading them
+          # in every job is expensive. This caches pip's download cache,
+          # keyed on the lock file.
+          cache: pip
+          cache-dependency-path: poetry.lock
       # ----------------
       # Install Deps
       # ----------------
